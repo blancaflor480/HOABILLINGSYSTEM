@@ -2,7 +2,7 @@
 <?php
     session_start();
     if (isset($_SESSION['SESSION_EMAIL'])) {
-        header("Location: welcome.php");
+        header("Location: dashboard.php");
         die();
     }
 
@@ -33,7 +33,7 @@
 
             if (empty($row['code'])) {
                 $_SESSION['SESSION_EMAIL'] = $email;
-                header("Location: welcome.php");
+                header("Location: dashboard.php");
             } else {
                 $msg = "<div class='alert alert-info'>First verify your account and try again.</div>";
             }
@@ -47,7 +47,7 @@
 <html lang="zxx">
 
 <head>
-    <title>HOA | Login Form</title>
+    <title>Rosedale Residences</title>
     <!-- Meta tag Keywords -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />

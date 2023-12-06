@@ -5,7 +5,10 @@
 		<link rel="stylesheet" href="css/slidestyle.css" type="text/css"/>
 		<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		-->
+		
 		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+	
+	
 	</head>
 
 
@@ -13,14 +16,12 @@
 		
 	  <div id="mySidenav" class="sidenav">
 	  <p class="logo"><span>E</span>-Billing</p>
-	  <a href="dashboard.php" class="icon-a"><i class="fa fa-dashboard icons"></i>   Dashboard</a>
-	  <a href="customer.php"class="icon-a"><i class="fa fa-users icons"></i>   Customers</a>
+	  <a href="dashboard.php" class="icon-a" ><i class="fa fa-tachometer icons"></i>   Dashboard</a>
 	  <!--<a href="#"class="icon-a"><i class="fa fa-list icons"></i>   Projects</a>-->
-	  <a href="billing.php"class="icon-a"><i class="fa fa-tasks icons"></i>   Billing</a>
-	  <a href="accounts.php"class="icon-a"><i class="fa fa-user icons"></i>   Accounts</a>
-	  <a href="complaint.php"class="icon-a"><i class="fa fa-list-alt icons"></i>   Complaints</a>
-	  <br><br>
-	  <a href="logout.php"class="icon-a"><i class="fa fa-power-off icons"></i>   Logout</a>
+	  <a href="personalinfo.php"class="icon-a" ><i class="fa fa-user icons"></i>   Personal information</a>
+	  <a href="billing.php"class="icon-a" ><i class="fa fa-tasks icons"></i>   Billing</a>
+	  <a href="complaint.php"class="icon-a" ><i class="fa fa-list-alt icons"></i>   Complaints</a>
+	  <a href="logout.php"class="icon-a" ><i class="fa fa-power-off icons"></i>   Logout</a>
 	  
 
 	</div>

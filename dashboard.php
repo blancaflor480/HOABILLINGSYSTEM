@@ -7,7 +7,7 @@
 
     include 'config.php';
 
-    $query = mysqli_query($conn, "SELECT * FROM admin WHERE email='{$_SESSION['SESSION_EMAIL']}'");
+    $query = mysqli_query($conn, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
 
     if (mysqli_num_rows($query) > 0) {
         $row = mysqli_fetch_assoc($query);
@@ -19,7 +19,7 @@
 <!Doctype HTML>
 	<html>
 	<head>
-		<title>Dashboard | Admin</title>
+		<title>Dashboard | Users</title>
 		<!--<link rel="stylesheet" href="css/style1.css" type="text/css"/>-->
 		</head>
 
@@ -40,33 +40,34 @@
 
 			<img src="images/users.png" class="pro-img" />
 			<!--<i class="fa fa-user-circle-o" aria-hidden="true"></i>-->
-			<p><?php echo $row['fname']  ?> <span><?php echo $row['type']  ?> </span></p>
+			<p><?php echo $row['fname']  ?> <span></span></p>
 		</div>
 	</div>
 		<div class="clearfix"></div>
 	</div>
-<?php 
+
+<!--<?php 
 include 'config.php';
 $query = mysqli_query($conn, "SELECT count(id) AS numberofuser, id from users");
 if (mysqli_num_rows($query) > 0){
      $row = mysqli_fetch_assoc($query);
    
  }
-?>
+?>-->
 
 		<div class="clearfix"></div>
 		<br/>
 		
 		
 		<div class="col-div-3"  >
-			<div class="box" style="border-radius: 10px;">
-				<p><?php echo $row['numberofuser'] ?><br/><span>Customers</span></p>
-				<i class="fa fa-users box-icon"></i>
+			<div class="box" style="border-radius: 10px; background-color: green;">
+				<p><!--<?php echo $row['numberofuser'] ?>-->...<br/><span>Payed Bills</span></p>
+				<i class="fa fa-money box-icon"></i>
 			</div>
 		</div>
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px;">
-				<p>...<br/><span>Billing</span></p>
+			<div class="box" style="border-radius: 10px; background-color: darkred;">
+				<p>...<br/><span>Pending Bills</span></p>
 				<i class="fa fa-tasks box-icon"></i>
 			</div>
 		</div>
@@ -79,7 +80,7 @@ if (mysqli_num_rows($query) > 0){
 ?>
 		
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px;">
+			<div class="box" style="border-radius: 10px; background-color: #DB793D;">
 				<p><?php echo $row['numberofadmin']; ?><br/><span>Accounts</span></p>
 				<i class="fa fa-user box-icon"></i>
 			</div>
@@ -93,10 +94,10 @@ if (mysqli_num_rows($query) > 0){
 ?>
 
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px;">
+			<div class="box" style="border-radius: 10px; background-color: #1659B2;">
 				<p><?php echo $row['numberofcomplaint']; ?><br/><span>Complaints</span></p>
 				<i class="fa fa-list-alt box-icon"></i>
-			</div>
+			</div>	
 		</div>
 		<div class="clearfix"></div>
 		<br/><br/>
@@ -108,15 +109,15 @@ $query = mysqli_query($conn, "SELECT * FROM users");
 		<div class="col-div-8">
 			<div class="box-8" style="border-radius: 10px;">
 			<div class="content-box">
-				<p>All Customers <span>See</span></p>
+				<!--<p>All Customers <span>See</span></p>-->
 				<br/>
 				<table>
 	  <tr>
-	    <th>Name</th>
+	    <!--<th>Name</th>
 	    <th>Contact</th>
-	    <th>Address</th>
+	    <th>Address</th>-->
 	  </tr>
-	   <?php
+	   <!--<?php
                 while ($row = mysqli_fetch_assoc($query)) {
                     echo "<tr>";
                     echo "<td>" . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . "</td>";
@@ -124,7 +125,8 @@ $query = mysqli_query($conn, "SELECT * FROM users");
                     echo "<td>" . $row['address'] . "</td>"; // Adjust 'address' based on your actual column name
                     echo "</tr>";
                 }
-                ?>
+                ?>-->
+         <h2 style="color: white; text-align: center; padding: 50px;">Calendar Undermaintainance..</h2>
 	  
 	</table>
 			</div>

@@ -46,7 +46,7 @@
 <html lang="zxx">
 
 <head>
-    <title>Login Form - Brave Coder</title>
+    <title>Rosedale Residences</title>
     <!-- Meta tag Keywords -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
@@ -55,6 +55,8 @@
     <!-- //Meta tag Keywords -->
 
     <link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!--    <link href="font-awesome-4.7.0/fonts/familypoppins.css" rel="stylesheet">-->
 
     <!--/Style-CSS -->
     <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2023 at 03:03 PM
+-- Generation Time: Dec 06, 2023 at 04:16 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -47,8 +47,29 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`Id`, `fname`, `mname`, `lname`, `gender`, `contact`, `email`, `bday`, `address`, `password`, `type`, `code`) VALUES
-(1, NULL, NULL, NULL, '', NULL, 'admin@gmail.com', NULL, NULL, '21232f297a57a5a743894a0e4a801fc3', 'Admin', ''),
+(1, 'Anonymous', NULL, NULL, '', NULL, 'admin@gmail.com', NULL, NULL, '21232f297a57a5a743894a0e4a801fc3', 'Admin', ''),
 (2, 'Jade Ryan', 'L.', 'Blancaflor', 'Male', 999, 'blancaflor1203@gmail.com', '2023-11-01', NULL, '21232f297a57a5a743894a0e4a801fc3', 'Staff', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `complaint`
+--
+
+CREATE TABLE `complaint` (
+  `id` int(14) NOT NULL,
+  `usersid` int(14) NOT NULL,
+  `adminId` int(14) NOT NULL,
+  `complaint` varchar(140) NOT NULL,
+  `stats` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `complaint`
+--
+
+INSERT INTO `complaint` (`id`, `usersid`, `adminId`, `complaint`, `stats`) VALUES
+(1, 1, 1, 'Billing not match', 'Not Process');
 
 -- --------------------------------------------------------
 
@@ -90,6 +111,14 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Indexes for table `complaint`
+--
+ALTER TABLE `complaint`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `adminId` (`adminId`),
+  ADD KEY `usersid` (`usersid`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -106,10 +135,27 @@ ALTER TABLE `admin`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `complaint`
+--
+ALTER TABLE `complaint`
+  MODIFY `id` int(14) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `complaint`
+--
+ALTER TABLE `complaint`
+  ADD CONSTRAINT `complaint_ibfk_1` FOREIGN KEY (`adminId`) REFERENCES `admin` (`Id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `complaint_ibfk_2` FOREIGN KEY (`usersid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

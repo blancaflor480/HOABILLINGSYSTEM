@@ -11,7 +11,7 @@
 
 	<body>
 		
-	  <div id="mySidenav" class="sidenav">
+	  <div id="mySidenav" class="sidenav" style="background-color: #182061;">
 	  <p class="logo"><span>E</span>-Billing</p>
 	  <a href="dashboard.php" class="icon-a"><i class="fa fa-dashboard icons"></i>   Dashboard</a>
 	  <a href="customer.php"class="icon-a"><i class="fa fa-users icons"></i>   Customers</a>

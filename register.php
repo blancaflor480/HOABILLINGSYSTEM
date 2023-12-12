@@ -107,10 +107,10 @@
             <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                    <div class="alert-close">
+                    <div class="alert-close" style="background-color: #182061">
                         <span class="fa fa-close"></span>
                     </div>
-                    <div class="w3l_form align-self">
+                    <div class="w3l_form align-self" style="background-color: #182061">
                         <div class="left_grid_info">
                             <img src="images/image2.svg" alt="">
                         </div>
@@ -126,7 +126,7 @@
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" value="<?php if (isset($_POST['submit'])) { echo $email; } ?>" required>
                             <input type="password" class="password" name="password" placeholder="Enter Your Password" required>
                             <input type="password" class="confirm-password" name="confirm-password" placeholder="Enter Confirm Password" required>
-                            <button name="submit" class="btn" type="submit">Register</button>
+                            <button name="submit" class="btn" type="submit" style="background-color: #182061">Register</button>
                         </form>
                         <div class="social-icons">
                             <p>Have an account! <a href="index.php">Login</a>.</p>

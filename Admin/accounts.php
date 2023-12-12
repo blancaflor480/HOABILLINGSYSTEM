@@ -21,6 +21,8 @@
 	<head>
 		<title>Dashboard | Admin</title>
 		<!--<link rel="stylesheet" href="css/style1.css" type="text/css"/>-->
+		<link rel="stylesheet" href="Bootstrap/bootstrap.min.css" type="text/css"/>
+        <script src="Bootstrap/bootstrap.min.js"></script>
 		</head>
 
 <?php include('slide.php');?>
@@ -53,7 +55,7 @@ $query = mysqli_query($conn, "SELECT * FROM admin");
 		<div class="col-div-8" style="width: 100%;">
 			<div class="box-8">
 			<div class="content-box">
-				<p>All Customers <span>Add</span></p>
+				<p>Administrator Account <span style="background-color: #272c4a;"><button type="button" class="btn btn-success"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp Account</button></span></p>
 				<br/>
 				<table>
 	  <tr>
@@ -64,18 +66,20 @@ $query = mysqli_query($conn, "SELECT * FROM admin");
 	    <th>Address</th>
 	    <th>Email</th>
 	    <th>Type</th>
+	    <th>Action</th>
 	  </tr>
 	  <?php
                 while ($row = mysqli_fetch_assoc($query)) {
                     echo "<tr>";
                     echo "<td>" . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . "</td>";
-                    echo "<td>" . $row['gender'] . "</td>"; // Adjust 'contact' based on your actual column name
-                    echo "<td>" . $row['bday'] . "</td>"; // Adjust 'contact' based on your actual column name
-                    echo "<td>" . $row['contact'] . "</td>"; // Adjust 'contact' based on your actual column name
-                    echo "<td>" . $row['address'] . "</td>"; // Adjust 'address' based on your actual column name
-                    echo "<td>" . $row['email'] . "</td>"; // Adjust 'contact' based on your actual column name
-                    echo "<td>" . $row['type'] . "</td>"; // Adjust 'contact' based on your actual column name
-                    
+                    echo "<td>" . $row['gender'] . "</td>"; 
+                    echo "<td>" . $row['bday'] . "</td>"; 
+                    echo "<td>" . $row['contact'] . "</td>"; 
+                    echo "<td>" . $row['address'] . "</td>"; 
+                    echo "<td>" . $row['email'] . "</td>"; 
+                    echo "<td>" . $row['type'] . "</td>";
+                    echo '<td><button type="button" class="btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>';
+                    echo '<td><button type="button" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>';         
                     echo "</tr>";
                 }
                 ?>	  

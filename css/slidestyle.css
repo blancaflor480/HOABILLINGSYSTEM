@@ -27,7 +27,7 @@ body{
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #622323;
+  background-color: #182061;
   overflow: hidden;
   transition: 0.5s;
   padding-top: 32px;
@@ -43,7 +43,7 @@ body{
 .sidenav a:hover {
   border-radius: 10px;
   color: #f1f1f1;
-  background-color:#1b203d;
+  background-color:#949EB2;
 }
 .sidenav{
   position: absolute;

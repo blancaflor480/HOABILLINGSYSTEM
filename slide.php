@@ -5,7 +5,8 @@
 		<link rel="stylesheet" href="css/slidestyle.css" type="text/css"/>
 		<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		-->
-		
+		<link rel="icon" href="images/rosedalelogo.png" type="image/icon type">
+
 		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
 	
 	
@@ -14,7 +15,7 @@
 
 	<body>
 		
-	  <div id="mySidenav" class="sidenav">
+	  <div id="mySidenav" class="sidenav" style="background-color: #182061;">
 	  <p class="logo"><span>E</span>-Billing</p>
 	  <a href="dashboard.php" class="icon-a" ><i class="fa fa-tachometer icons"></i>   Dashboard</a>
 	  <!--<a href="#"class="icon-a"><i class="fa fa-list icons"></i>   Projects</a>-->

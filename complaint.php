@@ -31,8 +31,8 @@
 
 		<div class="head">
 			<div class="col-div-6">
-	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav"  >☰ Personal Information</span>
-	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav2"  >☰ Personal Information</span>
+	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav"  >☰ Complaint</span>
+	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav2"  >☰ Complaint</span>
 	</div>
 		
 		<div class="clearfix"></div>
@@ -53,9 +53,9 @@ $query = mysqli_query($conn, "SELECT * FROM admin");
 		<div class="col-div-8" style="width: 100%;">
 			<div class="box-8">
 			<div class="content-box">
-				<p>Please fill up for this information! </p>
+				<p></p>
 				<br/>
-		<form action="" method="post">	
+		<!--<form action="" method="post">	
 			<label style="color: white;">Transaction ID: <input type="text" name="" /></label><br>	
 			<label style="color: white;">Firs Name: <input type="text" name="" /></label><br>	
 			<label style="color: white;">Middlle Name: <input type="text" name="" /></label><br>	
@@ -67,7 +67,7 @@ $query = mysqli_query($conn, "SELECT * FROM admin");
 			<label style="color: white;">Contact: <input type="number" name="" /></label><br>
 			<input type="submit" value="Save" name="edit" />	
 			<input type="submit" value="cancel" name="edit" />	
-			</form>	
+			</form>-->	
 			</div>
 		</div>
 		</div>	

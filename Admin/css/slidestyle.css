@@ -27,7 +27,7 @@ body{
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #272c4a;
+  background-color: #182061;
   overflow: hidden;
   transition: 0.5s;
   padding-top: 32px;
@@ -132,13 +132,13 @@ body{
 	padding: 20px;
 }
 .content-box p{
-	margin: 0px;
+	  margin: 0px;
     font-size: 20px;
     color: #f7403b;
 }
 .content-box p span{
 	  float: right;
-    background-color: #ddd;
+    
     padding: 3px 10px;
     font-size: 15px;
 }

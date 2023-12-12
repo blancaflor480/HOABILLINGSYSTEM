@@ -74,10 +74,10 @@
             <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                    <div class="alert-close">
+                    <div class="alert-close" style="background-color: #182061">
                         <span class="fa fa-close"></span>
                     </div>
-                    <div class="w3l_form align-self">
+                    <div class="w3l_form align-self" style="background-color: #182061">
                         <div class="left_grid_info">
                             <img src="images/image.svg" alt="">
                         </div>
@@ -90,7 +90,7 @@
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" required>
                             <input type="password" class="password" name="password" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>
                             <p><a href="forgot-password.php" style="margin-bottom: 15px; display: block; text-align: right;">Forgot Password?</a></p>
-                            <button name="submit" name="submit" class="btn" type="submit">Login</button>
+                            <button name="submit" name="submit" class="btn" type="submit" style="background-color: #182061">Login</button>
                         </form>
                     </div>
                 </div>

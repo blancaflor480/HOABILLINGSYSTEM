@@ -20,6 +20,8 @@
 <head>
     <title>Dashboard | Admin</title>
     <!--<link rel="stylesheet" href="css/style1.css" type="text/css"/>-->
+    <link rel="stylesheet" href="Bootstrap/bootstrap.min.css" type="text/css"/>
+    <script src="Bootstrap/bootstrap.min.js"></script>
 </head>
 
 <?php include('slide.php');?>
@@ -61,16 +63,26 @@
                         </tr>
                        <?php 
            //$query = mysqli_query($conn, "SELECT id, transaction_Id, fname, mname, lname, complaint, stats FROM complaint");
-        $query = mysqli_query($conn, "SELECT usersid, complaint, stats FROM complaint");
+
+        //$query = mysqli_query($conn, "SELECT id, complaint, stats FROM complaint");
+          $query = mysqli_query($conn, "SELECT complaint.id, users.transaction_Id, users.fname, users.lname ,complaint.complaint, complaint.stats
+              FROM complaint
+              LEFT JOIN users ON complaint.usersid = users.id
+              LEFT JOIN users AS u1 ON complaint.id = u1.transaction_Id
+              LEFT JOIN users AS u2 ON complaint.id = u2.fname
+              LEFT JOIN users AS u3 ON complaint.id = u3.lname");
+                       
+           
            if (mysqli_num_rows($query) > 0) {
                 // Your existing loop code here
                 while ($row = mysqli_fetch_assoc($query)) {
                     echo "<tr>";
-                    echo "<td>" . $row['usersid'] . "</td>";
-                   // echo "<td>" . $row['transaction_Id'] . "</td>";
-                   // echo "<td>" . $row['fname'] . " " . $row['mname'] . " " . $row['lname'] . "</td>";
+                    echo "<td>" . $row['id'] . "</td>";
+                    echo "<td>" . $row['transaction_Id'] . "</td>";
+                    echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
                     echo "<td>" . $row['complaint'] . "</td>";
                     echo "<td>" . $row['stats'] . "</td>";
+                    echo '<td><button type="button" class="btn btn-success">Response</button></td>';
                     echo "</tr>";
                 }
             } else {

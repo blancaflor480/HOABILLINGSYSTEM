@@ -78,6 +78,8 @@ if (isset($_POST['submit'])) {
     <meta name="keywords"
         content="Login Form" />
     <!-- //Meta tag Keywords -->
+    <link rel="icon" href="images/rosedalelogo.png" type="image/icon type">
+
 
     <link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -97,10 +99,10 @@ if (isset($_POST['submit'])) {
             <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                    <div class="alert-close">
+                    <div class="alert-close" style="background-color: #182061">
                         <span class="fa fa-close"></span>
                     </div>
-                    <div class="w3l_form align-self">
+                    <div class="w3l_form align-self" style="background-color: #182061">
                         <div class="left_grid_info">
                             <img src="images/image3.svg" alt="">
                         </div>
@@ -111,7 +113,7 @@ if (isset($_POST['submit'])) {
                         <?php echo $msg; ?>
                         <form action="" method="post">
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" required>
-                            <button name="submit" class="btn" type="submit">Send Reset Link</button>
+                            <button name="submit" class="btn" type="submit" style="background-color: #182061">Send Reset Link</button>
                         </form>
                         <div class="social-icons">
                             <p>Back to! <a href="index.php">Login</a>.</p>

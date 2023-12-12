@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2023 at 04:16 PM
+-- Generation Time: Dec 12, 2023 at 04:46 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -97,8 +97,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `transaction_Id`, `fname`, `mname`, `lname`, `bday`, `gender`, `address`, `email`, `contact`, `password`, `code`) VALUES
-(1, 0, 'Jade Ryan', 'Leba', 'Blancaflor', '0000-00-00', '', 'kaingen', 'bryanblancaflor007@gmail.com', 99389022, 'b220e82dde8abcb5dfe247ff49606009', ''),
-(2, 1222233, 'ja', 'jad', 'jjjjjjj', '2023-11-01', 'male', 'kaingen', 'blancaflor007@gmail.com', 9999212, 'Hakdog007', '');
+(1, 20211023, 'Jade Ryan', 'Leba', 'Blancaflor', '0000-00-00', '', 'kaingen', 'bryanblancaflor007@gmail.com', 99389022, 'b220e82dde8abcb5dfe247ff49606009', ''),
+(2, 1222233, 'ja', 'jad', 'jjjjjjj', '2023-11-01', 'male', 'kaingen', 'blancaflor007@gmail.com', 9999212, 'Hakdog007', ''),
+(3, 0, 'John Paul', 'Allera', 'Magno', '0000-00-00', '', '', 'japs@gmail.com', 0, '642217fa13b2def0a72323c85d882371', '1231ac8c37ffc9a4058c6dddff13e13d');
 
 --
 -- Indexes for dumped tables
@@ -144,7 +145,7 @@ ALTER TABLE `complaint`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

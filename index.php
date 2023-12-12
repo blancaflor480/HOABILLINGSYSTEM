@@ -54,6 +54,7 @@
     <meta name="keywords"
         content="Login Form" />
     <!-- //Meta tag Keywords -->
+    <link rel="icon" href="images/rosedalelogo.png" type="image/icon type">
 
     <link rel="stylesheet" href="fonts/font-awesome.min.css">
     <link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -74,10 +75,10 @@
             <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                    <div class="alert-close">
+                    <div class="alert-close" style="background-color: #182061">
                         <span class="fa fa-close"></span>
                     </div>
-                    <div class="w3l_form align-self">
+                    <div class="w3l_form align-self" style="background-color: #182061">
                         <div class="left_grid_info">
                             <img src="images/image.svg" alt="">
                         </div>
@@ -90,7 +91,7 @@
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" required>
                             <input type="password" class="password" name="password" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>
                             <p><a href="forgot-password.php" style="margin-bottom: 15px; display: block; text-align: right;">Forgot Password?</a></p>
-                            <button name="submit" name="submit" class="btn" type="submit">Login</button>
+                            <button name="submit" name="submit" class="btn" type="submit" style="background-color: #182061">Login</button>
                         </form>
                         <div class="social-icons">
                             <p>Create Account! <a href="register.php">Register</a>.</p>

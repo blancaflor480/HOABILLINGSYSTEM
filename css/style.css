@@ -176,7 +176,7 @@ button:hover {
     padding: 0px;
     flex-basis: 50%;
     -webkit-flex-basis: 50%;
-    background: #00c16e;
+    background: #182061;
     padding: 100px 50px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
@@ -218,7 +218,7 @@ button:hover {
     position: absolute;
     right: -5px;
     top: -5px;
-    background: #62c16e;
+    background: #182061;
     border-radius: 50px;
     color: #fff;
     text-align: center;
@@ -274,7 +274,7 @@ button:hover {
     font-size: 18px;
     color: #fff;
     width: 100%;
-    background: #00c16e;
+    background: #182061;
     border: none;
     padding: 14px 15px;
     font-weight: 500;
@@ -286,7 +286,7 @@ button:hover {
 }
 
 .w3l-mockup-form button:hover {
-    background: #4ca356;
+    background: #949EB2;
 }
 
 .w3l-mockup-form .social-icons ul li {

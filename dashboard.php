@@ -136,7 +136,7 @@ $query = mysqli_query($conn, "SELECT * FROM users");
 		<div class="col-div-4">
 			<div class="box-4" style="border-radius: 10px;">
 			<div class="content-box">
-				<p>Total population <span>See All</span></p>
+<!--				<p>Total population <span>See All</span></p>
 
 				<div class="circle-wrap">
 	    <div class="circle">
@@ -148,7 +148,8 @@ $query = mysqli_query($conn, "SELECT * FROM users");
 	      </div>
 	      <div class="inside-circle"> 70% </div>
 	    </div>
-	  </div>
+	  </div> -->
+	  <h1 style="color: white; font-size: 20px; text-align: center; padding: 60px;">Under Maintainance..</h1>
 			</div>
 		</div>
 		</div>

@@ -22,7 +22,6 @@
 		<title>Dashboard | Admin</title>
 		<!--<link rel="stylesheet" href="css/style1.css" type="text/css"/>-->
 		<link rel="stylesheet" href="Bootstrap/bootstrap.min.css" type="text/css"/>
-        <script src="Bootstrap/bootstrap.min.js"></script>
 		</head>
 
 <?php include('slide.php');?>
@@ -78,19 +77,73 @@ $query = mysqli_query($conn, "SELECT * FROM admin");
                     echo "<td>" . $row['address'] . "</td>"; 
                     echo "<td>" . $row['email'] . "</td>"; 
                     echo "<td>" . $row['type'] . "</td>";
-                    echo '<td><button type="button" class="btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>';
-                    echo '<td><button type="button" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>';         
-                    echo "</tr>";
+					echo '<td><button type="button" class="btn btn-warning"  data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>';
+					echo '<td><button type="button" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></button></td>';         
+
+					echo "</tr>";
                 }
                 ?>	  
+				
 	</table>
+	
 			</div>
 		</div>
 		</div>	
 		<div class="clearfix"></div>
-	</div>
-
-
+		
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Account Details</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">First name:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+		  <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Middle name:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Last name:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Gender:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <!--<div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Birthday:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Contact:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+		  <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Address:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>-->
+          <div class="mb-1">
+            <label for="recipient-name" class="col-form-label">Email:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+   <script src="Bootstrap/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script>
 

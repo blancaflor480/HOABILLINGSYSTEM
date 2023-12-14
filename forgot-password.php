@@ -1,4 +1,3 @@
-<!-- Code by Brave Coder - https://youtube.com/BraveCoder -->
 
 <?php
 
@@ -29,7 +28,6 @@ if (isset($_POST['submit'])) {
 
         if ($query) {        
             echo "<div style='display: none;'>";
-            //Create an instance; passing `true` enables exceptions
             $mail = new PHPMailer(true);
 
             try {
@@ -50,7 +48,7 @@ if (isset($_POST['submit'])) {
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->Subject = 'no reply';
-                $mail->Body    = 'Here is the verification link <b><a href="http://localhost/login/change-password.php?reset='.$code.'">http://localhost/login/change-password.php?reset='.$code.'</a></b>';
+                $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/change-password.php?reset='.$code.'">http://localhost/login/change-password.php?reset='.$code.'</a></b>';
 
                 $mail->send();
                 echo 'Message has been sent';
@@ -109,7 +107,7 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class="content-wthree">
                         <h2>Forgot Password</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+                        <p>Enter your email and receive a secure link to reset your password instantly.</p>
                         <?php echo $msg; ?>
                         <form action="" method="post">
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" required>

@@ -69,7 +69,7 @@ if (isset($_GET['reset'])) {
                     </div>
                     <div class="content-wthree">
                         <h2>Change Password</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+                        <p>Effortlessly update your password for increased security and peace of mind with our intuitive web system.</p>
                         <?php echo $msg; ?>
                         <form action="" method="post">
                             <input type="password" class="password" name="password" placeholder="Enter Your Password" required>

@@ -50,6 +50,8 @@ body{
   right: 25px;
   font-size: 36px;
 }
+
+/* eto section box grid */
 #main {
   transition: margin-left .5s;
   padding: 16px;

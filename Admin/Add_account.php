@@ -1,9 +1,13 @@
-
 <style>
   #staticBackdrop img {
     max-width: 100%;
     height: auto;
     margin-bottom: 20px;
+  }
+
+  .modal-dialog {
+    max-width: 45%; /* Adjusted maximum width */
+    margin: 5% auto; /* Centered on the screen */
   }
 
   .modal-body {
@@ -13,24 +17,25 @@
   .modal-body label {
     display: block;
     margin-bottom: 5px;
+    font-size: 0.9rem; /* Adjusted font size */
   }
 
-  .modal-body input {
-    width: 100%;
+  .modal-body input,
+  .modal-body select {
+    width: calc(100% - 12px); /* Adjusted width */
     padding: 6px;
     margin-bottom: 15px;
     box-sizing: border-box;
+    font-size: 0.9rem; /* Adjusted font size */
   }
-  .modal-body select{
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
+
+  .modal-footer {
+    text-align: center; /* Centered buttons */
   }
 </style>
 
 <!-- Modal -->
-<div class="modal fade" id="Add_account" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="Addaccount" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -39,10 +44,10 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-      <form action="backend_account.php" method="POST" enctype="multipart/form-data">
-        <div><img src="" alt=""></div>
-        <label for="fname">First Name</label>
+    <div class="modal-body">
+      <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
+      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;">Please fill up of input!</h5>
+         <label for="fname">First Name</label>
         <input type="text" id="fname" name="fname" />
 
         <label for="mname">Middle Name</label>
@@ -53,15 +58,6 @@
 
         <label for="email">Email</label>
         <input type="text" id="email" name="email" />
-        
-        <label for="contact">Contact No.</label>
-        <input type="text" id="contact" name="contact" />
-        
-        <label for="birthday">Birthday</label>
-        <input type="date" id="bday" name="bday" />
-
-        <label for="Address">Address</label>
-        <input type="text" id="address" name="address" />
 
         <label for="gender">Gender</label>
         <select id="gender" name="gender">
@@ -93,8 +89,9 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" name="submit" class="btn btn-success">Create</button>
       </div>
-
-</form>
+      </form>
+    </div>    
+      
     </div>
   </div>
 </div>

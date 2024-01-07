@@ -67,7 +67,7 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-<div class="text">Billing</div>
+<div class="text">Monthly Report</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Accounts
@@ -84,16 +84,15 @@ $type  = $row['type'];
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                  <th>Customer no.</th>
+                  <th>#</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
-                  <th>Full name</th>
+                  <th>Customer</th>
                   <th>Reading</th>
                   <th>Comsumption</th>
                   <th>Rate (m3)</th>
                   <th>Status</th>
                   <th>Amount</th>
-				  <th>Action</th>
                 </tr>
               </thead>
               <tbody>

@@ -1,9 +1,5 @@
-<!--< ?php include ('config.php');
-$Id=$_GET['Id'];
- ?>-->
 <?php
 session_start();
-include('config.php');
 include('Sidebar.php');
 
 if (isset($_SESSION['uname'])) {
@@ -76,7 +72,7 @@ $type  = $row['type'];
         <div class="card">
           <h5 class="card-header">List of Accounts
             <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Add_account">
+              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addaccount">
                 <span class="bx bx-user-plus"></span> Create New
               </button>
               <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">

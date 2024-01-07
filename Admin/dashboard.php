@@ -16,8 +16,7 @@ if (!$result) {
     header("Location: index.php?error=Login%20First");
     exit();
 }
-
- ?>
+?>
 
 <?php include('sidebar.php');?>	
 

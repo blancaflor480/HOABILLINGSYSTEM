@@ -1,13 +1,3 @@
-<!--< ?php 
-include 'config.php';
-$query = mysqli_query($conn, "SELECT fname,type, image from admin");
-if (mysqli_num_rows($query) > 0){
-     $row = mysqli_fetch_assoc($query);
-     if(isset($row['image'])&& $row['image'] != ""){
-     }
- }
-?>-->
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -300,7 +290,7 @@ if (mysqli_num_rows($query) > 0){
           <span class="tooltip">Customer</span>
         </li>
         <li>
-          <a href="#">
+          <a href="billing.php">
             <i class="bx bx-pie-chart-alt-2"></i>
             <span class="links_name">Billing</span>
           </a>
@@ -314,14 +304,14 @@ if (mysqli_num_rows($query) > 0){
           <span class="tooltip">Account</span>
         </li>
         <li>
-          <a href="#">
+          <a href="monthlyreport.php">
             <i class="bx bx-folder"></i>
             <span class="links_name">Monthly Report</span>
           </a>
           <span class="tooltip">Monthly Report</span>
         </li>
         <li>
-          <a href="#">
+          <a href="complaint.php">
             <i class="bx bx-envelope"></i>
             <span class="links_name">Complaint</span>
           </a>
@@ -334,15 +324,43 @@ if (mysqli_num_rows($query) > 0){
           </a>
           <span class="tooltip">Setting</span>
         </li>
-        <a href="logout.php">
+
+
+<?php 
+include ('config.php');
+if (isset($_SESSION['uname'])) {
+$uname = $_SESSION['uname'];
+} else {
+  // Handle the case when the session variable is not set, redirect or show an error.
+  header("Location: index.php");
+  exit();
+}
+
+$conn_String = mysqli_connect("localhost", "root", "", "billing");
+$stmt = $conn_String->prepare("SELECT * FROM tableaccount WHERE uname = ?");
+$stmt->bind_param("s", $uname);
+$stmt->execute();
+$result = $stmt->get_result()->fetch_assoc();
+
+$query = mysqli_query($conn, "SELECT type, uname,image from tableaccount");
+if (mysqli_num_rows($query) > 0){
+     $row = mysqli_fetch_assoc($query);
+     if(isset($row['image'])&& $row['image'] != ""){
+     }
+ }
+?>
+
+       <a href="logout.php">
         <li class="profile">
           <div class="profile-details">
-            <?php if($row['image'] != ""): ?>
-            <img src="upload/<?php echo $row['image']; ?>" alt="profileImg" />
-            <?php endif; ?> 
+          <?php if ($result['image'] != ""): ?>
+                        <img src="uploads/<?php echo $result['image']; ?>" alt="Profile Image">
+                      <?php else: ?>
+                        <img src="images/users.png" alt="Default Image">
+          <?php endif; ?> 
             <div class="name_job">
-              <div class="name"><?php echo $row['fname']; ?></div>
-              <div class="job"><?php echo $row['type']; ?></div>
+              <div class="name"><?php echo $result['uname']; ?></div>
+              <div class="job"><?php echo $result['type']; ?></div>
             </div>
           </div>
           <i class="bx bx-log-out" id="log_out"></i>

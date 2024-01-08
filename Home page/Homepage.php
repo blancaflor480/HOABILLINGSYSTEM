@@ -8,8 +8,10 @@
     <title>Rosedale Residence Website</title>
     <!-- All CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/bootstrap-icon/font/bootstrap-icons.css">
    
+   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+-->
 <style>
  /*@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');*/
  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
@@ -178,7 +180,7 @@ body {
                 <a class="nav-link" href="#contact">Contact</a>
               </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        
               <li class="nav-item">
-                <a class="nav-link" href="users/index.php" style="color: #182061; font-weight: bold;">Login</a>
+                <a class="nav-link" href="User/index.php" style="color: #182061; font-weight: bold;">Login</a>
               </li>        
               <li class="nav-item">
                 <a class="nav-link" href="User/register.php" style="font-weight: bold;">Sign Up</a>
@@ -219,7 +221,8 @@ body {
             <img src="img/3.png" class="d-block w-100" alt="...">
             <div class="carousel-caption">
               <h5>Service</h5>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, nulla, tempore. Deserunt excepturi quas vero.</p>
+                              <p>It is very important for the customer to pay attention to the adipiscing process. Most of all, there is no time.
+                                 They leave it to be accepted, which it is true.</p>
                               <p><a href="#" class="btn btn-warning mt-3">Learn More</a></p>
             </div>
           </div>
@@ -240,13 +243,18 @@ body {
               <div class="row">
                   <div class="col-lg-4 col-md-12 col-12">
                       <div class="about-img">
-                          <img src="img/about.jpg" alt="" class="img-fluid">
+                          <img src="img/about1.png" alt="" class="img-fluid">
                       </div>
                   </div>
                   <div class="col-lg-8 col-md-12 col-12 ps-lg-5 mt-md-5">
                       <div class="about-text">
-                            <h2>We Provide the Best Quality <br/> Services Ever</h2>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, labore reiciendis. Assumenda eos quod animi! Soluta nesciunt inventore dolores excepturi provident, culpa beatae tempora, explicabo corporis quibusdam corrupti. Autem, quaerat. Assumenda quo aliquam vel, nostrum explicabo ipsum dolor, ipsa perferendis porro doloribus obcaecati placeat natus iste odio est non earum?</p>
+                            <h2>Team Goal<br/></h2>
+                            <p>
+                                The main goal of implementing a billing management system on our subdivision website is to simplify 
+                                the process of handling various payments and enhance the overall experience for residents. 
+                                We aim to automate the billing process, ensuring that bills for services 
+                                like maintenance fees and utilities are easily generated and promptly delivered to residents.
+                            </p>
                             <a href="#" class="btn btn-warning">Learn More</a>
                       </div>
                   </div>
@@ -261,7 +269,7 @@ body {
                   <div class="col-md-12">
                       <div class="section-header text-center pb-5">
                           <h2>Our Services</h2>
-                          <p>Lorem ipsum dolor sit amet, consectetur <br>adipisicing elit. Non, quo.</p>
+                          <p>How this portal works<br></p>
                       </div>
                   </div>
               </div>
@@ -269,9 +277,9 @@ body {
                 <div class="col-12 col-md-12 col-lg-4">
                     <div class="card text-white text-center bg-dark pb-2">
                         <div class="card-body">
-                            <i class="bi bi-laptop"></i>
-                            <h3 class="card-title">Best Quality</h3>
-                            <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus alias iste. Accusantium?</p>
+                            <i class="bi bi-browser-chrome"></i>
+                            <h3 class="card-title">1 - Login</h3>
+                            <p class="lead">Description...</p>
                             <button class="btn bg-warning text-dark">Read More</button>
                         </div>
                     </div>
@@ -279,9 +287,9 @@ body {
                   <div class="col-12 col-md-12 col-lg-4">
                       <div class="card text-white text-center bg-dark pb-2">
                           <div class="card-body">
-                            <i class="bi bi-journal"></i>
-                              <h3 class="card-title">Sustainability</h3>
-                              <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus alias iste. Accusantium?</p>
+                            <i class="bi bi bi-envelope-at-fill"></i>
+                              <h3 class="card-title">2 - Peruse Bills</h3>
+                              <p class="lead">Description...</p>
                               <button class="btn bg-warning text-dark">Read More</button>
                           </div>
                       </div>
@@ -289,9 +297,9 @@ body {
                   <div class="col-12 col-md-12 col-lg-4">
                       <div class="card text-white text-center bg-dark pb-2">
                           <div class="card-body">
-                            <i class="bi bi-intersect"></i>
-                              <h3 class="card-title">Integrity</h3>
-                              <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus alias iste. Accusantium?</p>
+                            <i class="bi bi-newspaper"></i>
+                              <h3 class="card-title">3 - Transact</h3>
+                              <p class="lead">Description...</p>
                               <button class="btn bg-warning text-dark">Read More</button>
                           </div>
                       </div>
@@ -302,7 +310,7 @@ body {
       <!-- services section Ends -->
 
       <!-- portfolio strats -->
-      <section id="portfolio" class="portfolio section-padding">
+      <!--<section id="portfolio" class="portfolio section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -351,7 +359,7 @@ body {
                 </div>
             </div>
         </div>
-      </section>
+      </section>-->
       <!-- portfolio ends -->
       <!-- team starts -->
       <section class="team section-padding" id="team">
@@ -360,17 +368,21 @@ body {
                 <div class="col-md-12">
                     <div class="section-header text-center pb-5">
                         <h2>Our Team</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur <br>adipisicing elit. Non, quo.</p>
+                        <p>It is very important for the <br>customer to pay attention to the adipiscing process. No, where</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            
+            <div class="row justify-content-center">
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <img src="img/team-1.jpg" alt="" class="img-fluid rounded-circle">
+                            <img src="img/jade.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Jade Ryan L. Blancaflor</h3>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi ipsam nostrum illo tempora esse quibusdam.</p>
+                        <p class="card-text">
+                        The customer himself, the customer will be able to pursue the adipiscing of the company. 
+                        I followed that our very times were some.
+                        </p>
                         
 
                         <p class="socials">
@@ -382,12 +394,15 @@ body {
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <img src="img/team-2.jpg" alt="" class="img-fluid rounded-circle">
+                            <img src="img/128x128.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Ma. Angelica M. Rubrico</h3>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi ipsam nostrum illo tempora esse quibusdam.</p>
+                        <p class="card-text">The customer himself, the customer will be able to pursue the adipiscing of the company. 
+                        I followed that our very times were some.
+                        </p>
                         <p class="socials">
                             <i class="bi bi-twitter text-dark mx-1"></i>
                         <i class="bi bi-facebook text-dark mx-1"></i>
@@ -400,9 +415,11 @@ body {
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="card text-center">
                         <div class="card-body">
-                            <img src="img/team-3.jpg" alt="" class="img-fluid rounded-circle">
+                            <img src="img/mona1.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Mona Lyn C. Bularon</h3>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi ipsam nostrum illo tempora esse quibusdam.</p>
+                        <p class="card-text">The customer himself, the customer will be able to pursue the adipiscing of the company. 
+                        I followed that our very times were some.
+                        </p>
                         <p class="socials">
                             <i class="bi bi-twitter text-dark mx-1"></i>
                         <i class="bi bi-facebook text-dark mx-1"></i>
@@ -412,21 +429,7 @@ body {
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <img src="img/team-4.jpg" alt="" class="img-fluid rounded-circle">
-                        <h3 class="card-title py-2">Jack Wilson</h3>
-                        <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi ipsam nostrum illo tempora esse quibusdam.</p>
-                        <p class="socials">
-                            <i class="bi bi-twitter text-dark mx-1"></i>
-                        <i class="bi bi-facebook text-dark mx-1"></i>
-                        <i class="bi bi-linkedin text-dark mx-1"></i>
-                        <i class="bi bi-instagram text-dark mx-1"></i>
-                        </p>
-                        </div>
-                    </div>
-                </div>
+               
             </div>
           </div>
       </section>
@@ -438,7 +441,7 @@ body {
                 <div class="col-md-12">
                     <div class="section-header text-center pb-5">
                         <h2>Contact Us</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur <br>adipisicing elit. Non, quo.</p>
+                        <p>It is very important for the <br>customer to pay attention to the adipiscing process. No, where</p>
                     </div>
                 </div>
             </div>
@@ -471,7 +474,7 @@ body {
       <!-- footer starts -->
       <footer class="bg-dark p-2 text-center">
           <div class="container">
-              <p class="text-white">All Right Reserved By @website Name</p>
+              <p class="text-white">All Right Reserved By Rosedale Residence</p>
           </div>
       </footer>
       <!-- footer ends -->

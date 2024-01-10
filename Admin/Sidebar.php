@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="bootstrap-4.6.2/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <link rel="stylesheet" href="boostrap-icon/bootstrap-icon/font/bootstrap-icons.css">
   <script src="bootstrap-4.6.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <style>
@@ -269,7 +270,7 @@
   <body>
     <div class="sidebar">
       <div class="logo-details">
-        <i class="bx bxl-c-plus-plus icon"></i>
+        <i class="bx bx-building-house icon"></i>
         <div class="logo_name">E Billing</div>
         <i class="bx bx-menu" id="btn"></i>
       </div>
@@ -318,7 +319,7 @@
           <span class="tooltip">Complaint</span>
         </li>
         <li>
-          <a href="#">
+          <a href="settings.php">
             <i class="bx bx-cog"></i>
             <span class="links_name">Setting</span>
           </a>

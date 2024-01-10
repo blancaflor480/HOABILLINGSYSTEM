@@ -18,7 +18,7 @@ if (!$result) {
 }
 ?>
 
-<?php include('sidebar.php');?>	
+<?php include('Sidebar.php');?>	
 
 <!Doctype HTML>
 
@@ -127,9 +127,27 @@ td, th {
   color: #ddd;
   border-bottom: 1px solid #81818140;
 }
+  #carouselExampleSlidesOnly {
+    max-width: 47%; /* Adjust the percentage as needed */
+    margin: 10px;   /* Center the carousel */
+  }
 
+  .carousel-inner img {
+    border-radius: 5px;
+    width: 100%;    /* Make images fill the container */
+    height: 380px;
+  }
+  .announcement-box {
+            width: 50%; /* Adjust the width as needed */
+            background-color: #31304D;
+            padding: 10px;
+            margin-right: 5px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            float: right; /* Align to the right */
+        }
 </style>
-
 	
 	<body>
   <section class="home-section">
@@ -165,13 +183,13 @@ if (mysqli_num_rows($query) > 0){
 		
 		
 		<div class="col-div-3" >
-			<div class="box" style="border-radius: 10px; background-color: #20A11E; width: 90%">
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
 				<p><?php echo $row['numberofuser'] ?><br/><span style="font-size: 15px">Customers</span></p>
 				<i class="bx bx-group box-icons"></i>
 			</div>
 		</div>
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #A32525; width: 90%">
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
 				<p>...<br/><span style="font-size: 15px">Billing</span></p>
 				<i class="bx bx-objects-vertical-bottom box-icons"></i>
 			</div>
@@ -185,28 +203,32 @@ if (mysqli_num_rows($query) > 0){
 ?>-->
 		
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #E5A603; width: 90%">
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
 				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
 				<i class="bx bx-envelope box-icons"></i>
 			</div>
 		</div>
-<!--< ?php 
+<?php 
 include 'config.php';
-$query = mysqli_query($conn, "SELECT count(id) AS numberofcomplaint, id from complaint");
+$query = mysqli_query($conn, "SELECT count(Id) AS numberofaccount, Id from tableaccount");
 if (mysqli_num_rows($query) > 0){
      $row = mysqli_fetch_assoc($query);
  }
-?>-->
+?>
 
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #3251F6; width: 90%">
-				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Rental House</span></p>
-				<i class="bx bx-home box-icons"></i>
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+				<p><?php echo $row['numberofaccount']; ?><br/><span style="font-size: 15px">Account</span></p>
+				<i class="bx bx-user box-icons"></i>
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<br/>
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="announcement-box">
+                <h4 style="font-weight: 500;">Announcement</h4>
+                <p>Your announcement content goes here.</p>
+            </div>
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
         <img src="images/1pic.jpg" class="d-block w-100" alt="...">
@@ -219,7 +241,7 @@ if (mysqli_num_rows($query) > 0){
     </div>
   </div>
 </div>
-    </section>
+
   <!--
 		<div class="col-div-4">
 			<div class="box-4" style="border-radius: 10px;">

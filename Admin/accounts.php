@@ -16,9 +16,14 @@ $type  = $row['type'];
 ?>
 
 <!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">-->
+
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+
+<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+-->
 
 <style>
   .card {
@@ -41,7 +46,7 @@ $type  = $row['type'];
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 12px; /* Adjusted font size */
+    font-size: 0.9rem; /* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -121,7 +126,7 @@ $type  = $row['type'];
             <a class="dropdown-item" href="Edit_Account.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <!-- Use a form for deletion -->
             <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
+                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.9rem;"><span class="bx bx-trash"></span> Delete</button>
             </form>
         </div>
     </div>
@@ -133,7 +138,7 @@ $type  = $row['type'];
           </div>
         </div>
       </div>
-   
+   <br>
 </section>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

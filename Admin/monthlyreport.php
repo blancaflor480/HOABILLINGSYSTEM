@@ -16,9 +16,10 @@ $type  = $row['type'];
 ?>
 
 <!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+
 
 <style>
   .card {
@@ -71,15 +72,13 @@ $type  = $row['type'];
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Accounts
-            <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Add_account">
-                <span class="bx bx-user-plus"></span> Create New
+              <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#Add_account">
+                <span class="bx bx-printer"></span> Print
               </button>
-              <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
+             <!-- <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
                 <span class="bx bx-archive"></span> Archive
-              </button>
-            <?php endif; ?>
-          </h5>
+              </button>-->
+            </h5>
           <div class="card-body">
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>

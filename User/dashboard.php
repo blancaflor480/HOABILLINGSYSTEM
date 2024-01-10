@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION['email'])) {
-        header("Location: index.php");
+        header("Location: index.php?error=Login%20First");
         die();
     }
 
@@ -9,7 +9,7 @@
 
 	$email = $_SESSION['email'];
 	$conn_String = mysqli_connect("localhost", "root", "", "billing");
-	$stmt = $conn_String->prepare("SELECT * FROM tableaccount WHERE email = '{$_SESSION['email']}'");
+	$stmt = $conn_String->prepare("SELECT * FROM tableusers WHERE email = '{$_SESSION['email']}'");
 	$stmt->execute();
 	$result = $stmt->get_result()->fetch_assoc();
 	
@@ -28,7 +28,7 @@
     //}
 ?>
 
-<?php include('sidebar.php');?>	
+<?php include('Sidebar.php');?>	
 
 <!Doctype HTML>
 
@@ -176,14 +176,14 @@ if (mysqli_num_rows($query) > 0){
 		
 		<div class="col-div-3" >
 			<div class="box" style="border-radius: 10px; background-color: #20A11E; width: 90%">
-				<p><?php echo $row['numberofuser'] ?><br/><span style="font-size: 15px">Customers</span></p>
-				<i class="bx bx-group box-icons"></i>
+				<p><?php echo $row['numberofuser'] ?><br/><span style="font-size: 15px">Payed Bills</span></p>
+				<i class="bi bi-paypal box-icons"></i>
 			</div>
 		</div>
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #A32525; width: 90%">
-				<p>...<br/><span style="font-size: 15px">Billing</span></p>
-				<i class="bx bx-objects-vertical-bottom box-icons"></i>
+				<p>...<br/><span style="font-size: 15px">Pending Billing</span></p>
+				<i class="bi bi-receipt box-icons"></i>
 			</div>
 		</div>
 <!--< ?php 
@@ -210,8 +210,8 @@ if (mysqli_num_rows($query) > 0){
 
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #3251F6; width: 90%">
-				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Rental House</span></p>
-				<i class="bx bx-home box-icons"></i>
+				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Date Registered</span></p>
+				<i class="bx bx-calendar box-icons"></i>
 			</div>
 		</div>
 		<div class="clearfix"></div>

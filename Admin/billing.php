@@ -16,9 +16,9 @@ $type  = $row['type'];
 ?>
 
 <!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
 
 <style>
   .card {
@@ -70,7 +70,7 @@ $type  = $row['type'];
 <div class="text">Billing</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">List of Accounts
+          <h5 class="card-header">List of Bills
             <?php if ($type == 'Admin'): ?>
               <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Add_account">
                 <span class="bx bx-user-plus"></span> Create New
@@ -88,9 +88,6 @@ $type  = $row['type'];
                   <th>Reading Date</th>
                   <th>Due Date</th>
                   <th>Full name</th>
-                  <th>Reading</th>
-                  <th>Comsumption</th>
-                  <th>Rate (m3)</th>
                   <th>Status</th>
                   <th>Amount</th>
 				  <th>Action</th>

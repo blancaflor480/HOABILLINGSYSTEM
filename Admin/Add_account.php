@@ -46,7 +46,7 @@
       </div>
     <div class="modal-body">
       <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
-      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;">Please fill up of input!</h5>
+      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;">Please fill up!</h5>
          <label for="fname">First Name</label>
         <input type="text" id="fname" name="fname" />
 

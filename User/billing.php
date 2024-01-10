@@ -1,109 +1,180 @@
 <?php
     session_start();
-    if (!isset($_SESSION['SESSION_EMAIL'])) {
-        header("Location: index.php");
+    if (!isset($_SESSION['email'])) {
+        header("Location: index.php?error=Login%20First");
         die();
     }
 
     include 'config.php';
 
-    $query = mysqli_query($conn, "SELECT * FROM users WHERE email='{$_SESSION['SESSION_EMAIL']}'");
+	$email = $_SESSION['email'];
+	$conn_String = mysqli_connect("localhost", "root", "", "billing");
+	$stmt = $conn_String->prepare("SELECT * FROM tableusers WHERE email = '{$_SESSION['email']}'");
+	$stmt->execute();
+	$result = $stmt->get_result()->fetch_assoc();
+	
+	if (!$result) {
+		header("Location: index.php?error=Login%20First");
+		exit();
+	}
 
-    if (mysqli_num_rows($query) > 0) {
-        $row = mysqli_fetch_assoc($query);
+
+//    $query = mysqli_query($conn, "SELECT * FROM tableusers WHERE email='{$_SESSION['SESSION_EMAIL']}'");
+
+  //  if (mysqli_num_rows($query) > 0) {
+    //    $row = mysqli_fetch_assoc($query);
 
        // echo "Welcome " . $row['fname'] . " <a href='logout.php'>Logout</a>";
+    //}
+?>
+<?php include('Sidebar.php');?>
+
+<!-- Include these links to the head section of your HTML -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+
+<style>
+  .card {
+    margin: 0px;
+  }
+
+  .table th,
+  .table td {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px; /* Adjusted font size */
+  }
+
+  .table img {
+    max-width: 80px;
+    max-height: 80px;
+    border: 4px groove #CCCCCC;
+    border-radius: 5px;
+  }
+
+  .dropdown-menu a {
+    cursor: pointer;
+    font-size: 12px; /* Adjusted font size */
+  }
+
+  .dropdown-menu a:hover {
+    background-color: #f8f9fa !important;
+  }
+
+  .btn {
+    font-size: 12px; /* Adjusted font size */
+  }
+
+  /* Adjusted font size for DataTable controls */
+  .dataTables_length,
+  .dataTables_filter,
+  .dataTables_info,
+  .paginate_button {
+    font-size: 12px;
+  }
+
+  /* Adjusted font size for pagination buttons */
+  .paginate_button.previous, .paginate_button.next {
+    font-size: 12px;
+  }
+</style>
+
+<section class="home-section">
+<div class="text">Billing</div>
+    <div class="col-lg-12">
+        <div class="card">
+          <h5 class="card-header">Dues Bills
+              <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#Add_account">
+                <span class="bi bi-receipt"></span> History Transaction
+              </button>
+              <a class="btn btn-warning float-right" href="complaint.php">
+                <span class="bx bx-envelope"></span> Compalint
+              </a>
+           </h5>
+          <div class="card-body">
+            <table class="table table-hover table-striped table-bordered" id="list">
+              <thead>
+                <tr>
+                  <th>Bill no.</th>
+                  <th>Reading Date</th>
+                  <th>Due Date</th>
+                  <th>Unit Comsumption</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+				          <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!--< ?php
+                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
+                  while ($row = mysqli_fetch_array($result)) {
+                    $Id = $row['Id'];
+                ?>-->
+                  <!--<tr>
+                    <td>< ?php echo $row['Id']; ?></td>
+                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
+                    <td>
+                      < ?php if ($row['image'] != ""): ?>
+                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
+                      < ?php else: ?>
+                        <img src="images/users.png" alt="Default Image">
+                      < ?php endif; ?>
+                    </td>
+                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
+                    <td>< ?php echo $row['email']; ?></td>
+                    <td>< ?php echo $row['type']; ?></td>
+                    <td>
+                    <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Select
+        </a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
+            <form method="post">
+                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
+            </form>
+        </div>
+    </div>
+                    </td>
+                  </tr>
+                <--< ?php } ?>-->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+   
+</section>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete'])) {
+        $buttonValue = $_POST['delete'];
+        // Move the record to the archive table
+        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $archiveResult = mysqli_query($conn, $archiveQuery);
+        
+        // Update the status to 'Offline'
+        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
+        $updateResult = mysqli_query($conn, $updateQuery);
+        
+        if ($archiveResult && $updateResult) {
+            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
+        }
     }
+}
 ?>
 
-<!Doctype HTML>
-	<html>
-	<head>
-		<title>Dashboard | Admin</title>
-		<!--<link rel="stylesheet" href="css/style1.css" type="text/css"/>-->
-		</head>
+<script>
+  $(document).ready(function () {
+    $('#list').DataTable({
+      "pagingType": "full_numbers",
+      "lengthMenu": [5, 10, 25, 50, 75, 100],
+      "pageLength": 10,
+      "order": [[1, 'desc']],
+    });
+  });
+</script>
 
-<?php include('slide.php');?>
-	
-	<body>
-		
-	  <div id="main">
-
-		<div class="head">
-			<div class="col-div-6">
-	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav"  >☰ Billing</span>
-	<span style="font-size:30px;cursor:pointer; color: #272c4a; font-weight: 600;" class="nav2"  >☰ Billing</span>
-	</div>
-		
-		<div class="clearfix"></div>
-	</div>
-
-		<div class="clearfix"></div>
-		<br/>
-		
-		
-		
-		<div class="clearfix"></div>
-		
-<?php 
-include 'config.php';
-$query = mysqli_query($conn, "SELECT * FROM admin");
-?>
-
-		<div class="col-div-8" style="width: 100%;">
-			<div class="box-8">
-			<div class="content-box">
-				<p></p>
-				<br/>
-		<!--<form action="" method="post">	
-			<label style="color: white;">Transaction ID: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Firs Name: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Middlle Name: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Last Name: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Birth Day: <input type="date" name="" /></label><br>	
-			<label style="color: white;">Gender: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Address: <input type="text" name="" /></label><br>	
-			<label style="color: white;">Email: <input type="email" name="" /></label><br>	
-			<label style="color: white;">Contact: <input type="number" name="" /></label><br>
-			<input type="submit" value="Save" name="edit" />	
-			<input type="submit" value="cancel" name="edit" />	
-			</form>-->	
-			</div>
-		</div>
-		</div>	
-		<div class="clearfix"></div>
-	</div>
-
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script>
-
-	  $(".nav").click(function(){
-	    $("#mySidenav").css('width','70px');
-	    $("#main").css('margin-left','70px');
-	    $(".logo").css('visibility', 'hidden');
-	    $(".logo span").css('visibility', 'visible');
-	     $(".logo span").css('margin-left', '-10px');
-	     $(".icon-a").css('visibility', 'hidden');
-	     $(".icons").css('visibility', 'visible');
-	     $(".icons").css('margin-left', '-8px');
-	      $(".nav").css('display','none');
-	      $(".nav2").css('display','block');
-	  });
-
-	$(".nav2").click(function(){
-	    $("#mySidenav").css('width','300px');
-	    $("#main").css('margin-left','300px');
-	    $(".logo").css('visibility', 'visible');
-	     $(".icon-a").css('visibility', 'visible');
-	     $(".icons").css('visibility', 'visible');
-	     $(".nav").css('display','block');
-	      $(".nav2").css('display','none');
-	 });
-
-	</script>
-
-	</body>
-
-
-	</html>
+<?php include('Add_account.php'); ?>
+<?php include('Delete_Account.php'); ?>

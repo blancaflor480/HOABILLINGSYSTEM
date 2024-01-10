@@ -18,9 +18,10 @@ $type  = $row['type'];
 ?>
 
 <!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+
 
 <style>
   .card {
@@ -102,7 +103,7 @@ $type  = $row['type'];
                 <?php
                   $result = mysqli_query($conn, "SELECT * FROM tableusers ORDER BY id ASC") or die(mysqli_error());
                   while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['id'];
+                    $id = $row['id'];
                 ?>
                   <tr>
                     <td><?php echo $row['id']; ?></td>
@@ -123,7 +124,7 @@ $type  = $row['type'];
             Select
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
+            <a class="dropdown-item" href="Edit_User.php?<?php echo 'id=' . $id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <!-- Use a form for deletion -->
             <form method="post">
                 <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><i class="bx bx-trash"></i> Delete</button>
@@ -145,11 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete'])) {
         $buttonValue = $_POST['delete'];
         // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableusers WHERE Id = '$buttonValue'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
         
         // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
+        $updateQuery = "UPDATE tableusers SET status='Offline' WHERE Id = '$buttonValue'";
         $updateResult = mysqli_query($conn, $updateQuery);
         
         if ($archiveResult && $updateResult) {
@@ -170,5 +171,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
-<?php include('Add_account.php'); ?>
-<?php include('Delete_Account.php'); ?>
+<!--< ?php include('Add_account.php'); ?>
+< ?php include('Delete_Account.php'); ?>-->'

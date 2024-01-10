@@ -45,7 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
         if ($stmt->execute()) {
             echo '<script>alert("Created successfully!")</script>';
+            header("Location: accounts.php");
+            exit();
         } else {
+            echo '<script>alert("Error, Please try again!")</script>';
             die("Error: " . $stmt->error);
         }
 
@@ -54,11 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         die("Error: Sorry, there was an error uploading your file.");
     }
 
-    // Close database connection
     $conn->close();
 
-    // Redirect after processing the form
-    header("Location: account.php");
-    exit();
 }
 ?>

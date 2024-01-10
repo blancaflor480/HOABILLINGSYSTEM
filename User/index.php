@@ -75,9 +75,11 @@
             <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                    <div class="alert-close" style="background-color: #182061">
-                        <span class="fa fa-close"></span>
+                <a href="../Homepage.php">    
+                <div class="alert-close" style="background-color: #182061">
+                    <span class="fa fa-close"></span>
                     </div>
+                </a>
                     <div class="w3l_form align-self" style="background-color: #182061">
                         <div class="left_grid_info">
                             <img src="images/image.svg" alt="">

@@ -65,9 +65,9 @@ $type  = $row['type'];
     font-size: 12px;
   }
 </style>
-
+<!--<i class="bi bi-receipt"></i>-->
 <section class="home-section">
-<div class="text">Billing</div>
+<div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Bills
@@ -84,34 +84,49 @@ $type  = $row['type'];
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                  <th>Customer no.</th>
+                <th>Customer no.</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
                   <th>Full name</th>
                   <th>Status</th>
                   <th>Amount</th>
-				  <th>Action</th>
+				          <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
+               <!--< ?php
+                  $result = mysqli_query($conn, "SELECT * FROM tablebilling_list ORDER BY tableusers_id ASC") or die(mysqli_error());
                   while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
+                    $tableusers_id = $row['tableusers_id'];
                 ?>-->
-                  <!--<tr>
-                    <td>< ?php echo $row['Id']; ?></td>
-                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
+                <?php 
+					$i = 1;
+						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+             `name` from `tablebilling_list` b inner join 
+             tableusers c on b.tableusers_id = c.id 
+             order by unix_timestamp(`reading_date`) desc, `name` asc ");
+						while($row = $qry->fetch_assoc()):
+					?>
+					
+                  <tr>
+                    <td><?php echo $row['tableusers_id']; ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
+                    <td><?php echo $row['name']; ?></td>
                     <td>
-                      < ?php if ($row['image'] != ""): ?>
-                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
-                      < ?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      < ?php endif; ?>
+                    <?php
+								  switch($row['status']){
+									case 0:
+										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
+										break;
+									case 1:
+										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+										break;
+								}
+								?>
                     </td>
-                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td>< ?php echo $row['email']; ?></td>
-                    <td>< ?php echo $row['type']; ?></td>
+                    <td><?php echo $row['total']; ?></td>
+                   
                     <td>
                     <div class="dropdown">
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -126,7 +141,8 @@ $type  = $row['type'];
     </div>
                     </td>
                   </tr>
-                <--< ?php } ?>-->
+                  <?php endwhile; ?>
+ <!--               < ?php } ?>-->
               </tbody>
             </table>
           </div>

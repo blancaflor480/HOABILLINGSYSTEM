@@ -10,6 +10,14 @@ if (isset($_SESSION['uname'])) {
     exit();
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["response"])) {
+    // Handle the response button click, update the complaint status, etc.
+    $complaintId = $_POST["complaintId"]; // Assuming you have a hidden input in your form with the complaintId
+    // Perform the update query based on the complaintId
+    $updateQuery = "UPDATE tablecomplaint SET status = 'Processed' WHERE Id = $complaintId";
+    mysqli_query($conn, $updateQuery);
+}
+
 $query  = mysqli_query($conn, "SELECT * FROM tableaccount WHERE uname = '$uname'") or die(mysqli_error());
 $row = mysqli_fetch_array($query);
 $type  = $row['type'];
@@ -85,6 +93,7 @@ $type  = $row['type'];
               <thead>
                 <tr>
                   <th>Complaint #</th>
+                  <th>Date Time</th>
                   <th>Full name</th>
                   <th>Complaint</th>
                   <th>Status</th>
@@ -92,39 +101,28 @@ $type  = $row['type'];
                 </tr>
               </thead>
               <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>-->
-                  <!--<tr>
-                    <td>< ?php echo $row['Id']; ?></td>
-                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
+              <?php 
+					$i = 1;
+						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+             `name` from `tablecomplaint` b inner join 
+             tableusers c on b.tableusers_id = c.id 
+             order by unix_timestamp(`date_time`) desc, `name` asc ");
+						while($row = $qry->fetch_assoc()):
+					?>
+                  <tr>
+                    <td><?php echo $row['Id']; ?></td>
+                    <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
+                    <td><?php echo $row['name']; ?></td>
+                    <td><?php echo $row['message']; ?></td>
+                    <td><?php echo $row['status']; ?></td>
                     <td>
-                      < ?php if ($row['image'] != ""): ?>
-                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
-                      < ?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      < ?php endif; ?>
-                    </td>
-                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td>< ?php echo $row['email']; ?></td>
-                    <td>< ?php echo $row['type']; ?></td>
-                    <td>
-                    <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
-            </form>
-        </div>
-    </div>
-                    </td>
+                    <form method="post">
+                                       
+                                        <button class="btn btn-success"  name="complaintId" value="<?php echo $row['Id']; ?>" type="submit">Response</button>  
+                                      </form>
+                  </td>
                   </tr>
-                <--< ?php } ?>-->
+                <?php endwhile ?>
               </tbody>
             </table>
           </div>
@@ -132,24 +130,6 @@ $type  = $row['type'];
       </div>
    
 </section>
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
-        }
-    }
-}
-?>
 
 <script>
   $(document).ready(function () {

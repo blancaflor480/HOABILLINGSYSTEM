@@ -124,9 +124,13 @@ $type  = $row['type'];
         </a>
         <div class="dropdown-menu">
             <a class="dropdown-item" href="Edit_Account.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
+
             <!-- Use a form for deletion -->
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.9rem;"><span class="bx bx-trash"></span> Delete</button>
+            <form method="post" onsubmit="return confirm('Are you sure you want to delete this account?');">
+                <input type="hidden" name="deleteId" value="<?php echo $Id; ?>">
+                <button class="dropdown-item" type="submit" style="font-size: 0.9rem;">
+                    <span class="bx bx-trash"></span> Delete
+                </button>
             </form>
         </div>
     </div>
@@ -142,19 +146,32 @@ $type  = $row['type'];
 </section>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
+    if (isset($_POST['deleteId'])) {
+        $deleteId = $_POST['deleteId'];
+
+        // Start a transaction
+        mysqli_autocommit($conn, false);
+
         // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $archiveQuery = "INSERT INTO tablearchives SELECT * FROM tableaccount WHERE Id = '$deleteId'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
+
+        // Delete the record from the main table
+        $deleteQuery = "DELETE FROM tableaccount WHERE Id = '$deleteId'";
+        $deleteResult = mysqli_query($conn, $deleteQuery);
+
+        if ($archiveResult && $deleteResult) {
+            // Commit the transaction
+            mysqli_commit($conn);
+            echo '<script>setTimeout(function() { window.location.href = "accounts.php"; }, 10);</script>';
+        } else {
+            // Rollback the transaction in case of any failure
+            mysqli_rollback($conn);
+            echo "Error deleting record: " . mysqli_error($conn);
         }
+
+        // Restore the autocommit mode
+        mysqli_autocommit($conn, true);
     }
 }
 ?>

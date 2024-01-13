@@ -142,9 +142,9 @@ td, th {
             background-color: #31304D;
             padding: 10px;
             margin-right: 5px;
-            border-radius: 10px;
+            border-radius: 5px;
             color: white;
-            font-size: 16px;
+            
             float: right; /* Align to the right */
         }
 </style>
@@ -184,14 +184,26 @@ if (mysqli_num_rows($query) > 0){
 		
 		<div class="col-div-3" >
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+      <a href="customer.php" style="text-decoration: none;">
 				<p><?php echo $row['numberofuser'] ?><br/><span style="font-size: 15px">Customers</span></p>
 				<i class="bx bx-group box-icons"></i>
+        </a>
 			</div>
 		</div>
+
+    <?php 
+include 'config.php';
+$query = mysqli_query($conn, "SELECT count(id) AS numberofbilling, id from tablebilling_list");
+if (mysqli_num_rows($query) > 0){
+     $row = mysqli_fetch_assoc($query);
+ }
+ ?>
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p>...<br/><span style="font-size: 15px">Billing</span></p>
+			<a href="billing.php" style="text-decoration: none;">	
+      <p><?php echo $row['numberofbilling']; ?><br/><span style="font-size: 15px">Billing</span></p>
 				<i class="bx bx-objects-vertical-bottom box-icons"></i>
+      </a>
 			</div>
 		</div>
 <!--< ?php 
@@ -204,8 +216,10 @@ if (mysqli_num_rows($query) > 0){
 		
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
+			<a href="complaint.php" style="text-decoration: none;">	
+      <p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
 				<i class="bx bx-envelope box-icons"></i>
+</a>
 			</div>
 		</div>
 <?php 
@@ -218,15 +232,17 @@ if (mysqli_num_rows($query) > 0){
 
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><?php echo $row['numberofaccount']; ?><br/><span style="font-size: 15px">Account</span></p>
+			<a href="accounts.php" style="text-decoration: none;">	
+      <p><?php echo $row['numberofaccount']; ?><br/><span style="font-size: 15px">Account</span></p>
 				<i class="bx bx-user box-icons"></i>
+      </a>
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<br/>
     <div class="announcement-box">
-                <h4 style="font-weight: 500;">Announcement</h4>
-                <p>Your announcement content goes here.</p>
+                <h4 style="font-weight: 500; font-size: 1.2rem;"><i class="bx bx-bell" type="solid"></i> Announcement</h4>
+                <p style="font-size: 0.9rem;">- System Undermaintainance, sorry to able acess in sidebar.Thankyou!</p>
             </div>
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">

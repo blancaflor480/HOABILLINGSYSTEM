@@ -44,7 +44,7 @@ $type  = $row['type'];
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 12px; /* Adjusted font size */
+    font-size: 0.9rem;/* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -127,7 +127,7 @@ $type  = $row['type'];
             <a class="dropdown-item" href="Edit_User.php?<?php echo 'id=' . $id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <!-- Use a form for deletion -->
             <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><i class="bx bx-trash"></i> Delete</button>
+                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.9rem;"><i class="bx bx-trash"></i> Delete</button>
             </form>
         </div>
     </div>

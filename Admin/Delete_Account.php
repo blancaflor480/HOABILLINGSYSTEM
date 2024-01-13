@@ -43,8 +43,7 @@
       <table class="table table-bordered" style="margin-left:0px;">
         <thead class="table-dark">
           <tr>
-            <th style="width: 5%; font-size: 0.7rem;">#</th>
-           
+            <th style="width: 5%; font-size: 0.7rem;">#</th>           
             <th style="width: 20%; font-size: 0.7rem;">EMAIL ADDRESS</th>
             <th style="width: 10%; font-size: 0.7rem;">RESTORE</th>
           </tr>
@@ -52,7 +51,7 @@
         <tbody>
        <?php
        $db = mysqli_connect("localhost", "root", "", "billing");
-          $cmd = mysqli_query($db, "SELECT Id,email from tableaccount where type ='Staff' and  status='offline' order by Id DESC");
+          $cmd = mysqli_query($db, "SELECT Id,email from tablearchives where type ='Admin' order by Id DESC");
           while ($result = mysqli_fetch_assoc($cmd)) {
             $id = $result["Id"];
             
@@ -77,17 +76,36 @@
 </div>
 <?php
 include ('config.php');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_POST['insert'])) {
+    if (isset($_POST['insert'])) {
         $buttonValue = $_POST['insert'];
-        $sql = "UPDATE tableaccount set status='Active' WHERE Id = '$buttonValue'";
-        $result1 = mysqli_query($db,$sql);
-        if($result1)
-        {
-         
-          echo '<script>setTimeout(function() { window.location.href = "accounts.php"; }, 10);</script>';
+
+        // Check if the record already exists in the main table to avoid primary key conflicts
+        $checkQuery = "SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $checkResult = mysqli_query($db, $checkQuery);
+
+        if (mysqli_num_rows($checkResult) == 0) {
+            // The record does not exist in the main table, proceed with restoration
+            $archiveQuery = "INSERT INTO tableaccount SELECT * FROM tablearchives WHERE Id = '$buttonValue'";
+            $result1 = mysqli_query($db, $archiveQuery);
+
+            if ($result1) {
+                // Delete the record from the archive table after successful restoration
+                $deleteQuery = "DELETE FROM tablearchives WHERE Id = '$buttonValue'";
+                $deleteResult = mysqli_query($db, $deleteQuery);
+
+                if ($deleteResult) {
+                    echo '<script>setTimeout(function() { window.location.href = "accounts.php"; }, 10);</script>';
+                } else {
+                    echo "Error deleting record from archive table: " . mysqli_error($db);
+                }
+            } else {
+                echo "Error restoring record to main table: " . mysqli_error($db);
+            }
+        } else {
+            echo "Record already exists in the main table.";
         }
-       
     }
 }
 ?>

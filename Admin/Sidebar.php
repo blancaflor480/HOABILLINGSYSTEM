@@ -191,7 +191,7 @@
   height: 60px;
   width: 78px;
   left: 0;
-  bottom: -8px;
+  bottom: -12px;
   padding: 10px 14px;
   background: #1d1b31;
   transition: all 0.5s ease;
@@ -343,27 +343,32 @@ $stmt->bind_param("s", $uname);
 $stmt->execute();
 $result = $stmt->get_result()->fetch_assoc();
 
-$query = mysqli_query($conn, "SELECT type, uname,image from tableaccount");
+$query = mysqli_query($conn, "SELECT Id, type, uname,image from tableaccount");
 if (mysqli_num_rows($query) > 0){
      $row = mysqli_fetch_assoc($query);
      if(isset($row['image'])&& $row['image'] != ""){
      }
  }
+ 
 ?>
 
-       <a href="logout.php">
-        <li class="profile">
-          <div class="profile-details">
+<li class="profile">
+            <div class="profile-details">
+            <a href="View_Account.php?<?php echo 'uname=' .$uname; ?>" style="text-decoration: none; width: 48px;"> 
+
           <?php if ($result['image'] != ""): ?>
-                        <img src="uploads/<?php echo $result['image']; ?>" alt="Profile Image">
+           
+            <img src="uploads/<?php echo $result['image']; ?>" alt="Profile Image">
                       <?php else: ?>
                         <img src="images/users.png" alt="Default Image">
-          <?php endif; ?> 
-            <div class="name_job">
+          <?php endif; ?>
+          <div class="name_job">
               <div class="name"><?php echo $result['uname']; ?></div>
-              <div class="job"><?php echo $result['type']; ?></div>
+              <div class="job"><?php echo $result['type']; ?></div>                                
             </div>
+            </a>
           </div>
+          <a href="logout.php" style="color: white; text-decoration: none;">          
           <i class="bx bx-log-out" id="log_out"></i>
         </li>
         </a>

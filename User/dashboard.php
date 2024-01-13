@@ -137,7 +137,25 @@ td, th {
   color: #ddd;
   border-bottom: 1px solid #81818140;
 }
+#carouselExampleSlidesOnly {
+    max-width: 47%; /* Adjust the percentage as needed */
+    margin: 10px;   /* Center the carousel */
+  }
 
+  .carousel-inner img {
+    border-radius: 5px;
+    width: 100%;    /* Make images fill the container */
+    height: 380px;
+  }
+  .announcement-box {
+            width: 50%; /* Adjust the width as needed */
+            background-color: #31304D;
+            padding: 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+            color: white;   
+            float: right; /* Align to the right */
+        }
 </style>
 
 	
@@ -161,28 +179,28 @@ td, th {
 <div>  
 <h4 style="font-weight: 500;">Welcome to Billing Management System</h4> 
 </div>   
-<?php 
+<!--< ?php 
 include 'config.php';
-$query = mysqli_query($conn, "SELECT count(id) AS numberofuser, id from tableusers");
+$query = mysqli_query($conn, "SELECT * FROM tablebilling_list WHERE status='1' AND tableusers_id='1'");
 if (mysqli_num_rows($query) > 0){
      $row = mysqli_fetch_assoc($query);
    
  }
-?>
+?>-->
 
 		<div class="clearfix"></div>
 		<br/>
 		
 		
 		<div class="col-div-3" >
-			<div class="box" style="border-radius: 10px; background-color: #20A11E; width: 90%">
-				<p><?php echo $row['numberofuser'] ?><br/><span style="font-size: 15px">Payed Bills</span></p>
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+				<p><!--< ?php echo $row['numberofpaid'] ?>-->...<br/><span style="font-size: 15px">Payed Bills</span></p>
 				<i class="bi bi-paypal box-icons"></i>
 			</div>
 		</div>
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #A32525; width: 90%">
-				<p>...<br/><span style="font-size: 15px">Pending Billing</span></p>
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+				<p><!--< ?php echo $row['tableusers_id'] ?>-->...<br/><span style="font-size: 15px">Pending Billing</span></p>
 				<i class="bi bi-receipt box-icons"></i>
 			</div>
 		</div>
@@ -195,28 +213,32 @@ if (mysqli_num_rows($query) > 0){
 ?>-->
 		
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #E5A603; width: 90%">
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
 				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
 				<i class="bx bx-envelope box-icons"></i>
 			</div>
 		</div>
-<!--< ?php 
+<?php 
 include 'config.php';
-$query = mysqli_query($conn, "SELECT count(id) AS numberofcomplaint, id from complaint");
+$query = mysqli_query($conn, "SELECT datereg AS datetime from tableusers");
 if (mysqli_num_rows($query) > 0){
      $row = mysqli_fetch_assoc($query);
  }
-?>-->
+?>
 
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #3251F6; width: 90%">
-				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Date Registered</span></p>
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+				<p><?php echo date("Y-m-d", strtotime($row['datetime'])); ?><br/><span style="font-size: 15px">Date Registered</span></p>
 				<i class="bx bx-calendar box-icons"></i>
 			</div>
 		</div>
 		<div class="clearfix"></div>
 		<br/>
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="announcement-box">
+                <h4 style="font-weight: 500; font-size: 1.2rem;"><i class="bx bx-bell" type="solid"></i> Announcement</h4>
+                <p style="font-size: 0.9rem;">- System Undermaintainance, sorry to able acess in sidebar.Thankyou!</p>
+            </div>
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
         <img src="images/1pic.jpg" class="d-block w-100" alt="...">
@@ -229,6 +251,7 @@ if (mysqli_num_rows($query) > 0){
     </div>
   </div>
 </div>
+
     </section>
   <!--
 		<div class="col-div-4">

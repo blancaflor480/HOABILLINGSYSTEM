@@ -77,7 +77,7 @@
 .container form{
     position: relative;
     margin-top: 16px;
-    min-height: 350px;
+    min-height: 550px;
     background-color: #fff;
     overflow: hidden;
 }
@@ -153,7 +153,7 @@ form .fields .input-field{
     align-items: center;
     justify-content: center;
     height: 45px;
-    max-width: 200px;
+    max-width: 150px;
     width: 100%;
     border: none;
     outline: none;
@@ -183,7 +183,7 @@ form .buttons{
     align-items: center;
 }
 form .buttons button , .backBtn{
-    margin-right: 14px;
+    margin-right: 15px;
 }
 
 @media (max-width: 750px) {
@@ -206,18 +206,28 @@ form .buttons button , .backBtn{
 </style>
 
 <section class="home-section">
-<div class="text">Personal</div>
-    <div class="col-md-11">
+<div class="text">Customer</div>
+    <div class="col-md-12">
         <div class="card">
           <h5 class="card-header">Personal Details
            </h5>
           <div class="card-body">
-    <div class="container">        
+    <div class="container" style="margin-left: 70px">        
         <form method="POST" enctype="multipart/form-data" >
         <input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
-                
+            
             <div class="form first">
-                <div class="details personal">                 
+        <spant style="display: flex; justify-content:center" class="title; ">
+        <?php if($result['image'] != ""): ?>
+        <img style="border:4px groove #CCCCCC; border-radius:5px; width:100px; height: 100px;"  
+        src="uploads/<?php echo $meta['image']; ?>" alt="" style="max-width: 100px; max-height: 100px;">
+    <?php else: ?>
+        <img src="images/users.png" width="100px" height="100px" style="border:4px groove #CCCCCC; border-radius:5px;">
+    <?php endif; ?>
+        </spant>        
+            <div class="details personal">
+                
+                 
                    <div class="fields">
                         <div class="input-field">
                             <label>First Name</label>
@@ -226,28 +236,28 @@ form .buttons button , .backBtn{
 
                         <div class="input-field">
                             <label>Middle Name</label>
-                            <input type="text" name="mname" value="<?php echo $result['mname']; ?>" required>
+                            <input type="text" name="mname" value="<?php echo $result['mname']; ?>"  required>
                         </div>
 
                         <div class="input-field">
                             <label>Last Name</label>
-                            <input type="text" name="lname" value="<?php echo $result['lname']; ?>" required/>
+                            <input type="text" name="lname" value="<?php echo $result['lname']; ?>"  required/>
                         </div>
 
 
                         <div class="input-field">
                             <label>Date of Birth</label>
-                            <input type="date" value="<?php echo $result['bday']; ?>" required>
+                            <input type="date" value="<?php echo $result['bday']; ?>"  required>
                         </div>
 
                         <div class="input-field">
                             <label>Email</label>
-                            <input type="text" value="<?php echo $result['email']; ?>" required>
+                            <input type="email" value="<?php echo $result['email']; ?>" required>
                         </div>
 
                         <div class="input-field">
                             <label>Mobile Number</label>
-                            <input type="number" value="<?php echo $result['contact']; ?>" required>
+                            <input type="number" value="<?php echo $result['contact']; ?>"  required>
                         </div>
 
                         <div class="input-field">
@@ -262,7 +272,7 @@ form .buttons button , .backBtn{
 
                         <div class="input-field">
                             <label>Address</label>
-                            <input type="text" value="<?php echo $result['address']; ?>" required>
+                            <input type="text" value="<?php echo $result['address']; ?>"  required>
                         </div>
                     
                     <div class="input-field">
@@ -274,13 +284,39 @@ form .buttons button , .backBtn{
                           <option <?php if ($result['category'] == 'Others') echo 'selected'; ?>>Others</option>
                         </select>
                     </div>
-
-                        <button class="sumbit">
+                    
+                    <div class="input-field">
+                            <label>Password</label>
+                            <input type="password" value="<?php echo $result['password']; ?>"  required>
+                        </div>
+                    
+                        <div class="input-field">
+                            <label>Confirm Password</label>
+                            <input type="password" value="<?php echo $result['copassword']; ?>"  required>
+                        </div>
+                    
+<br>
+                    <div class="input-field">
+                            <label>Image</label>
+                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>"  required>
+                    </div>
+                     
+                   
+                     
+                    <div style="display: flex; justify-content: center; width: 1100px;">
+                        <button class="sumbit" type="submit">
                             <span class="btnText">Save</span>&nbsp;
                             <i class="bi bi-cloud-download"></i>
                         </button>
+                        &nbsp;&nbsp;
+                        <button class="sumbit" style="background-color: gray;">
+                            <span class="btnText">Close</span>&nbsp;
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                        </div>
                         
                       </div>
+                    
                 </div>
 
                 <!--<div class="details ID">

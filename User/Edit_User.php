@@ -293,10 +293,18 @@ form .buttons button , .backBtn{
                         </select>
                     </div>
 
+                    <div style="display: flex; justify-content: center; width: 1100px;">
                         <button class="sumbit">
                             <span class="btnText">Save</span>&nbsp;
                             <i class="bi bi-cloud-download"></i>
                         </button>
+                        &nbsp;&nbsp;
+                        <button class="sumbit" style="background-color: gray;">
+                            <span class="btnText">Close</span>&nbsp;
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                        </div>
+
                         
                       </div>
                 </div>

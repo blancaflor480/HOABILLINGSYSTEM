@@ -90,7 +90,9 @@
                         <p>Hello, Friend! Enter your personal details and start journey with us.</p>
                         <?php echo $msg; ?>
                         <form action="" method="post">
+                            <label style="font-size: 1rem; font-weight: 550;">Email</label>
                             <input type="email" class="email" name="email" placeholder="Enter Your Email" required>
+                            <label style="font-size: 1rem; font-weight: 550;">Password</label>
                             <input type="password" class="password" name="password" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>
                             <p><a href="forgot-password.php" style="margin-bottom: 15px; display: block; text-align: right;">Forgot Password?</a></p>
                             <button name="submit" name="submit" class="btn" type="submit" style="background-color: #182061">Login</button>

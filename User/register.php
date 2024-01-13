@@ -28,11 +28,11 @@
         $confirm_password = mysqli_real_escape_string($conn, md5($_POST['confirm-password']));
         $code = mysqli_real_escape_string($conn, md5(rand()));
 
-        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tableusers WHERE email='{$email}'")) > 0) {
             $msg = "<div class='alert alert-danger'>{$email} - This email address has been already exists.</div>";
         } else {
             if ($password === $confirm_password) {
-                $sql = "INSERT INTO users (fname, mname, lname, email, password, code) VALUES ('{$fname}', '{$mname}', '{$lname}', '{$email}', '{$password}', '{$code}')";
+                $sql = "INSERT INTO tableusers (fname, mname, lname, email, password, code) VALUES ('{$fname}', '{$mname}', '{$lname}', '{$email}', '{$password}', '{$code}')";
                 $result = mysqli_query($conn, $sql);
 
                 if ($result) {
@@ -58,7 +58,7 @@
                         //Content
                         $mail->isHTML(true);                                  //Set email format to HTML
                         $mail->Subject = 'no reply';
-                        $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/?verification='.$code.'">http://localhost/login/?verification='.$code.'</a></b>';
+                        $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/User/?verification='.$code.'">http://localhost/login/?verification='.$code.'</a></b>';
 
                         $mail->send();
                         echo 'Message has been sent';
@@ -66,7 +66,7 @@
                         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                     }
                     echo "</div>";
-                    $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div> ";
+                    $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div>";
                 } else {
                     $msg = "<div class='alert alert-danger'>Something wrong went.</div>";
                 }
@@ -89,8 +89,8 @@
         content="Login Form" />
     <!-- //Meta tag Keywords -->
 
-    <!--<link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">-->
-    <link rel="stylesheet" href="fonts/font-awesome.min.css">
+    <link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!--<link rel="stylesheet" href="fonts/font-awesome.min.css">-->
     <!--/Style-CSS -->
     <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
     <!--//Style-CSS -->
@@ -122,12 +122,18 @@
                         <p>To keep connected with us please login with your personal info</p>
                         <?php echo $msg; ?>
                         <form action="" method="post">
-                            <input type="text" class="name" name="fname" placeholder="Enter Your First Name" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
-                             <input type="text" class="name" name="mname" placeholder="Enter Your Middle Name" value="<?php if (isset($_POST['submit'])) { echo $mname; } ?>" required>
-                              <input type="text" class="name" name="lname" placeholder="Enter Your Last Name" value="<?php if (isset($_POST['submit'])) { echo $lname; } ?>" required>
-                            <input type="email" class="email" name="email" placeholder="Enter Your Email" value="<?php if (isset($_POST['submit'])) { echo $email; } ?>" required>
-                            <input type="password" class="password" name="password" placeholder="Enter Your Password" required>
-                            <input type="password" class="confirm-password" name="confirm-password" placeholder="Enter Confirm Password" required>
+                          <label style="font-size: 1rem; font-weight: 450;">First name</label>
+                            <input type="text" class="name" name="fname" placeholder="Enter your first name" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
+                            <label style="font-size: 1rem; font-weight: 450;">Middle name</label>
+                             <input type="text" class="name" name="mname" placeholder="Enter your middle name" value="<?php if (isset($_POST['submit'])) { echo $mname; } ?>" required>
+                             <label style="font-size: 1rem; font-weight: 450;">Last name</label>
+                              <input type="text" class="name" name="lname" placeholder="Enter your last name" value="<?php if (isset($_POST['submit'])) { echo $lname; } ?>" required>
+                            <label style="font-size: 1rem; font-weight: 450;">Email</label>
+                            <input type="email" class="email" name="email" placeholder="Enter your email" value="<?php if (isset($_POST['submit'])) { echo $email; } ?>" required>
+                            <label style="font-size: 1rem; font-weight: 450;">Password</label>
+                            <input type="password" class="password" name="password" placeholder="Enter your password" required>
+                            <label style="font-size: 1rem; font-weight: 450;">Confirm</label>
+                            <input type="password" class="confirm-password" name="confirm-password" placeholder="Enter confirm password" required>
                             <button name="submit" class="btn" type="submit" style="background-color: #182061">Register</button>
                         </form>
                         <div class="social-icons">

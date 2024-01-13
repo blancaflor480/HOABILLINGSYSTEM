@@ -96,10 +96,10 @@
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                  <th>Bill no.</th>
+                <th>Customer no.</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
-                  <th>Unit Comsumption</th>
+                  <th>Previous</th>
                   <th>Status</th>
                   <th>Amount</th>
 				          <th>Action</th>
@@ -111,21 +111,37 @@
                   while ($row = mysqli_fetch_array($result)) {
                     $Id = $row['Id'];
                 ?>-->
-                  <!--<tr>
-                    <td>< ?php echo $row['Id']; ?></td>
-                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
+                <?php 
+					$i = 1;
+						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+             `name` from `tablebilling_list` b inner join 
+             tableusers c on b.tableusers_id = c.id 
+             order by unix_timestamp(`reading_date`) desc, `name` asc ");
+						while($row = $qry->fetch_assoc()):
+					?>
+					
+                  <tr>
+                    <td><?php echo $row['tableusers_id']; ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
+                    <td><?php echo $row['previous']; ?></td>
                     <td>
-                      < ?php if ($row['image'] != ""): ?>
-                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
-                      < ?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      < ?php endif; ?>
+                    <?php
+								  switch($row['status']){
+									case 0:
+										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
+										break;
+									case 1:
+										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+										break;
+								}
+								?>
                     </td>
-                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td>< ?php echo $row['email']; ?></td>
-                    <td>< ?php echo $row['type']; ?></td>
+                    <td><?php echo $row['total']; ?></td>
+                   
                     <td>
-                    <div class="dropdown">
+          
+                <div class="dropdown">
         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
             Select
         </a>
@@ -138,7 +154,7 @@
     </div>
                     </td>
                   </tr>
-                <--< ?php } ?>-->
+                <?php endwhile ?>
               </tbody>
             </table>
           </div>
@@ -175,6 +191,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   });
 </script>
-
-<?php include('Add_account.php'); ?>
-<?php include('Delete_Account.php'); ?>

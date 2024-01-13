@@ -89,44 +89,27 @@
               <thead>
                 <tr>
                   <th>Complaint #</th>
+                  <th>Date Time</th>
                   <th>Complaint</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>-->
-                  <!--<tr>
-                    <td>< ?php echo $row['Id']; ?></td>
-                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
-                    <td>
-                      < ?php if ($row['image'] != ""): ?>
-                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
-                      < ?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      < ?php endif; ?>
-                    </td>
-                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td>< ?php echo $row['email']; ?></td>
-                    <td>< ?php echo $row['type']; ?></td>
-                    <td>
-                    <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
-            </form>
-        </div>
-    </div>
-                    </td>
+              <?php 
+					$i = 1;
+						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+             `name` from `tablecomplaint` b inner join 
+             tableusers c on b.tableusers_id = c.id 
+             order by unix_timestamp(`date_time`) desc, `name` asc ");
+						while($row = $qry->fetch_assoc()):
+					?>
+                  <tr>
+                    <td><?php echo $row['Id']; ?></td>
+                    <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
+                    <td><?php echo $row['message']; ?></td>
+                    <td><?php echo $row['status']; ?></td>
                   </tr>
-                <--< ?php } ?>-->
+                <?php endwhile ?>
               </tbody>
             </table>
           </div>
@@ -164,5 +147,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
-<?php include('Add_account.php'); ?>
-<?php include('Delete_Account.php'); ?>

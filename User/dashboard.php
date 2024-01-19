@@ -161,8 +161,7 @@ td, th {
 	
 	<body>
   <section class="home-section">
-      <div class="text">Dashboard</div>
-    
+     <div class="text"><li class="bi bi-person-fill" style="list-style: none;"></i> Hi <?php echo $row['fname']  ?>!</div>
 	  <div id="main">
 
 		
@@ -198,9 +197,23 @@ if (mysqli_num_rows($query) > 0){
 				<i class="bi bi-paypal box-icons"></i>
 			</div>
 		</div>
+
+<?php
+include 'config.php';
+
+$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofpending FROM tablebilling_list WHERE status = 0");
+
+if (mysqli_num_rows($query) > 0) {
+    $row = mysqli_fetch_assoc($query);
+
+    $numberofpending = $row['numberofpending'];
+} else {
+    $numberofpending = 0;
+}
+?>		
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><!--< ?php echo $row['tableusers_id'] ?>-->...<br/><span style="font-size: 15px">Pending Billing</span></p>
+				<p><?php echo $row['numberofpending'] ?><br/><span style="font-size: 15px">Pending Billing</span></p>
 				<i class="bi bi-receipt box-icons"></i>
 			</div>
 		</div>
@@ -227,8 +240,8 @@ if (mysqli_num_rows($query) > 0){
 ?>
 
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><?php echo date("Y-m-d", strtotime($row['datetime'])); ?><br/><span style="font-size: 15px">Date Registered</span></p>
+			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%; ">
+				<p style="font-size: 1.2rem"><?php echo date("Y-m-d", strtotime($row['datetime'])); ?><br/><span style="font-size: 15px">Date Registered</span></p>
 				<i class="bx bx-calendar box-icons"></i>
 			</div>
 		</div>
@@ -236,7 +249,7 @@ if (mysqli_num_rows($query) > 0){
 		<br/>
     <div class="announcement-box">
                 <h4 style="font-weight: 500; font-size: 1.2rem;"><i class="bx bx-bell" type="solid"></i> Announcement</h4>
-                <p style="font-size: 0.9rem;">- System Undermaintainance, sorry to able acess in sidebar.Thankyou!</p>
+                <p style="font-size: 0.9rem;">- System Under Maintenance, sorry for the inconvenience. Unable to access the sidebar. Thank you!</p>
             </div>
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner">

@@ -123,7 +123,7 @@
                         <?php echo $msg; ?>
                         <form action="" method="post">
                           <label style="font-size: 1rem; font-weight: 450;">First name</label>
-                            <input type="text" class="name" name="fname" placeholder="Enter your first name" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
+                            <input type="text"  class="name" name="fname" placeholder="Enter your first name" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
                             <label style="font-size: 1rem; font-weight: 450;">Middle name</label>
                              <input type="text" class="name" name="mname" placeholder="Enter your middle name" value="<?php if (isset($_POST['submit'])) { echo $mname; } ?>" required>
                              <label style="font-size: 1rem; font-weight: 450;">Last name</label>

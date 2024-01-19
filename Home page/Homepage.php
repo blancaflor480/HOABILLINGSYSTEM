@@ -19,7 +19,7 @@
 	font-family: 'Poppins', sans-serif;
 }
 body {
-	background: #D0D3D4;
+	background: #FFECD6;
 }
 .section-padding {
 	padding: 100px 0;
@@ -77,7 +77,7 @@ body {
 	letter-spacing: 2px;
 }
 .navbar{
-	background-color: #D0D3D4;
+	background-color: #FFECD6;
 }
 .navbar-light .navbar-brand:focus, .navbar-light .navbar-brand:hover {
 	color: #000;
@@ -155,7 +155,7 @@ body {
     
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-          <a class="navbar-brand" href="#"><span style="color: brown;">Rosedale</span> Residence</a>
+          <a class="navbar-brand" href="#"><span style="color: #3559E0;">Rosedale</span> Residence</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -178,9 +178,9 @@ body {
               </li>--> 
               <li class="nav-item">
                 <a class="nav-link" href="#contact">Contact</a>
-              </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        
+              </li>        
               <li class="nav-item">
-                <a class="nav-link" href="User/index.php" style="color: #182061; font-weight: bold;">Login</a>
+                <a class="nav-link" href="User/index.php" style="color: #3559E0; font-weight: bold;">Login</a>
               </li>        
               <li class="nav-item">
                 <a class="nav-link" href="User/register.php" style="font-weight: bold;">Sign Up</a>
@@ -206,21 +206,21 @@ body {
               <h5 style="font-weight: bold; font-size: 2.8rem; color: ">Welcome</h5>
                               <p style="font-size: 1.5rem; font-weight: bold;">ROSEDALE RESIDENCES WEBSITE</p>
                               <span>"Smart Billing, Steamless Living: Elevate Your Subdivision Experience"</span>
-                              <p><a href="#" class="btn btn-warning mt-3">Learn More</a></p>
+                              <p><a href="#" class="btn btn-warning mt-3">Explore</a></p>
             </div>
           </div>
           <div class="carousel-item">
             <img src="img/2.png" class="d-block w-100" alt="...">
             <div class="carousel-caption">
               <h5 style="font-weight: bold; font-size: 2.8rem; color: ">About us</h5>
-                              <p style="font-size: 1rem;"> Embark on a journey with us as we strive to redefine the way you experience comfort and convenience, offering a seamless blend of innovation and hospitality in every aspect of your stay.</p>
-                              <p><a href="#" class="btn btn-warning mt-3">Learn More</a></p>
+                              <p style="font-size: 1rem;"> Experience the convenience of automated billing processes and comprehensive financial insights with our billing management system, providing you with the tools to optimize revenue management and ensure efficient financial control.</p>
+                              <p><a href="" class="btn btn-warning mt-3">Learn More</a></p>
             </div>
           </div>
           <div class="carousel-item">
             <img src="img/3.png" class="d-block w-100" alt="...">
             <div class="carousel-caption">
-              <h5>Service</h5>
+              <h5 style="font-weight: bold; font-size: 2.8rem; color: ">Service</h5>
                               <p>It is very important for the customer to pay attention to the adipiscing process. Most of all, there is no time.
                                  They leave it to be accepted, which it is true.</p>
                               <p><a href="#" class="btn btn-warning mt-3">Learn More</a></p>
@@ -248,15 +248,13 @@ body {
                   </div>
                   <div class="col-lg-8 col-md-12 col-12 ps-lg-5 mt-md-5">
                       <div class="about-text">
-                            <h2>Team Goal<br/></h2>
-                            <p>
-                                The main goal of implementing a billing management system on our subdivision website is to simplify 
-                                the process of handling various payments and enhance the overall experience for residents. 
-                                We aim to automate the billing process, ensuring that bills for services 
-                                like maintenance fees and utilities are easily generated and promptly delivered to residents.
+                            <h2>About<br/></h2>
+                            <p style="text-align: justify;"> 
+                            Rosedale Residence is implementing a billing management system on our subdivision website to simplify the process 
+                            of handling various payments and enhance the overall experience for residents. We aim to automate the billing process, 
+                            ensuring that bills for services such as maintenance fees and utilities are easily generated and promptly delivered to residents.
                             </p>
-                            <a href="#" class="btn btn-warning">Learn More</a>
-                      </div>
+                        </div>
                   </div>
               </div>
           </div>
@@ -269,7 +267,7 @@ body {
                   <div class="col-md-12">
                       <div class="section-header text-center pb-5">
                           <h2>Our Services</h2>
-                          <p>How this portal works<br></p>
+                          <p>How this portal works?<br></p>
                       </div>
                   </div>
               </div>
@@ -279,9 +277,9 @@ body {
                         <div class="card-body">
                             <i class="bi bi-browser-chrome"></i>
                             <h3 class="card-title">1 - Login</h3>
-                            <p class="lead">Description...</p>
-                            <button class="btn bg-warning text-dark">Read More</button>
-                        </div>
+                            <p class="lead" style="font-size: 1rem; text-align: center;">&nbsp;&nbsp;Experience swift and secure access to your account with our streamlined login process. 
+                            Enjoy a seamless and private user experience, putting you in control account to acessible billing system.</p>
+                            </div>
                     </div>
                 </div>
                   <div class="col-12 col-md-12 col-lg-4">
@@ -289,19 +287,19 @@ body {
                           <div class="card-body">
                             <i class="bi bi bi-envelope-at-fill"></i>
                               <h3 class="card-title">2 - Peruse Bills</h3>
-                              <p class="lead">Description...</p>
-                              <button class="btn bg-warning text-dark">Read More</button>
-                          </div>
+                              <p class="lead" style="font-size: 1rem;">Navigate through proposed legislation with ease, utilizing our intuitive interface to peruse bills, 
+                                view comprehensive summaries, and stay informed about the latest legislative developments.</p>
+                            </div>
                       </div>
                   </div>
                   <div class="col-12 col-md-12 col-lg-4">
                       <div class="card text-white text-center bg-dark pb-2">
                           <div class="card-body">
                             <i class="bi bi-newspaper"></i>
-                              <h3 class="card-title">3 - Transact</h3>
-                              <p class="lead">Description...</p>
-                              <button class="btn bg-warning text-dark">Read More</button>
-                          </div>
+                              <h3 class="card-title">3 - Transaction</h3>
+                              <p class="lead" style="font-size: 1rem;">Simplify financial transactions with our user-friendly billing system, enabling swift and secure 
+                                payments, tracking transaction history, and ensuring a hassle-free experience for all your billing needs.</p>
+                            </div>
                       </div>
                   </div>
               </div>
@@ -380,16 +378,16 @@ body {
                             <img src="img/jade.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Jade Ryan L. Blancaflor</h3>
                         <p class="card-text">
-                        The customer himself, the customer will be able to pursue the adipiscing of the company. 
-                        I followed that our very times were some.
-                        </p>
+                        As a seasoned full-stack web developer, I blend creativity with technical expertise to craft dynamic and responsive websites.
+                         From front-end design finesse to back-end functionality, I deliver comprehensive solutions that bring digital visions to life.  
+                      </p>
                         
 
                         <p class="socials">
-                            <i class="bi bi-twitter text-dark mx-1"></i>
-                        <i class="bi bi-facebook text-dark mx-1"></i>
-                        <i class="bi bi-linkedin text-dark mx-1"></i>
-                        <i class="bi bi-instagram text-dark mx-1"></i>
+                        <a href="https://www.twitter.com/"><i class="bi bi-twitter text-dark mx-1"></i></a>
+                        <a href="https://www.facebook.com/"><i class="bi bi-facebook text-dark mx-1"></i></a>
+                        <a href="https://www.linkedin.com/"><i class="bi bi-linkedin text-dark mx-1"></i></a>
+                        <a href="https://www.instagram.com/"><i class="bi bi-instagram text-dark mx-1"></i></a>
                         </p>
                         </div>
                     </div>
@@ -400,8 +398,9 @@ body {
                         <div class="card-body">
                             <img src="img/128x128.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Ma. Angelica M. Rubrico</h3>
-                        <p class="card-text">The customer himself, the customer will be able to pursue the adipiscing of the company. 
-                        I followed that our very times were some.
+                        <p class="card-text">
+                        As a dedicated Quality Assurance professional, I ensure excellence through meticulous testing and process evaluation, guaranteeing the highest standards of product and service quality. 
+                        My commitment to continuous improvement defines my role in maintaining superior quality standards.
                         </p>
                         <p class="socials">
                             <i class="bi bi-twitter text-dark mx-1"></i>
@@ -417,9 +416,10 @@ body {
                         <div class="card-body">
                             <img src="img/mona1.png" alt="" class="img-fluid rounded-circle">
                         <h3 class="card-title py-2">Mona Lyn C. Bularon</h3>
-                        <p class="card-text">The customer himself, the customer will be able to pursue the adipiscing of the company. 
-                        I followed that our very times were some.
-                        </p>
+                        <p class="card-text">
+                        As a dedicated documentation specialist, I meticulously organize and present information, ensuring clarity and accessibility. 
+                        Streamlining my work empowers seamless understanding, making information readily available for all. 
+                      </p>
                         <p class="socials">
                             <i class="bi bi-twitter text-dark mx-1"></i>
                         <i class="bi bi-facebook text-dark mx-1"></i>
@@ -463,7 +463,8 @@ body {
 								<div class="mb-3">
 									<textarea class="form-control" placeholder="Message" required="" rows="3"></textarea>
 								</div>
-							</div><button class="btn btn-warning btn-lg btn-block mt-3" type="button">Send Now</button>
+							</div><button class="btn btn-danger btn-lg btn-block mt-3" type="button">
+                Send Now&nbsp<i class="bi bi-send-check"></i></button>
 						</div>
 					</form>
 				</div>
@@ -472,11 +473,15 @@ body {
       </section>
       <!-- contact ends -->
       <!-- footer starts -->
-      <footer class="bg-dark p-2 text-center">
-          <div class="container">
-              <p class="text-white">All Right Reserved By Rosedale Residence</p>
-          </div>
-      </footer>
+<footer class="bg-dark p-2 text-center">
+    <div class="container">
+        <p class="text-white" id="copyright"></p>
+    </div>
+
+    <script>
+        document.getElementById('copyright').innerHTML = 'All Right Reserved By Rosedale Residence &copy; ' + new Date().getFullYear();
+    </script>
+</footer>
       <!-- footer ends -->
 
 

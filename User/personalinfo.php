@@ -206,10 +206,10 @@ form .buttons button , .backBtn{
 </style>
 
 <section class="home-section">
-<div class="text">Customer</div>
+<div class="text"><i class="bi bi-person-lines-fill"></i>&nbsp;Personal Information</div>
     <div class="col-md-12">
         <div class="card">
-          <h5 class="card-header">Personal Details
+          <h5 class="card-header" style="background-color: #182061; color: white;">Personal Details
            </h5>
           <div class="card-body">
     <div class="container" style="margin-left: 70px">        
@@ -220,7 +220,7 @@ form .buttons button , .backBtn{
         <spant style="display: flex; justify-content:center" class="title; ">
         <?php if($result['image'] != ""): ?>
         <img style="border:4px groove #CCCCCC; border-radius:5px; width:100px; height: 100px;"  
-        src="uploads/<?php echo $meta['image']; ?>" alt="" style="max-width: 100px; max-height: 100px;">
+        src="uploads/<?php echo $result['image']; ?>"  style="max-width: 100px; max-height: 100px;">
     <?php else: ?>
         <img src="images/users.png" width="100px" height="100px" style="border:4px groove #CCCCCC; border-radius:5px;">
     <?php endif; ?>
@@ -298,7 +298,7 @@ form .buttons button , .backBtn{
 <br>
                     <div class="input-field">
                             <label>Image</label>
-                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>"  required>
+                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>">
                     </div>
                      
                    
@@ -308,11 +308,8 @@ form .buttons button , .backBtn{
                             <span class="btnText">Save</span>&nbsp;
                             <i class="bi bi-cloud-download"></i>
                         </button>
-                        &nbsp;&nbsp;
-                        <button class="sumbit" style="background-color: gray;">
-                            <span class="btnText">Close</span>&nbsp;
-                            <i class="bi bi-x-circle"></i>
-                        </button>
+                        
+                        
                         </div>
                         
                       </div>

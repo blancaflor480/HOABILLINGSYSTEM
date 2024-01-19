@@ -72,10 +72,10 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-<div class="text">Accounts</div>
+<div class="text" ><i class="bi bi-people"></i> Accounts</div>
     <div class="col-lg-12">
-        <div class="card">
-          <h5 class="card-header">List of Accounts
+        <div class="card" >
+          <h5 class="card-header" style="background-color: #182061; color: white;" >List of Accounts
             <?php if ($type == 'Admin'): ?>
               <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addaccount">
                 <span class="bx bx-user-plus"></span> Create New

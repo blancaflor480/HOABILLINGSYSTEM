@@ -77,12 +77,9 @@
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Customer Complaint
-             <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#Add_account">
+             <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#AddComplaint">
                 <span class="bx bx-plus"></span> New Complaint              
             </button>
-             <!-- <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-archive"></span> Archive
-              </button>-->
             </h5>
           <div class="card-body">
             <table class="table table-hover table-striped table-bordered" id="list">
@@ -147,3 +144,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
+<?php include('Add_Complaint.php'); ?>

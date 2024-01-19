@@ -151,7 +151,8 @@ td, th {
 	
 	<body>
   <section class="home-section">
-      <div class="text">Dashboard</div>
+      <div class="text"><li class="bi bi-person-fill" style="list-style: none;"></i> 
+        Hi <?php echo $row['uname']  ?>!</div>
     
 	  <div id="main">
 
@@ -206,18 +207,24 @@ if (mysqli_num_rows($query) > 0){
       </a>
 			</div>
 		</div>
-<!--< ?php 
+<?php
 include 'config.php';
-$query = mysqli_query($conn, "SELECT count(id) AS numberofcomplaint, id from complaint");
-if (mysqli_num_rows($query) > 0){
-     $row = mysqli_fetch_assoc($query);
- }
-?>-->
+
+$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE status = 'unprocessed'");
+
+if (mysqli_num_rows($query) > 0) {
+    $row = mysqli_fetch_assoc($query);
+
+    $numberofcomplaint = $row['numberofcomplaint'];
+} else {
+    $numberofcomplaint = 0;
+}
+?>
 		
 		<div class="col-div-3">
 			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
 			<a href="complaint.php" style="text-decoration: none;">	
-      <p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
+      <p><?php echo $row['numberofcomplaint']; ?><br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
 				<i class="bx bx-envelope box-icons"></i>
 </a>
 			</div>

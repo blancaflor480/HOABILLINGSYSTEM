@@ -81,12 +81,12 @@
 </style>
 
 <section class="home-section">
-<div class="text">Billing</div>
+<div class="text"><small style="font-size: 1rem">Billing Due ></small>  Billing History Transaction</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">Dues Bills
-              <a class="btn btn-primary float-right mx-2" href="billing_history.php">
-                <span class="bi bi-receipt"></span> History Transaction
+          <h5 class="card-header">Bills History
+              <a type="button" class="btn btn-primary float-right mx-2" href="billing.php">
+                <span class="bi bi-receipt"></span> Due Date Bills
               </a>
               <a class="btn btn-warning float-right" href="complaint.php">
                 <span class="bx bx-envelope"></span> Compalint
@@ -100,9 +100,8 @@
                   <th>Reading Date</th>
                   <th>Due Date</th>
                   <th>Previous</th>
-                  <th>Status</th>
                   <th>Amount</th>
-				          <th>Action</th>
+		          <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,9 +113,9 @@
                 <?php 
 					$i = 1;
 						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
-             `name` from `tablebilling_list` b inner join 
-             tableusers c on b.tableusers_id = c.id 
-             order by unix_timestamp(`reading_date`) desc, `name` asc ");
+                        `name` from `tablebilling_list` b inner join 
+                        tableusers c on b.tableusers_id = c.id 
+                        order by unix_timestamp(`reading_date`) desc, `name` asc ");
 						while($row = $qry->fetch_assoc()):
 					?>
 					
@@ -125,34 +124,21 @@
                     <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
                     <td><?php echo $row['previous']; ?></td>
+                    <td><?php echo $row['total']; ?></td>
                     <td>
                     <?php
-								  switch($row['status']){
-									case 0:
-										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
-										break;
-									case 1:
-										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
-										break;
+						switch($row['status']){
+							case 0:
+								echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                Pending</span>';
+									break;
+							case 1:
+								echo '<span class="badge badge-success bg-gradient-success text-sm px-3" Style="Height: 20px; font-size: 0.7rem;">Paid</span>';
+									break;
 								}
 								?>
                     </td>
-                    <td><?php echo $row['total']; ?></td>
                    
-                    <td>
-          
-                <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
-            </form>
-        </div>
-    </div>
-                    </td>
                   </tr>
                 <?php endwhile ?>
               </tbody>

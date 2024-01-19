@@ -70,13 +70,13 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-<div class="text">Customer</div>
+<div class="text"><i class="bi bi-people"></i> Customer</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Customer
             <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Add_account">
-                <span class="bx bx-user-plus"></span> Create New
+              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addcustomer">
+                <span class="bx bx-user-plus"></span> Create New Customer
               </button>
               <button type="button" class="btn btn-warning float-right mx-2" data-toggle="modal" data-target="#delete_account">
                 <span class="bx bx-archive"></span> Archive
@@ -170,6 +170,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   });
 </script>
-
-<!--< ?php include('Add_account.php'); ?>
-< ?php include('Delete_Account.php'); ?>-->'
+<?php include('Add_customer.php'); ?>

@@ -281,7 +281,7 @@
             <i class="bx bx-home"></i>
             <span class="links_name">Home</span>
           </a>
-          <span class="tooltip">Dashboard</span>
+          <span class="tooltip">Home</span>
         </li>
         <li>
           <a href="billing.php">
@@ -334,7 +334,7 @@ if (mysqli_num_rows($query) > 0){
         <li class="profile">
           <div class="profile-details">
           <?php if ($result['image'] != ""): ?>
-                        <img src="uploads/<?php echo $result['image']; ?>" alt="Profile Image">
+                      <img src="uploads/<?php echo $result['image']; ?>" alt="Profile Image">
                       <?php else: ?>
                         <img src="images/users.png" alt="Default Image">
           <?php endif; ?> 

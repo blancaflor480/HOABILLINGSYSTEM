@@ -23,8 +23,8 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $code = mysqli_real_escape_string($conn, md5(rand()));
 
-    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
-        $query = mysqli_query($conn, "UPDATE users SET code='{$code}' WHERE email='{$email}'");
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tableusers WHERE email='{$email}'")) > 0) {
+        $query = mysqli_query($conn, "UPDATE tableusers SET code='{$code}' WHERE email='{$email}'");
 
         if ($query) {        
             echo "<div style='display: none;'>";
@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
                 //Content
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->Subject = 'no reply';
-                $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/change-password.php?reset='.$code.'">http://localhost/login/change-password.php?reset='.$code.'</a></b>';
+                $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/User/change-password.php?reset='.$code.'">http://localhost/login/change-password.php?reset='.$code.'</a></b>';
 
                 $mail->send();
                 echo 'Message has been sent';

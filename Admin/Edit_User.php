@@ -3,8 +3,8 @@
     include ('config.php');
     include ('sidebar.php');
 
-    if (isset($_GET['id'])) {
-        $user = $conn->query("SELECT * FROM tableusers WHERE id ='{$_GET['id']}' ");
+    if (isset($_GET['Id'])) {
+        $user = $conn->query("SELECT * FROM tableusers WHERE Id ='{$_GET['Id']}' ");
 
         // Check if the query was successful and returned any result
         if ($user && $user->num_rows > 0) {
@@ -16,7 +16,7 @@
         }
     }
     if (isset($_POST['update'])) {
-        $id = $_GET['id'];
+        $Id = $_GET['Id'];
         $fname = $_POST['fname'];
         $mname = $_POST['mname'];
         $lname = $_POST['lname'];
@@ -33,7 +33,7 @@
             // Hash the password
             $hashed_password = mysqli_real_escape_string($conn, md5($password));
             // Update the user with the new password
-            mysqli_query($conn, "UPDATE tableusers SET password='$hashed_password' WHERE id = '$id'") or die(mysqli_error());
+            mysqli_query($conn, "UPDATE tableusers SET password='$hashed_password' WHERE Id = '$Id'") or die(mysqli_error());
         }
 
         // Check if an image file was uploaded
@@ -52,13 +52,13 @@
             // Update the user with the new image
             mysqli_query($conn, "UPDATE tableusers SET fname='$fname', mname='$mname', lname='$lname', email='$email', 
             gender='$gender', contact='$contact', address='$address', 
-            category='$category', image='$image_name' WHERE id = '$id'") or die(mysqli_error());
+            category='$category', image='$image_name' WHERE Id = '$Id'") or die(mysqli_error());
 
         } else {
             // Update the user without changing the image
             mysqli_query($conn, "UPDATE tableusers SET fname='$fname', mname='$mname', lname='$lname',
              email='$email', gender='$gender', contact='$contact', 
-             address='$address', category='$category' WHERE id = '$id'") or die(mysqli_error());
+             address='$address', category='$category' WHERE Id = '$Id'") or die(mysqli_error());
     
         }
 
@@ -239,7 +239,7 @@
             <div class="card-body">
         <div class="container" style="margin-left: 70px">        
             <form method="POST" enctype="multipart/form-data" >
-            <input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
+            <input type="hidden" name="Id" value="<?= isset($meta['Id']) ? $meta['Id'] : '' ?>">
                 
                 <div class="form first">
             <spant style="display: flex; justify-content:center" class="title; ">

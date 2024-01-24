@@ -92,7 +92,7 @@
                 </tr>
               </thead>
               <tbody>
-              <?php 
+        <?php 
 					$i = 1;
 						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
              `name` from `tablecomplaint` b inner join 
@@ -103,7 +103,7 @@
                   <tr>
                     <td><?php echo $row['Id']; ?></td>
                     <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
-                    <td><?php echo $row['message']; ?></td>
+                    <td><?php echo $row['description']; ?></td>
                     <td><?php echo $row['status']; ?></td>
                   </tr>
                 <?php endwhile ?>

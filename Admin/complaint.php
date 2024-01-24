@@ -113,12 +113,12 @@ $type  = $row['type'];
                     <td><?php echo $row['Id']; ?></td>
                     <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
                     <td><?php echo $row['name']; ?></td>
-                    <td><?php echo $row['message']; ?></td>
+                    <td><?php echo $row['description']; ?></td>
                     <td><?php echo $row['status']; ?></td>
                     <td>
                     <form method="post">
-                                       
-                                        <button class="btn btn-success"  name="complaintId" value="<?php echo $row['Id']; ?>" type="submit">Response</button>  
+                                    
+                     <button class="btn btn-success"  name="complaintId" value="<?php echo $row['Id']; ?>" type="submit">Response</button>  
                                       </form>
                   </td>
                   </tr>

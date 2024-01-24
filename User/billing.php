@@ -55,7 +55,7 @@
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 12px; /* Adjusted font size */
+    font-size: 15px; /* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -146,11 +146,10 @@
             Select
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
-            </form>
-        </div>
+            <a class="dropdown-item" href=""><i class="bi bi-eye"></i> View</a>
+            <a class="dropdown-item" href=""><i class="bi bi-cash-coin"></i> Pay</a>
+               
+          </div>
     </div>
                     </td>
                   </tr>

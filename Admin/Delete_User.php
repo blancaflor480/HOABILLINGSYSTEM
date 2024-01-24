@@ -30,11 +30,11 @@
 </style>
 
 <!-- Modal -->
-<div class="modal fade" id="delete_account" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="delete_user" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Restore Account</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Restore User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $buttonValue = $_POST['insert'];
 
         // Check if the record already exists in the main table to avoid primary key conflicts
-        $checkQuery = "SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $checkQuery = "SELECT * FROM tableusers WHERE Id = '$buttonValue'";
         $checkResult = mysqli_query($db, $checkQuery);
 
         if (mysqli_num_rows($checkResult) == 0) {

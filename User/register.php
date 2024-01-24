@@ -1,80 +1,77 @@
-<!-- Code by Brave Coder - https://youtube.com/BraveCoder -->
-
 <?php
-    //Import PHPMailer classes into the global namespace
-    //These must be at the top of your script, not inside a function
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use PHPMailer\PHPMailer\Exception;
+// Import PHPMailer classes into the global namespace
+// These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
-    session_start();
-    if (isset($_SESSION['SESSION_EMAIL'])) {
-        header("Location: welcome.php");
-        die();
-    }
+session_start();
+if (isset($_SESSION['SESSION_EMAIL'])) {
+    header("Location: welcome.php");
+    die();
+}
 
-    //Load Composer's autoloader
-    require 'vendor/autoload.php';
+// Load Composer's autoloader
+require 'vendor/autoload.php';
 
-    include 'config.php';
-    $msg = "";
+include 'config.php';
+$msg = "";
 
-    if (isset($_POST['submit'])) {
-        $fname = mysqli_real_escape_string($conn, $_POST['fname']);
-        $mname = mysqli_real_escape_string($conn, $_POST['mname']);
-        $lname = mysqli_real_escape_string($conn, $_POST['lname']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = mysqli_real_escape_string($conn, md5($_POST['password']));
-        $confirm_password = mysqli_real_escape_string($conn, md5($_POST['confirm-password']));
-        $code = mysqli_real_escape_string($conn, md5(rand()));
+if (isset($_POST['submit'])) {
+    $fname = mysqli_real_escape_string($conn, $_POST['fname']);
+    $mname = mysqli_real_escape_string($conn, $_POST['mname']);
+    $lname = mysqli_real_escape_string($conn, $_POST['lname']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm-password']);
+    $code = mysqli_real_escape_string($conn, md5(rand()));
 
-        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tableusers WHERE email='{$email}'")) > 0) {
-            $msg = "<div class='alert alert-danger'>{$email} - This email address has been already exists.</div>";
-        } else {
-            if ($password === $confirm_password) {
-                $sql = "INSERT INTO tableusers (fname, mname, lname, email, password, code) VALUES ('{$fname}', '{$mname}', '{$lname}', '{$email}', '{$password}', '{$code}')";
-                $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tableusers WHERE email='{$email}'")) > 0) {
+        $msg = "<div class='alert alert-danger'>{$email} - This email address has been already exists.</div>";
+    } else {
+        if (strlen($password) >= 8 && $password === $confirm_password) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                if ($result) {
-                    echo "<div style='display: none;'>";
-                    //Create an instance; passing `true` enables exceptions
-                    $mail = new PHPMailer(true);
+            $sql = "INSERT INTO tableusers (fname, mname, lname, email, password, code) VALUES ('{$fname}', '{$mname}', '{$lname}', '{$email}', '{$hashedPassword}', '{$code}')";
+            $result = mysqli_query($conn, $sql);
 
-                    try {
-                        //Server settings
-                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                        $mail->isSMTP();                                            //Send using SMTP
-                        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                        $mail->Username   = 'billinghoa@gmail.com';                     //SMTP username
-                        $mail->Password   = 'sqtrxkdxrkbalgfu';                               //SMTP password
-                        $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
-                        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            if ($result) {
+                // Create an instance; passing `true` enables exceptions
+                $mail = new PHPMailer(true);
 
-                        //Recipients
-                        $mail->setFrom('billinghoa@gmail.com');
-                        $mail->addAddress($email);
+                try {
+                    // Server settings
+                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+                    $mail->isSMTP();                                            // Send using SMTP
+                    $mail->Host       = 'smtp.gmail.com';                     // Set the SMTP server to send through
+                    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                    $mail->Username   = 'billinghoa@gmail.com';                // SMTP username
+                    $mail->Password   = 'sqtrxkdxrkbalgfu';                    // SMTP password
+                    $mail->SMTPSecure = 'ssl';                                 // Enable implicit TLS encryption
+                    $mail->Port       = 465;                                   // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-                        //Content
-                        $mail->isHTML(true);                                  //Set email format to HTML
-                        $mail->Subject = 'no reply';
-                        $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/User/?verification='.$code.'">http://localhost/login/?verification='.$code.'</a></b>';
+                    // Recipients
+                    $mail->setFrom('billinghoa@gmail.com');
+                    $mail->addAddress($email);
 
-                        $mail->send();
-                        echo 'Message has been sent';
-                    } catch (Exception $e) {
-                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    }
-                    echo "</div>";
-                    $msg = "<div class='alert alert-info'>We've send a verification link on your email address.</div>";
-                } else {
-                    $msg = "<div class='alert alert-danger'>Something wrong went.</div>";
+                    // Content
+                    $mail->isHTML(true);                                  // Set email format to HTML
+                    $mail->Subject = 'no reply';
+                    $mail->Body    = 'Here is the verification link <b><a href="http://localhost/HOABILLINGSYSTEM/User/?verification='.$code.'">http://localhost/login/?verification='.$code.'</a></b>';
+
+                    $mail->send();
+                    $msg = "<div class='alert alert-info'>We've sent a verification link to your email address.</div>";
+                } catch (Exception $e) {
+                    $msg = "<div class='alert alert-danger'>Message could not be sent. Mailer Error: {$mail->ErrorInfo}</div>";
                 }
             } else {
-                $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match</div>";
+                $msg = "<div class='alert alert-danger'>Something went wrong.</div>";
             }
+        } else {
+            $msg = "<div class='alert alert-danger'>Password must be at least 8 characters and Confirm Password must match.</div>";
         }
     }
+}
 ?>
 
 <!DOCTYPE html>

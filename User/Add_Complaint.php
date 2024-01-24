@@ -46,19 +46,19 @@
         </button>
       </div>
     <div class="modal-body">
-      <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
+      <form method="POST" action="bk_complaint.php" enctype="multipart/form-data">
       <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;"></h5>
          
         <label for="mname">Type of Complaint</label>
-    <select name="typemessage" id="typemessage">
-            <option value="volvo">---Please Select---</option>
-            <option value="saab">Bill not correct</option>
-            <option value="mercedes">Bill generated late</option>
-            <option value="audi">Transaction not processed</option>
-            <option value="audi">Previous complaint not process</option>
+    <select name="typecomplaint" id="typemessage">
+            <option>---Please Select---</option>
+            <option value="Bill not correct">Bill not correct</option>
+            <option value="Bill generated late">Bill generated late</option>
+            <option value="Transaction not processed">Transaction not processed</option>
+            <option value="Previous complaint not process">Previous complaint not process</option>
     </select>
         <label for="text">Please type your concern</label>
-        <textarea type="text" id="text" name="message"></textarea>
+        <textarea type="text" id="text" name="description"></textarea>
  
       </div>
       <div class="modal-footer">

@@ -1,7 +1,5 @@
-
- <?php
+<?php
 session_start();
-include('config.php');
 include('Sidebar.php');
 
 if (isset($_SESSION['uname'])) {
@@ -21,7 +19,6 @@ $type  = $row['type'];
 <link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
-
 
 <style>
   .card {
@@ -44,7 +41,7 @@ $type  = $row['type'];
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 0.9rem;/* Adjusted font size */
+    font-size: 12px; /* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -68,72 +65,82 @@ $type  = $row['type'];
     font-size: 12px;
   }
 </style>
-
+<!--<i class="bi bi-receipt"></i>-->
 <section class="home-section">
-<div class="text"><i class="bi bi-people"></i> Customer</div>
+<div class="text"><i class="bi bi-receipt"></i>&nbsp;Transaction</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">List of Customer
+          <h5 class="card-header">List of Homeowners Bills
             <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addcustomer">
-                <span class="bx bx-user-plus"></span> Create New Customer
+              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
+                <span class="bi bi-receipt"></span> Create New Bills
               </button>
-              <button type="button" class="btn btn-warning float-right mx-2" data-toggle="modal" data-target="#delete_user">
-                <span class="bx bx-archive"></span> Archive
+              <a href="billing.php">
+              <button type="button" class="btn btn-primary float-right" >
+                <span class="bi bi-card-checklist"></span> Bills
               </button>
-              <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-printer"></span> Print
-              </button>
-            <?php endif; ?>
+              </a>
+              <?php endif; ?>
           </h5>
           <div class="card-body">
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Date Created</th>
-                  <th>Profile</th>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th>Category</th>
-                  <th>Action</th>
+                <th>Customer no.</th>
+                  <th>Reading Date</th>
+                  <th>Due Date</th>
+                  <th>Full name</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+				          <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableusers ORDER BY id ASC") or die(mysqli_error());
+               <!--< ?php
+                  $result = mysqli_query($conn, "SELECT * FROM tablebilling_list ORDER BY tableusers_id ASC") or die(mysqli_error());
                   while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>
+                    $tableusers_id = $row['tableusers_id'];
+                ?>-->
+                <?php 
+					$i = 1;
+						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+             `name` from `tablebilling_list` b inner join 
+             tableusers c on b.tableusers_id = c.id 
+             order by unix_timestamp(`reading_date`) desc, `name` asc ");
+						while($row = $qry->fetch_assoc()):
+					?>
+					
                   <tr>
-                    <td><?php echo $row['Id']; ?></td>
-                    <td><?php echo date("Y-m-d H:i", strtotime($row['datereg'])); ?></td>
+                    <td><?php echo $row['tableusers_id']; ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
+                    <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
+                    <td><?php echo $row['name']; ?></td>
                     <td>
-                      <?php if ($row['image'] != ""): ?>
-                        <img src="<?php echo $row['image']; ?>" alt="Profile Image">
-                      <?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      <?php endif; ?>
+                    <?php
+								  switch($row['status']){
+									case 0:
+										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
+										break;
+									case 1:
+										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+										break;
+								}
+								?>
                     </td>
-                    <td><?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td><?php echo $row['email']; ?></td>
-                    <td><?php echo $row['category']; ?></td>
+                    <td><?php echo $row['total']; ?></td>
+                   
                     <td>
                     <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
+        <a class="btn btn-warning" href="#" role="button">
+        <i class="bi bi-eye"></i> View
         </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_User.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <!-- Use a form for deletion -->
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.9rem;"><i class="bx bx-trash"></i> Delete</button>
             </form>
         </div>
     </div>
                     </td>
                   </tr>
-                <?php } ?>
+                  <?php endwhile; ?>
+ <!--               < ?php } ?>-->
               </tbody>
             </table>
           </div>
@@ -146,11 +153,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete'])) {
         $buttonValue = $_POST['delete'];
         // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableusers WHERE Id = '$buttonValue'";
+        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
         
         // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableusers SET status='Offline' WHERE Id = '$buttonValue'";
+        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
         $updateResult = mysqli_query($conn, $updateQuery);
         
         if ($archiveResult && $updateResult) {
@@ -170,5 +177,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   });
 </script>
-<?php include('Add_customer.php'); ?>
-<?php include('Delete_User.php'); ?>
+
+<?php include('Addbills.php'); ?>
+

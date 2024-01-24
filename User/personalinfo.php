@@ -1,45 +1,66 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header("Location: index.php?error=Login%20First");
-        die();
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    header("Location: index.php?error=Login%20First");
+    die();
+}
+
+include 'config.php';
+
+$email = $_SESSION['email'];
+$conn_String = mysqli_connect("localhost", "root", "", "billing");
+
+// Fetch user data
+$stmt = $conn_String->prepare("SELECT * FROM tableusers WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result()->fetch_assoc();
+
+if (!$result) {
+    header("Location: index.php?error=Login%20First");
+    exit();
+}
+
+if (isset($_POST['update'])) {
+    $fname = $_POST['fname'];
+    $mname = $_POST['mname'];
+    $lname = $_POST['lname'];
+    $bday = $_POST['bday'];
+    $contact = $_POST['contact'];
+    $gender = $_POST['gender'];
+    $address = $_POST['address'];
+    $category = $_POST['category'];
+
+    // Check if an image file was uploaded
+    if ($_FILES["image"]["error"] == 0) {
+        $image_name = addslashes($_FILES['image']['name']);
+        $image_size = $_FILES["image"]["size"];
+
+        // Check the image file size
+        if ($image_size > 10000000) {
+            die("File size is too big!");
+        }
+
+        // Move the uploaded image to the server
+        move_uploaded_file($_FILES["image"]["tmp_name"], "uploads/" . $image_name);
+
+        // Update the user with the new image using WHERE clause
+        $stmt = $conn_String->prepare("UPDATE tableusers SET fname=?, mname=?, lname=?, bday=?, contact=?, 
+        gender=?, address=?, category=?, image=? WHERE email = ?");
+        $stmt->bind_param("ssssssssss", $fname, $mname, $lname, $bday, $contact, $gender, $address, $category, $image_name, $email);
+        $stmt->execute();
+    } else {
+        // Update the user without changing the image using WHERE clause
+        $stmt = $conn_String->prepare("UPDATE tableusers SET fname=?, mname=?, lname=?, bday=?, contact=?,
+        gender=?, address=?, category=? WHERE email = ?");
+        $stmt->bind_param("sssssssss", $fname, $mname, $lname, $bday, $contact, $gender, $address, $category, $email);
+        $stmt->execute();
     }
+}
 
-    include 'config.php';
-
-	$email = $_SESSION['email'];
-	$conn_String = mysqli_connect("localhost", "root", "", "billing");
-	$stmt = $conn_String->prepare("SELECT * FROM tableusers WHERE email = '{$_SESSION['email']}'");
-	$stmt->execute();
-	$result = $stmt->get_result()->fetch_assoc();
-	
-	if (!$result) {
-		header("Location: index.php?error=Login%20First");
-		exit();
-	}
-    
-    if (isset($_POST['update'])) {
-        $id = $_GET['id'];
-        $fname = $_POST['fname'];
-        $mname = $_POST['mname'];
-        $lname = $_POST['lname'];
-        $email = $_POST['email'];
-        $gender = $_POST['gender'];
-        $type = $_POST['type'];
-        $uname = $_POST['uname'];
-        $password = $_POST['password'];
-        $copassword = $_POST['copassword'];
-
-    // Check if a new password is provided
-    if (!empty($password)) {
-        // Hash the password
-        $hashed_password = mysqli_real_escape_string($conn, md5($password));
-        // Update the user with the new password
-        mysqli_query($conn, "UPDATE tableaccount SET password='$hashed_password' WHERE Id = '$Id'") or die(mysqli_error());
-    }
-
-    }
 ?>
+
 <?php include('Sidebar.php');?>
 
 <!-- Include these links to the head section of your HTML -->
@@ -213,7 +234,7 @@ form .buttons button , .backBtn{
            </h5>
           <div class="card-body">
     <div class="container" style="margin-left: 70px">        
-        <form method="POST" enctype="multipart/form-data" >
+<form method="POST" enctype="multipart/form-data" >
         <input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
             
             <div class="form first">
@@ -231,7 +252,7 @@ form .buttons button , .backBtn{
                    <div class="fields">
                         <div class="input-field">
                             <label>First Name</label>
-                            <input type="text" name="fname" value="<?php echo $row['fname']; ?>" required>
+                            <input type="text" name="fname" value="<?php echo $result['fname']; ?>" required>
                         </div>
 
                         <div class="input-field">
@@ -247,17 +268,17 @@ form .buttons button , .backBtn{
 
                         <div class="input-field">
                             <label>Date of Birth</label>
-                            <input type="date" value="<?php echo $result['bday']; ?>"  required>
+                            <input type="date" name="bday" value="<?php echo $result['bday']; ?>"  required>
                         </div>
 
                         <div class="input-field">
                             <label>Email</label>
-                            <input type="email" value="<?php echo $result['email']; ?>" required>
+                            <input type="email" name="email" value="<?php echo $result['email']; ?>" required>
                         </div>
 
                         <div class="input-field">
                             <label>Mobile Number</label>
-                            <input type="number" value="<?php echo $result['contact']; ?>"  required>
+                            <input type="number" name="contact" value="<?php echo $result['contact']; ?>"  required>
                         </div>
 
                         <div class="input-field">
@@ -272,7 +293,7 @@ form .buttons button , .backBtn{
 
                         <div class="input-field">
                             <label>Address</label>
-                            <input type="text" value="<?php echo $result['address']; ?>"  required>
+                            <input type="text" name="address" value="<?php echo $result['address']; ?>"  required>
                         </div>
                     
                     <div class="input-field">
@@ -286,27 +307,27 @@ form .buttons button , .backBtn{
                     </div>
                     
                     <div class="input-field">
-                            <label>Password</label>
-                            <input type="password" value="<?php echo $result['password']; ?>"  required>
-                        </div>
+                            <label>Image</label>
+                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" name="image" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>">
+                    </div>
                     
-                        <div class="input-field">
-                            <label>Confirm Password</label>
-                            <input type="password" value="<?php echo $result['copassword']; ?>"  required>
-                        </div>
                     
 <br>
                     <div class="input-field">
-                            <label>Image</label>
-                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>">
+                            <input style="width: 365px;padding: 6px;" type="hidden">
                     </div>
-                     
+
                    
                      
                     <div style="display: flex; justify-content: center; width: 1100px;">
-                        <button class="sumbit" type="submit">
-                            <span class="btnText">Save</span>&nbsp;
+                        <button type="submit" name="update" style="background-color: darkgreen;">
+                            <span class="btnText">Update</span>&nbsp;
                             <i class="bi bi-cloud-download"></i>
+                        </button>&nbsp;&nbsp;
+                        
+                        <button type="button" data-toggle="modal" data-target="#Changepass">
+                            <span class="btnText">Change Password</span>
+                            <i class="bi bi-pencil-square"></i>
                         </button>
                         
                         
@@ -315,133 +336,7 @@ form .buttons button , .backBtn{
                       </div>
                     
                 </div>
-
-                <!--<div class="details ID">
-                    <span class="title">Identity Details</span>
-
-                    <div class="fields">
-                        <div class="input-field">
-                            <label>ID Type</label>
-                            <input type="text" placeholder="Enter ID type" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>ID Number</label>
-                            <input type="number" placeholder="Enter ID number" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Issued Authority</label>
-                            <input type="text" placeholder="Enter issued authority" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Issued State</label>
-                            <input type="text" placeholder="Enter issued state" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Issued Date</label>
-                            <input type="date" placeholder="Enter your issued date" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Expiry Date</label>
-                            <input type="date" placeholder="Enter expiry date" required>
-                        </div>
-                    </div>
-
-                    <button class="nextBtn">
-                        <span class="btnText">Next</span>
-                        <i class="uil uil-navigator"></i>
-                    </button>
-                </div> 
-            </div>
-
-            <div class="form second">
-                <div class="details address">
-                    <span class="title">Address Details</span>
-
-                    <div class="fields">
-                        <div class="input-field">
-                            <label>Address Type</label>
-                            <input type="text" placeholder="Permanent or Temporary" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Nationality</label>
-                            <input type="text" placeholder="Enter nationality" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>State</label>
-                            <input type="text" placeholder="Enter your state" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>District</label>
-                            <input type="text" placeholder="Enter your district" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Block Number</label>
-                            <input type="number" placeholder="Enter block number" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Ward Number</label>
-                            <input type="number" placeholder="Enter ward number" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="details family">
-                    <span class="title">Family Details</span>
-
-                    <div class="fields">
-                        <div class="input-field">
-                            <label>Father Name</label>
-                            <input type="text" placeholder="Enter father name" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Mother Name</label>
-                            <input type="text" placeholder="Enter mother name" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Grandfather</label>
-                            <input type="text" placeholder="Enter grandfther name" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Spouse Name</label>
-                            <input type="text" placeholder="Enter spouse name" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Father in Law</label>
-                            <input type="text" placeholder="Father in law name" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>Mother in Law</label>
-                            <input type="text" placeholder="Mother in law name" required>
-                        </div>
-                    </div>
-
-                    <div class="buttons">
-                        <div class="backBtn">
-                            <i class="uil uil-navigator"></i>
-                            <span class="btnText">Back</span>
-                        </div>
-                        
-                        <button class="sumbit">
-                            <span class="btnText">Submit</span>
-                            <i class="uil uil-navigator"></i>
-                        </button>
-                    </div>-->
-                </div> 
+ </div> 
             </div>
         </form>
     </div>
@@ -473,3 +368,4 @@ backBtn.addEventListener("click", () => form.classList.remove('secActive'));
       </div>
    
 </section>
+<?php include('Changepassword.php'); ?>

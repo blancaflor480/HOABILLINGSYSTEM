@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2024 at 05:58 AM
+-- Generation Time: Jan 22, 2024 at 05:28 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -130,7 +130,9 @@ INSERT INTO `tablebilling_list` (`id`, `tableusers_id`, `reading_date`, `due_dat
 CREATE TABLE `tablecomplaint` (
   `Id` int(11) NOT NULL,
   `tableusers_id` int(11) DEFAULT NULL,
-  `message` text DEFAULT NULL,
+  `email` varchar(250) NOT NULL,
+  `typecomplaint` varchar(250) DEFAULT NULL,
+  `description` varchar(250) NOT NULL,
   `status` varchar(255) DEFAULT NULL,
   `date_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -139,8 +141,10 @@ CREATE TABLE `tablecomplaint` (
 -- Dumping data for table `tablecomplaint`
 --
 
-INSERT INTO `tablecomplaint` (`Id`, `tableusers_id`, `message`, `status`, `date_time`) VALUES
-(1, 1, 'Bill is not accurate \r\n', 'unprocessed', '2024-01-11 13:51:36');
+INSERT INTO `tablecomplaint` (`Id`, `tableusers_id`, `email`, `typecomplaint`, `description`, `status`, `date_time`) VALUES
+(1, 1, '', 'Bill is not accurate \r\n', '', 'unprocessed', '2024-01-11 13:51:36'),
+(2, NULL, 'bryanblancaflor007@gmail.com', 'audi', 'hahahahhaha', NULL, NULL),
+(3, 1, '', 'Transaction not processed', 'ppppppanget', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -175,8 +179,8 @@ CREATE TABLE `tableusers` (
 --
 
 INSERT INTO `tableusers` (`id`, `transaction_Id`, `fname`, `mname`, `lname`, `bday`, `gender`, `address`, `email`, `contact`, `password`, `copassword`, `status`, `category`, `image`, `code`, `datereg`, `Logintime`, `logoutime`) VALUES
-(1, 202110123, 'Jade Ryan', 'Leba', 'Blancaflor', '2002-08-17', 'Female', 'Tramo St. Kaingen, Bacoor City of Cavite', 'bryanblancaflor007@gmail.com', '09380538503', 'b220e82dde8abcb5dfe247ff49606009', 'b220e82dde8abcb5dfe247ff49606009', 'Active', 'Residences', 0x75736572732e706e67, '', '2023-12-28 13:28:03', '2024-01-17 14:14:42', '2024-01-17 14:15:15'),
-(2, 0, 'Bryan', 'M.', 'Leba', '0000-00-00', '', '', 'blancaflor480@gmail.com', '', 'b220e82dde8abcb5dfe247ff49606009', '', '', '', '', '', '2024-01-11 14:28:21', '2024-01-17 14:14:42', '2024-01-17 14:15:15');
+(1, 202110123, 'Jade Ryan', 'Leba', 'Blancaflor', '2002-08-17', 'Male', 'Tramo St. Kaingen, Bacoor City of Cavite', 'bryanblancaflor007@gmail.com', '09380538501', 'e5d637ecf888128db27fa83cb919728f', 'b220e82dde8abcb5dfe247ff49606009', 'Active', 'Residences', 0x75736572732e706e67, '', '2023-12-28 13:28:03', '2024-01-17 14:14:42', '2024-01-17 14:15:15'),
+(3, 0, 'jaderyan', 'leba', 'blancaflor', '2024-01-02', 'Female', 'Digman', 'blancaflor480@gmail.com', '0938032222', 'b220e82dde8abcb5dfe247ff49606009', '', '', 'Business', '', '', '2024-01-22 22:57:00', '2024-01-22 14:57:00', '2024-01-22 14:57:00');
 
 --
 -- Indexes for dumped tables
@@ -228,13 +232,13 @@ ALTER TABLE `tablebilling_list`
 -- AUTO_INCREMENT for table `tablecomplaint`
 --
 ALTER TABLE `tablecomplaint`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tableusers`
 --
 ALTER TABLE `tableusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

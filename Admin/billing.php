@@ -70,15 +70,17 @@ $type  = $row['type'];
 <div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">List of Bills
+          <h5 class="card-header">List of Homeowners Bills
             <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Add_account">
-                <span class="bx bx-user-plus"></span> Create New
+              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
+                <span class="bi bi-receipt"></span> Create New Bills
               </button>
-              <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-archive"></span> Archive
+              <a href="billing_transaction.php">
+              <button type="button" class="btn btn-primary float-right" >
+                <span class="bi bi-card-checklist"></span> Transaction
               </button>
-            <?php endif; ?>
+              </a>
+              <?php endif; ?>
           </h5>
           <div class="card-body">
             <table class="table table-hover table-striped table-bordered" id="list">
@@ -133,9 +135,11 @@ $type  = $row['type'];
             Select
         </a>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
+        <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bi bi-eye"></i> View</a>    
+        <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
+                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.7rem;">
+                <span class="bi bi-trash "></span> Delete</button>
             </form>
         </div>
     </div>
@@ -180,5 +184,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
-<?php include('Add_account.php'); ?>
+<?php include('Addbills.php'); ?>
 <?php include('Delete_Account.php'); ?>

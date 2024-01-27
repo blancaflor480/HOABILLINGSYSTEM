@@ -224,6 +224,35 @@ form .buttons button , .backBtn{
         width: 100%;
     }
 }
+#confirmationModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 1000;
+    text-align: center;
+    background-color: #182061;
+}
+
+#confirmationModal .modal-content {
+    margin: 0;
+    padding: 0;
+    }
+
+#confirmationModal button {
+    margin: 10px;
+    border: 1px #ccc;
+    border-radius: 0.3rem;
+    width: 120px;
+    cursor: pointer;
+    height: 35px;
+}
+
 </style>
 
 <section class="home-section">
@@ -234,8 +263,9 @@ form .buttons button , .backBtn{
            </h5>
           <div class="card-body">
     <div class="container" style="margin-left: 70px">        
-<form method="POST" enctype="multipart/form-data" >
-        <input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
+<form method="POST" enctype="multipart/form-data" id="updateForm">
+
+    <input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
             
             <div class="form first">
         <spant style="display: flex; justify-content:center" class="title; ">
@@ -273,7 +303,7 @@ form .buttons button , .backBtn{
 
                         <div class="input-field">
                             <label>Email</label>
-                            <input type="email" name="email" value="<?php echo $result['email']; ?>" required>
+                            <input type="email" name="email" value="<?php echo $result['email']; ?>" required disabled>
                         </div>
 
                         <div class="input-field">
@@ -308,7 +338,7 @@ form .buttons button , .backBtn{
                     
                     <div class="input-field">
                             <label>Image</label>
-                            <input style="width: 365px; background-color: #D5D8DC; padding: 6px;" name="image" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>">
+                            <input style="width: 1100px; background-color: #D5D8DC; padding: 6px;" name="image" type="file" value="<?php echo isset($result['image']) ? $result['image']: '' ?>">
                     </div>
                     
                     
@@ -320,12 +350,14 @@ form .buttons button , .backBtn{
                    
                      
                     <div style="display: flex; justify-content: center; width: 1100px;">
-                        <button type="submit" name="update" style="background-color: darkgreen;">
-                            <span class="btnText">Update</span>&nbsp;
-                            <i class="bi bi-cloud-download"></i>
-                        </button>&nbsp;&nbsp;
+                    <button type="button" style="background-color: darkgreen;" onclick="confirmUpdate()">
+                        <span class="btnText">Update</span>&nbsp;
+                        <i class="bi bi-cloud-download"></i>
+                    </button>
+
+                             &nbsp;&nbsp;
                         
-                        <button type="button" data-toggle="modal" data-target="#Changepass">
+                        <button type="button" data-toggle="modal" data-target="#Changepass" style=" background-color: #182061;">
                             <span class="btnText">Change Password</span>
                             <i class="bi bi-pencil-square"></i>
                         </button>
@@ -336,36 +368,44 @@ form .buttons button , .backBtn{
                       </div>
                     
                 </div>
- </div> 
+               </div> 
             </div>
+           
+
         </form>
+    
     </div>
-
-<script>
-      const form = document.querySelector("form"),
-        nextBtn = form.querySelector(".nextBtn"),
-        backBtn = form.querySelector(".backBtn"),
-        allInput = form.querySelectorAll(".first input");
-
-
-nextBtn.addEventListener("click", ()=> {
-    allInput.forEach(input => {
-        if(input.value != ""){
-            form.classList.add('secActive');
-        }else{
-            form.classList.remove('secActive');
-        }
-    })
-})
-
-backBtn.addEventListener("click", () => form.classList.remove('secActive'));
-    </script>
-
-
-
             </div>
         </div>
       </div>
    
 </section>
+<!-- Confirmation Modal -->
+<div id="confirmationModal">
+    <div class="modal-content">
+        <br>
+        <p style="font-size: 1rem; font-family: Poppins; font-weight: 500">Are you sure you want to update?</p>
+        <div class="modal-footer">
+            <button class="btn btn-success" name="update" onclick="confirmedUpdate()">Yes</button>
+            <button class="btn btn-secondary" onclick="closeConfirmation()">No</button>
+        </div>
+    </div>
+</div>
+
+<!---->
+ <script>
+function confirmUpdate() {
+    document.getElementById('confirmationModal').style.display = 'block';
+}
+
+function confirmedUpdate() {
+    // If user confirms, submit the form
+    document.getElementById('updateForm').submit();
+}
+
+function closeConfirmation() {
+    document.getElementById('confirmationModal').style.display = 'none';
+}
+</script>
+
 <?php include('Changepassword.php'); ?>

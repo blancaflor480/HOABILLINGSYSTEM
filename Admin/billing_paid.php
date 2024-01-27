@@ -41,7 +41,7 @@ $type  = $row['type'];
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 12px; /* Adjusted font size */
+    font-size: 15px; /* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -67,27 +67,37 @@ $type  = $row['type'];
 </style>
 <!--<i class="bi bi-receipt"></i>-->
 <section class="home-section">
-<div class="text"><i class="bi bi-receipt"></i>&nbsp;Transaction</div>
+<div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Homeowners Bills
             <?php if ($type == 'Admin'): ?>
               <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                 <span class="bi bi-receipt"></span> Generate Bills
-
               </button>
-              <a href="billing.php">
+              <a href="billing_transaction.php">
               <button type="button" class="btn btn-primary float-right" >
-                <span class="bi bi-card-checklist"></span> Bills
-              </button>
+                <span class="bi bi-card-checklist"></span> Transaction
+              </button>            
               </a>
+              <div class="dropdown">
+                   <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;"  data-toggle="dropdown" aria-expanded="false">
+                   Select Paid
+                 </button>
+        <div class="dropdown-menu">
+        <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</button>    
+        <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
+        <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>              
+      </div>
+    </div>
               <?php endif; ?>
           </h5>
           <div class="card-body">
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                <th>Customer no.</th>
+                <th>Bills no.</th>  
+                <th>Homeowner no.</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
                   <th>Full name</th>
@@ -104,15 +114,16 @@ $type  = $row['type'];
                 ?>-->
                 <?php 
 					$i = 1;
-						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
+				$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
              `name` from `tablebilling_list` b inner join 
-             tableusers c on b.tableusers_id = c.id 
+             tableusers c on b.tableusers_id = c.id
+             WHERE 'status' = 1 
              order by unix_timestamp(`reading_date`) desc, `name` asc ");
 						while($row = $qry->fetch_assoc()):
-              $tableusers_id = $row['tableusers_id'];
 					?>
 					
                   <tr>
+                  <td><?php echo $row['id']; ?></td>
                     <td><?php echo $row['tableusers_id']; ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
@@ -133,19 +144,21 @@ $type  = $row['type'];
                    
                     <td>
                     <div class="dropdown">
-             <button class="btn btn-warning view-bill" data-toggle="modal" 
-                  data-target="#viewbills" data-user-id="<?= $row['tableusers_id'] ?>">
-                <i class="bi bi-eye"></i> View
-             </button>
-
-  </td>
+                   <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+            Select
+        </a>
+        <div class="dropdown-menu">
+        <button class="dropdown-item view-bill" style="font-size: 0.7rem;" data-toggle="modal" data-target="#viewbills" data-user-id="<?= $row['tableusers_id'] ?>"><i class="bi bi-eye"></i> View</button>    
+        <button class="dropdown-item view-bill" style="font-size: 0.7rem;" data-toggle="modal" data-target="#viewbills" data-user-id="<?= $row['tableusers_id'] ?>"><i class="bx bx-edit"></i> Edit</button>
+            <form method="post">
+                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.7rem;">
+                <span class="bi bi-trash "></span> Delete</button>
             </form>
         </div>
     </div>
                     </td>
                   </tr>
                   <?php endwhile; ?>
- <!--               < ?php } ?>-->
               </tbody>
             </table>
           </div>
@@ -153,6 +166,25 @@ $type  = $row['type'];
       </div>
    
 </section>
+<!--< ?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['delete'])) {
+        $buttonValue = $_POST['delete'];
+        // Move the record to the archive table
+        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
+        $archiveResult = mysqli_query($conn, $archiveQuery);
+        
+        // Update the status to 'Offline'
+        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
+        $updateResult = mysqli_query($conn, $updateQuery);
+        
+        if ($archiveResult && $updateResult) {
+            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
+        }
+    }
+}
+?>-->
+
 
 <script>
 $(document).ready(function () {
@@ -218,7 +250,6 @@ $(document).ready(function () {
 });
 
 </script>
-
 <?php include('Addbills.php'); ?>
 <?php include('view_bills.php'); ?>
-
+<?php include('Delete_Account.php'); ?>

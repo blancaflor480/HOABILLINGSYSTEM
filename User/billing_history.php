@@ -93,53 +93,61 @@
               </a>
            </h5>
           <div class="card-body">
-            <table class="table table-hover table-striped table-bordered" id="list">
+          <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                <th>Customer no.</th>
+                <th>Bill no.</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
+                  <th>Current Amount</th>
+                  <th>Penalties</th>
+                  <th>Service Fee</th>
                   <th>Previous</th>
                   <th>Amount</th>
-		          <th>Status</th>
+				          <th>Status</th>
+                  
                 </tr>
               </thead>
               <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>-->
                 <?php 
-					$i = 1;
-						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
-                        `name` from `tablebilling_list` b inner join 
-                        tableusers c on b.tableusers_id = c.id 
-                        order by unix_timestamp(`reading_date`) desc, `name` asc ");
-						while($row = $qry->fetch_assoc()):
-					?>
+                 $i = 1;
+                $email = $_SESSION['email']; // Get the email of the logged-in user
+                $qry = $conn->prepare("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as `name` 
+                          FROM `tablebilling_list` b 
+                          INNER JOIN tableusers c ON b.tableusers_id = c.id 
+                          WHERE c.email = ? 
+                          ORDER BY unix_timestamp(`reading_date`) DESC, `name` ASC ");
+                $qry->bind_param("s", $email);
+                $qry->execute();
+                $result = $qry->get_result();
+
+             while($row = $result->fetch_assoc()):
+?>
 					
                   <tr>
-                    <td><?php echo $row['tableusers_id']; ?></td>
+                    <td><?php echo $row['id']; ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
+                    <td><?php echo $row['reading']; ?></td>
+                    <td><?php echo $row['penalties']; ?></td>
+                    <td><?php echo $row['service']; ?></td>
                     <td><?php echo $row['previous']; ?></td>
-                    <td><?php echo $row['total']; ?></td>
+                    <td><b><?php echo $row['total']; ?></b></td>
                     <td>
                     <?php
-						switch($row['status']){
-							case 0:
-								echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Pending</span>';
-									break;
-							case 1:
-								echo '<span class="badge badge-success bg-gradient-success text-sm px-3" Style="Height: 20px; font-size: 0.7rem;">Paid</span>';
-									break;
+								  switch($row['status']){
+									case 0:
+										echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                PENDING</span>';
+                    break;
+									case 1:
+										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+										break;
 								}
 								?>
                     </td>
-                   
-                  </tr>
+                    
+                   </tr>
                 <?php endwhile ?>
               </tbody>
             </table>

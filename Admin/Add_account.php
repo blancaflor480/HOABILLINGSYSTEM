@@ -19,14 +19,15 @@
     margin-bottom: 5px;
     font-size: 0.9rem; /* Adjusted font size */
   }
-
   .modal-body input,
   .modal-body select {
-    width: calc(100% - 12px); /* Adjusted width */
+    width: calc(100% - 12px);
     padding: 6px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
     margin-bottom: 15px;
     box-sizing: border-box;
-    font-size: 0.9rem; /* Adjusted font size */
+    font-size: 0.9rem;
   }
 
   .modal-footer {
@@ -47,14 +48,12 @@
     <div class="modal-body">
       <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
       <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;">Please fill up!</h5>
-         <label for="fname">First Name</label>
-        <input type="text" id="fname" name="fname" />
-
-        <label for="mname">Middle Name</label>
-        <input type="text" id="mname" name="mname" />
-
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname" name="lname" />
+         <label for="fname" style="width: 190px;">First Name</label>
+         <label for="mname" style="width: 150px; margin-left: 200px; background-color: yellow">Middle Name</label>
+         <label for="lname" style="width: 200px; margin-left: 430px; background-color: yellow; ">Last Name</label>
+        <input type="text" id="fname" name="fname" style="width: 210px;"/>
+        <input type="text" id="mname" name="mname" style="width: 210px;"/>
+        <input type="text" id="lname" name="lname" style="width: 210px;"/>
 
         <label for="email">Email</label>
         <input type="text" id="email" name="email" />

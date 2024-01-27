@@ -96,61 +96,61 @@
             <table class="table table-hover table-striped table-bordered" id="list">
               <thead>
                 <tr>
-                <th>Customer no.</th>
+                <th>Bill no.</th>
                   <th>Reading Date</th>
                   <th>Due Date</th>
+                  <th>Current Amount</th>
+                  <th>Penalties</th>
+                  <th>Service Fee</th>
                   <th>Previous</th>
-                  <th>Status</th>
                   <th>Amount</th>
-				          <th>Action</th>
+				          <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>-->
                 <?php 
-					$i = 1;
-						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
-             `name` from `tablebilling_list` b inner join 
-             tableusers c on b.tableusers_id = c.id 
-             order by unix_timestamp(`reading_date`) desc, `name` asc ");
-						while($row = $qry->fetch_assoc()):
-					?>
+                 $i = 1;
+                $email = $_SESSION['email']; // Get the email of the logged-in user
+                $qry = $conn->prepare("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as `name` 
+                          FROM `tablebilling_list` b 
+                          INNER JOIN tableusers c ON b.tableusers_id = c.id 
+                          WHERE c.email = ? 
+                          ORDER BY unix_timestamp(`reading_date`) DESC, `name` ASC ");
+                $qry->bind_param("s", $email);
+                $qry->execute();
+                $result = $qry->get_result();
+
+             while($row = $result->fetch_assoc()):
+?>
 					
                   <tr>
-                    <td><?php echo $row['tableusers_id']; ?></td>
+                    <td><?php echo $row['id']; ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
                     <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
+                    <td><?php echo $row['reading']; ?></td>
+                    <td><?php echo $row['penalties']; ?></td>
+                    <td><?php echo $row['service']; ?></td>
                     <td><?php echo $row['previous']; ?></td>
+                    <td><b><?php echo $row['total']; ?></b></td>
                     <td>
                     <?php
 								  switch($row['status']){
 									case 0:
-										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
-										break;
+										echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                PENDING</span>';
+                    break;
 									case 1:
 										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
 										break;
 								}
 								?>
                     </td>
-                    <td><?php echo $row['total']; ?></td>
-                   
+                    
                     <td>
+                      <a href="" class="btn btn-success"><i></i>Pay</a>
           
-                <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href=""><i class="bi bi-eye"></i> View</a>
-            <a class="dropdown-item" href=""><i class="bi bi-cash-coin"></i> Pay</a>
-               
-          </div>
-    </div>
+                
                     </td>
                   </tr>
                 <?php endwhile ?>

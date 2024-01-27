@@ -7,9 +7,14 @@
     <!-- Boxicons CDN Link -->
   <link rel="stylesheet" href="Bootstrap/boxicons-master/css/boxicons.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="bootstrap-4.6.2/css/bootstrap.min.css">
+  <!-- Include these links to the head section of your HTML -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  
+  <link rel="stylesheet" href="bootstrap-4.6.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="boostrap-icon/bootstrap-icon/font/bootstrap-icons.css">
   <script src="bootstrap-4.6.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">

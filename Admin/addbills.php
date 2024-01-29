@@ -58,18 +58,17 @@
           <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;"></h5>
 
        <label for="tableusers_id">Homeowner Name</label>
-        <select name="tableusers_id" id="tableusers_id" required="required">
-        <option value="" <?= !isset($tablusers_id) ? 'selected' : '' ?> disabled>Please Select Heres</option>
-        <?php 
-				$client_qry = $conn->query("SELECT *, concat(lname, ', ', fname, ' ', coalesce(mname)) as `name` FROM `tableusers` 
+        <select id="tableusers_id" required="required">
+    <option value="" <?= !isset($tablusers_id) ? 'selected' : '' ?> disabled>Please Select Here</option>
+    <?php 
+        $client_qry = $conn->query("SELECT *, concat(lname, ', ', fname, ' ', coalesce(mname)) as `name` FROM `tableusers` 
         where delete_flag = 0 and `status` = 1 ".(isset($tablusers_id) && is_numeric($tablusers_id) ? " or id != '{$tablusers_id}' " : '')." ");
-				while($row = $client_qry->fetch_assoc()):
-				?>
-        <option value="<?=  $row['Id'] ?>" <?= isset($tablusers_id) && $tablusers_id == $row['Id'] ? "selected" : '' ?>>
-        <?= $row['Id']." - ".$row['name'] ?></option>
-        <?php endwhile ?>
-      </select>
-      
+        while($row = $client_qry->fetch_assoc()):
+    ?>
+    <option value="<?= $row['Id'] . ' - ' . $row['name'] ?>" <?= isset($tablusers_id) && $tablusers_id == $row['Id'] ? "selected" : '' ?>>
+    <?= $row['Id'] . " - " . $row['name'] ?></option>
+    <?php endwhile ?>
+</select>      
           <label for="readingDueDate" style="width: 190px; margin-bottom: -22px">Reading Date</label>
           <label for="billDueDate" style="width: 250px; margin-left: 205px; ">Due Date</label>
           

@@ -105,8 +105,8 @@ if (isset($_GET['tableusers_id'])) {
 
           <label for="currentAmount" style="width: 190px; margin-bottom: -22px">Current Amount</label>
           <label for="previousBalance" style="width: 250px; margin-left: 205px; ">Previous Balance</label>
-         <input type="text" id="current" name="current" style="width: 200px;" value="<?php echo isset($result['reading']) ? $result['reading'] : '' ?>" disabled/>
-         <input type="text" id="previousBalance" name="previousBalance" style="width: 217px;" value="<?php echo isset($result['previous']) ? $result['previous'] : '' ?>" disabled/>
+         <input type="text" id="current" name="current" style="width: 200px;" value="<?php echo isset($meta['reading']) ? $meta['reading'] : '' ?>" disabled/>
+         <input type="text" id="previousBalance" name="previousBalance" style="width: 217px;" value="<?php echo isset($meta['previous']) ? $meta['previous'] : '' ?>" disabled/>
 
           
            <label for="serviceFee">Service Fee</label>

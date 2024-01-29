@@ -80,7 +80,7 @@
   }
 </style>
 
-<section class="home-section">
+ <section class="home-section">
 <div class="text">Billing</div>
     <div class="col-lg-12">
         <div class="card">
@@ -115,7 +115,7 @@
                 $qry = $conn->prepare("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as `name` 
                           FROM `tablebilling_list` b 
                           INNER JOIN tableusers c ON b.tableusers_id = c.id 
-                          WHERE c.email = ? 
+                          WHERE c.email = ? AND b.status = 0 
                           ORDER BY unix_timestamp(`reading_date`) DESC, `name` ASC ");
                 $qry->bind_param("s", $email);
                 $qry->execute();
@@ -146,12 +146,9 @@
 								}
 								?>
                     </td>
-                    
-                    <td>
-                      <a href="" class="btn btn-success"><i></i>Pay</a>
-          
-                
-                    </td>
+<td>
+  <button class="btn btn-success" data-toggle="modal" data-target="#paymentModal">Pay</button>
+</td>
                   </tr>
                 <?php endwhile ?>
               </tbody>
@@ -161,24 +158,7 @@
       </div>
    
 </section>
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
-        }
-    }
-}
-?>
+
 
 <script>
   $(document).ready(function () {
@@ -189,4 +169,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       "order": [[1, 'desc']],
     });
   });
+</script>
+<!-- Bootstrap Modal for Payment Options -->
+
+<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentModalLabel">Choose Payment Method</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add your payment options here -->
+        <div style="margin: auto; background-color: yellow;">
+        <div class="col-md-6" style="margin-left: 150px">
+        <button class="btn btn-primary" onclick="payWithGCash()">Pay with GCash</button>
+        </div><br>
+        <div class="col-md-6" style="margin-left: 145px">
+        <button class="btn btn-success" onclick="payWithPayMaya()">Pay with PayMaya</button>
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function payWithGCash() {
+    // Implement GCash payment logic here
+    alert('Redirecting to GCash payment page');
+    // You can add the actual logic to redirect to GCash payment page or perform other actions.
+  }
+
+  function payWithPayMaya() {
+    // Implement PayMaya payment logic here
+    alert('Redirecting to PayMaya payment page');
+    // You can add the actual logic to redirect to PayMaya payment page or perform other actions.
+  }
 </script>

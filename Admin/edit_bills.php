@@ -1,133 +1,195 @@
 <?php
+session_start();
 include('config.php');
-
-// Check if the user ID is provided in the URL
-if (isset($_GET['tableusers_id'])) {
-    // Query the billing details for the specific user
-    $user = $conn->prepare("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as `name` 
-                          FROM `tablebilling_list` b 
-                          INNER JOIN tableusers c ON b.tableusers_id = c.id 
-                          WHERE c.id = ? 
-                          ORDER BY unix_timestamp(`reading_date`) DESC, `name` ASC ");
-
-    $user->bind_param("s", $_GET['tableusers_id']);
-    $user->execute();
-    $result = $user->get_result();
-
-    // Check if the query was successful and returned any result
-    if ($result && $result->num_rows > 0) {
-        // Fetch the data
-        $result = $result->fetch_assoc();
-    } else {
-        // Handle the case where no user is found
-        echo '<script> alert("User not found."); location.replace("billing_transaction.php");</script>';
-    }
-}
+include('Sidebar.php');
 ?>
 
-<style>
-  #editbills img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
-  }
+<section class="home-section">
+    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> EDIT BILLS</p></div>
+    <br><br>
+    <div class="container justify-content-center" style="margin-top: -5em;">
+        <div class="col-lg-11 col-md-6 col-sm-11 col-xs-11">
+            <div class="card rounded-0 shadow">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <?php
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                            $id = $_POST['id'];
+                            $reading_date = $_POST['reading_date'];
+                            $previous = $_POST['previous'];
+                            $reading = $_POST['reading'];
+                            $service = $_POST['service'];
+                            $total = $_POST['total'];
+                            $due_date = $_POST['due_date'];
+                            $status = $_POST['status'];
 
-  .modal-dialog {
-    max-width: 30%;
-    margin: 5% auto;
-  }
+                            $update_query = $conn->prepare("UPDATE tablebilling_list 
+                                                            SET reading_date = ?, previous = ?, reading = ?, service = ?, total = ?, due_date = ?, status = ? 
+                                                            WHERE tableusers_id = ?");
+                            $update_query->bind_param("ssssssss", $reading_date, $previous, $reading, $service, $total, $due_date, $status, $id);
 
-  .modal-body {
-    text-align: left;
-  }
+                            if ($update_query->execute()) {
+                                echo json_encode(array('status' => 'success', 'message' => 'Billing information updated successfully.'));
+                            } else {
+                                echo json_encode(array('status' => 'error', 'message' => 'Failed to update billing information.'));
+                            }
+                            exit();
+                        }
 
-  .modal-body label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-  }
+                        if (isset($_GET['tableusers_id'])) {
+                            $user = $conn->prepare("SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name` 
+                                                FROM `tablebilling_list` b 
+                                                INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
+                                                WHERE c.Id = ? 
+                                                ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
 
-  .modal-body input,
-  .modal-body select {
-    width: calc(100% - 12px);
-    padding: 6px;
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-    font-size: 0.9rem;
-  }
+                            $user->bind_param("s", $_GET['tableusers_id']);
+                            $user->execute();
+                            $meta = $user->get_result();
 
-  .error-message {
-    color: red;
-    font-size: 0.7rem;
-  }
+                            if ($meta && $meta->num_rows > 0) {
+                                $meta = $meta->fetch_assoc();
+                            } else {
+                                echo '<script> alert("User not found."); location.replace("billing.php");</script>';
+                            }
+                        }
+                        ?>
 
-  .modal-footer {
-    text-align: center;
-  }
-</style>
-
-<!-- Modal -->
-<div class="modal fade" id="editbills" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Bills Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" action="bk_editbilling.php" enctype="multipart/form-data">
-          <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;"></h5>
-          <input type="hidden" name="tableusers_id" value="<?= isset($result['tableusers_id']) ? $result['tableusers_id'] : '' ?>">
-    
-          <label for="name">Homeowner Name</label>
-          <select id="name" disabled>
-            <?php
-            $client_qry = $conn->query("SELECT *, concat(lname, ', ', fname, ' ', coalesce(mname)) as `name` FROM `tableusers` 
-            where delete_flag = 0 and `status` = 1");
-            while ($row = $client_qry->fetch_assoc()) :
-            ?>
-              <option value="<?= $row['Id'] ?>" <?= isset($result['tableusers_id']) && $result['tableusers_id'] == $row['Id'] ? "selected" : '' ?>>
-                <?= $row['Id'] . " - " . $row['name'] ?></option>
-            <?php endwhile ?>
-          </select>
-
-          <label for="readingDueDate" style="width: 190px; margin-bottom: -22px">Reading Date</label>
-          <label for="billDueDate" style="width: 250px; margin-left: 205px; ">Due Date</label>
-          <input type="date" id="readingDueDate" name="reading_dueDate" style="width: 200px;" value="<?= isset($result['reading_date']) ? $result['reading_date'] : '' ?>" max="<?= date("Y-m-d") ?>" required/>
-          <input type="date" id="duedate" name="duedate" style="width: 217px;" value="<?= isset($meta['due_date']) ? $meta['due_date'] : '' ?>" required/>
-  
-          <label for="currentAmount" style="width: 190px; margin-bottom: -22px">Current Amount</label>
-          <label for="previousBalance" style="width: 250px; margin-left: 205px; ">Previous Balance</label>
-          <input type="text" id="current" name="current" style="width: 200px;" value="<?= isset($meta['reading']) ? $meta['reading'] : '' ?>" required/>
-          <input type="text" id="previousBalance" name="previous" style="width: 217px;" value="<?= isset($meta['previous']) ? $meta['previous'] : '' ?>" required/>
-   
-          
-          <label for="serviceFee">Service Fee</label>
-          <input type="text" name="service" id="service" value="<?= isset($meta['service']) ? $meta['service'] : '' ?>" required/>
-
-          <label type="text" for="penalties">Penalties</label>
-          <input type="text" name="penalties" id="penalties" value="<?= isset($meta['penalties']) ? $meta['penalties'] : '' ?>" required/>
-
-          <label for="totalAmount">Total Amount</label>
-          <input type="number" id="total" name="total" value="<?= isset($meta['total']) ? $meta['total'] : '' ?>" required/>
-   
-          <label for="Status">Status</label>
-          <select name="status" id="status" required>
-            <option value="0" <?php if ($result['status'] == 0) echo 'selected'; ?>>Pending</option>
-            <option value="1" <?php if ($result['status'] == 1) echo 'selected'; ?>>Paid</option>
-          </select>
-
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success" form="billing-form">Update</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" form="billing-form">Close</button>
-      </div>
-      </form>
+                        <form method="POST" id="billing-form">
+                            <input type="hidden" name="id" value="<?= isset($meta['tableusers_id']) ? $meta['tableusers_id'] : '' ?>">
+                            <div class="form-group mb-3">
+                                <label for="tableusers_id" class="control-label">Client</label>
+                                <select name="tableusers_id" id="tableusers_id" class="form-control form-control-sm rounded-0"
+                                        required="required">
+                                    <option value="" <?= !isset($meta['tableusers_id']) ? 'selected' : '' ?> disabled></option>
+                                    <?php
+                                    $client_qry = $conn->query("SELECT * FROM `tableusers` WHERE delete_flag = 0 AND `status` = 1 " . (isset($meta['tableusers_id']) && is_numeric($meta['tableusers_id']) ? " OR Id != '{$meta['tableusers_id']}' " : '') . " ");
+                                    while ($row = $client_qry->fetch_assoc()) :
+                                        ?>
+                                        <option value="<?= $row['Id'] ?>" <?= isset($meta['tableusers_id']) && $meta['tableusers_id'] == $row['Id'] ? "selected" : '' ?>><?= $row['fname'] . ' ' . $row['lname'] ?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="reading_date" class="control-label">Reading Date</label>
+                                <input type="date" class="form-control form-control-sm rounded-0" id="reading_date"
+                                       name="reading_date" required="required"
+                                       max="<?= date("Y-m-d") ?>"
+                                       value="<?= isset($meta['reading_date']) ? date("Y-m-d", strtotime($meta['reading_date'])) : '' ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="previous" class="control-label">Previous Reading</label>
+                                <input type="text" class="form-control form-control-sm rounded-0" id="previous"
+                                       name="previous" required="required"
+                                       readonly
+                                       value="<?= isset($meta['previous']) ? $meta['previous'] : '' ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="reading" class="control-label">Current Amount</label>
+                                <input type="text" class="form-control form-control-sm rounded-0" id="reading"
+                                       name="reading" required="required"
+                                       value="<?= isset($meta['reading']) ? $meta['reading'] : '' ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="service" class="control-label">Service Fee</label>
+                                <input type="text" class="form-control form-control-sm rounded-0" id="service"
+                                       name="service" required readonly
+                                       value="<?= isset($meta['service']) ? $meta['service'] : $_settings->info('service_fee') ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="total" class="control-label">Total Bill</label>
+                                <input type="text" 
+                                       class="form-control form-control-sm rounded-0 text-right" id="total" readonly
+                                       name="total"
+                                       required
+                                       value="<?= isset($meta['total']) ? $meta['total'] : '' ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="due_date" class="control-label">Due Date</label>
+                                <input type="date" class="form-control form-control-sm rounded-0" id="due_date"
+                                       name="due_date" required="required"
+                                       value="<?= isset($meta['due_date']) ? date("Y-m-d", strtotime($meta['due_date'])) : '' ?>"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="control-label">Status</label>
+                                <select name="status" id="status"
+                                        class="form-control form-control-sm rounded-0" required>
+                                    <option value="0" <?php echo isset($meta['status']) && $meta['status'] == 0 ? 'selected' : '' ?>>
+                                        Pending
+                                    </option>
+                                    <option value="1" <?php echo isset($meta['status']) && $meta['status'] == 1 ? 'selected' : '' ?>>
+                                        Paid
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                    </div><br>
+                    <div class="text-center" style="margin: 10px;">
+                        <button  class="btn btn-primary btn-sm bg-gradient-primary rounded-0" form="billing-form"><i class="fa fa-save"></i> Save</button>
+                        <a class="btn btn-light btn-sm bg-gradient-light border rounded-0" href="billing.php"><i class="fa fa-angle-left"></i> Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+    <br>
+</section>
+<script>
+    function updateTotalAmount() {
+        var currentAmount = parseFloat(document.getElementById('reading').value) || 0;
+        var previousAmount = parseFloat(document.getElementById('previous').value) || 0;
+        var serviceFee = parseFloat(document.getElementById('service').value) || 0;
 
+        var totalAmount = currentAmount + previousAmount + serviceFee;
+
+        // Check if totalAmount is a valid number before calling toFixed
+        if (!isNaN(totalAmount)) {
+            document.getElementById('total').value = totalAmount.toFixed(2);
+        }
+    }
+
+    function updateBillingDetails() {
+        var selectedUserId = document.getElementById('tableusers_id').value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+
+                    if (response.success) {
+                        document.getElementById('previous').value = parseFloat(response.previousBalance) || 0;
+
+                        // Set the service fee to 10 pesos
+                        document.getElementById('service').value = 10;
+
+                        document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
+
+                        var totalAmount = parseFloat(response.previousBalance) + 10 +
+                                          (parseFloat(response.penalties) || 0);
+
+                        // Check if totalAmount is a valid number before calling toFixed
+                        if (!isNaN(totalAmount)) {
+                            document.getElementById('total').value = totalAmount.toFixed(2);
+                        }
+                    } else {
+                        console.error('Error: ' + response.error);
+                    }
+                } else {
+                    console.error('Error: ' + xhr.status);
+                }
+            }
+        };
+
+        xhr.open('POST', 'get_billing_details.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        // Adjust the data being sent to match what your PHP script expects
+        xhr.send('tableusers_id=' + selectedUserId);
+    }
+
+    document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
+
+    // Attach the updateTotalAmount function to the 'input' event of the reading field
+    document.getElementById('reading').addEventListener('input', updateTotalAmount);
+</script>

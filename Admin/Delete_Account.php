@@ -78,7 +78,7 @@
   </div>
 </div>
 <?php
-include ('config.php');
+include('config.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['insert'])) {
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (mysqli_num_rows($checkResult) == 0) {
             // The record does not exist in the main table, proceed with restoration
-            $archiveQuery = "INSERT INTO tableaccount SELECT * FROM tablearchives WHERE Id = '$buttonValue'";
+            $archiveQuery = "INSERT INTO tableaccount SELECT Id, fname, mname, lname, gender, contact, email, bday, address, uname, password, copassword, image, type, status, date_created, code FROM tablearchives WHERE Id = '$buttonValue'";
             $result1 = mysqli_query($db, $archiveQuery);
 
             if ($result1) {

@@ -7,10 +7,14 @@ $defaultPenalties = 0; // Set the default penalties
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $userId = $_POST['userId'];
+    $tableusers_id = $_POST['tableusers_id'];
 
-    $query = "SELECT previous, service, penalties, total FROM tablebilling_list WHERE tableusers_id = $userId";
-    $result = $conn->query($query);
+    // Use a prepared statement to prevent SQL injection
+    $query = "SELECT previous, service, penalties, total FROM tablebilling_list WHERE tableusers_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $tableusers_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result) {
         $row = $result->fetch_assoc();
@@ -30,18 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'totalAmount' => 0
             );
 
-            $response['error'] = 'No data found for the user with ID ' . $userId;
+            $response['error'] = 'No data found for the user with ID ' . $tableusers_id;
         }
     } else {
-        $response['error'] = 'Database query error: ' . $conn->error;
+        $response['error'] = 'Database query error: ' . $stmt->error;
+        // Log the SQL query and error for debugging
+        error_log("SQL Query: $query | Error: " . $stmt->error);
     }
 
     // Log additional information for debugging
-    $response['query'] = $query;
-    $response['row'] = $row;
-    $response['userId'] = $userId;
+    $response['tableusers_id'] = $tableusers_id;
 } else {
     $response['error'] = 'Invalid request method';
+}
+
+// Return a consistent JSON structure
+if (isset($response['error'])) {
+    $response['success'] = false;
+} else {
+    $response['success'] = true;
 }
 
 // Send the JSON response

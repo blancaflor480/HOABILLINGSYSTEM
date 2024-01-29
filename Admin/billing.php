@@ -51,6 +51,12 @@ $type  = $row['type'];
   .btn {
     font-size: 12px; /* Adjusted font size */
   }
+.viewBillingBtn,
+.editBillingBtn,
+.deleteBillingBtn {
+    font-size: 11px; /* Adjust the font size as needed */
+    padding: 2px 5px; /* Adjust the padding as needed */
+}
 
   /* Adjusted font size for DataTable controls */
   .dataTables_length,
@@ -65,201 +71,100 @@ $type  = $row['type'];
     font-size: 12px;
   }
 </style>
-<!--<i class="bi bi-receipt"></i>-->
+
 <section class="home-section">
-<div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
+    <div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">List of Homeowners Bills
-            <?php if ($type == 'Admin'): ?>
-              <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
-                <span class="bi bi-receipt"></span> Generate Bills
-              </button>
-              <a href="billing_transaction.php">
-              <button type="button" class="btn btn-primary float-right" >
-                <span class="bi bi-card-checklist"></span> Transaction
-              </button>            
-              </a>
-              <div class="dropdown">
-                   <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;"  data-toggle="dropdown" aria-expanded="false">
-              Select All
-                 </button>
-        <div class="dropdown-menu">
-        <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</button>    
-        <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
-        <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>          
-      </div>
-    </div>
-              <?php endif; ?>
-          </h5>
-          <div class="card-body">
-            <table class="table table-hover table-striped table-bordered" id="list">
-              <thead>
-                <tr>
-                <th>Bills no.</th>  
-                <th>Homeowner no.</th>
-                  <th>Reading Date</th>
-                  <th>Due Date</th>
-                  <th>Full name</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-				          <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-               <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tablebilling_list ORDER BY tableusers_id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $tableusers_id = $row['tableusers_id'];
-                ?>-->
-                <?php 
-					$i = 1;
-						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
-             `name` from `tablebilling_list` b inner join 
-             tableusers c on b.tableusers_id = c.id 
-             order by unix_timestamp(`reading_date`) desc, `name` asc ");
-						while($row = $qry->fetch_assoc()):
-					?>
-					
-                  <tr>
-                  <td><?php echo $row['id']; ?></td>
-                    <td><?php echo $row['tableusers_id']; ?></td>
-                    <td><?php echo date("Y-m-d", strtotime($row['reading_date'])); ?></td>
-                    <td><?php echo date("Y-m-d", strtotime($row['due_date'])); ?></td>
-                    <td><?php echo $row['name']; ?></td>
-                    <td>
-                    <?php
-								  switch($row['status']){
-									case 0:
-										echo '<span class="badge badge-secondary  bg-gradient-secondary  text-lg px-2 ">Pending</span>';
-										break;
-									case 1:
-										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
-										break;
-								}
-								?>
-                    </td>
-                    <td><?php echo $row['total']; ?></td>
-                   
-                    <td>
+            <h5 class="card-header">List of Homeowners Bills
+                <?php if ($type == 'Admin'): ?>
+            <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
+                        <span class="bi bi-receipt"></span> Generate Bills
+                    </button>
+                    <a href="billing_transaction.php">
+                        <button type="button" class="btn btn-primary float-right">
+                            <span class="bi bi-card-checklist"></span> Transaction
+                        </button>
+                    </a>
                     <div class="dropdown">
-                   <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-        <button class="dropdown-item view-bill" style="font-size: 0.7rem;" data-toggle="modal" data-target="#viewbills" data-user-id="<?= $row['tableusers_id'] ?>"><i class="bi bi-eye"></i> View</button>    
-        <button class="dropdown-item update-bill" style="font-size: 0.7rem;" data-toggle="modal" data-target="#editbills" data-user-id="<?= $row['tableusers_id'] ?>"><i class="bx bx-edit"></i> Edit</button>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.7rem;">
-                <span class="bi bi-trash "></span> Delete</button>
-            </form>
-        </div>
-    </div>
-                    </td>
-                  </tr>
-                  <?php endwhile; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-   
-</section>
-<!--< ?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
-        }
+                        <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
+                            Select All
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
+                            <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
+                            <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover table-striped table-bordered" id="list">
+                    <thead>
+                        <tr>
+                            <th>Bills no.</th>
+                            <th>Homeowner no.</th>
+                            <th>Reading Date</th>
+                            <th>Due Date</th>
+                            <th>Full name</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    <?php
+    require 'config.php';
+
+    $query = "SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) AS name
+          FROM `tablebilling_list` b 
+          INNER JOIN tableusers c ON b.tableusers_id = c.id
+          ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, name ASC";
+
+    $query_run = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($query_run) > 0) {
+        foreach ($query_run as $billingRecord) {
+            ?>
+            <tr>
+                <td><?= $billingRecord['id']; ?></td>
+                <td><?= $billingRecord['tableusers_id']; ?></td> <!-- Change this to $billingRecord['name']; -->
+                <td><?= date("Y-m-d", strtotime($billingRecord['reading_date'])); ?></td>
+                <td><?= date("Y-m-d", strtotime($billingRecord['due_date'])); ?></td>
+                <td><?= $billingRecord['name']; ?></td> <!-- Display homeowner's name -->
+                <td>
+                    <?php
+                    switch ($billingRecord['status']) {
+                        case 0:
+                            echo '<span class="badge badge-secondary bg-gradient-secondary text-lg px-2 ">Pending</span>';
+                            break;
+                        case 1:
+                            echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+                            break;
+                    }
+                    ?>
+                </td>
+                <td><?= $billingRecord['total']; ?></td>
+                <td>
+                    <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
+    
+<a href="edit_bills.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success"><i class="bi bi-pencil-square"></i> Edit</a>
+
+                    <button type="button" value="<?= $billingRecord['id']; ?>" class="deleteBillingBtn btn btn-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                </td>
+            </tr>
+        <?php
     }
 }
-?>-->
+?>
+</tbody>
 
-
-<!--<script>
-$(document).ready(function () {
-  // Initialize DataTable
-  $('#list').DataTable({
-    "pagingType": "full_numbers",
-    "lengthMenu": [5, 10, 25, 50, 75, 100],
-    "pageLength": 10,
-    "order": [[1, 'desc']],
-  });
-
-  // Handle click event for "View" button
-  $('#list').on('click', '.view-bill', function () {
-    var tableusers_id = $(this).data('user-id');
-
-    // Make an AJAX request to fetch bill details for the selected user
-    $.ajax({
-      url: 'fetch_bill_details.php',
-      method: 'GET',
-      data: { tableusers_id: tableusers_id },
-      success: function (response) {
-        try {
-          // Log the raw response to the console for debugging
-          console.log('Raw JSON response:', response);
-
-          // Parse the JSON response
-          var data = JSON.parse(response);
-
-          // Log the parsed data to the console for debugging
-          console.log('Parsed JSON data:', data);
-
-          // Check if there is an error
-          if (data.error) {
-            alert(data.error);
-            return;
-          }
-
-          // Update the modal content with the fetched bill details
-          $('#viewbills .modal-body #name').val(data.tableusers_id);
-          $('#viewbills .modal-body #readingDueDate').val(data.reading_date);
-          $('#viewbills .modal-body #duedate').val(data.due_date);
-          $('#viewbills .modal-body #current').val(data.reading);
-          $('#viewbills .modal-body #previousBalance').val(data.previous);
-          $('#viewbills .modal-body #service').val(data.service);
-          $('#viewbills .modal-body #penalties').val(data.penalties);
-          $('#viewbills .modal-body #total').val(data.total);
-          $('#viewbills .modal-body #status').val(data.status);
-          
-          // Update the modal content with the fetched bill details
-          $('#editbills .modal-body #name').val(data.tableusers_id);
-          $('#editbills .modal-body #readingDueDate').val(data.reading_date);
-          $('#editbills .modal-body #duedate').val(data.due_date);
-          $('#editbills .modal-body #current').val(data.reading);
-          $('#editbills .modal-body #previousBalance').val(data.previous);
-          $('#editbills .modal-body #service').val(data.service);
-          $('#editbills .modal-body #penalties').val(data.penalties);
-          $('#editbills .modal-body #total').val(data.total);
-          $('#editbills .modal-body #status').val(data.status);
-          
-          // ... update other fields similarly
-          // Show the modal
-          $('#viewbills').modal('show');
-        } catch (error) {
-          console.error('Error parsing JSON response:', error);
-         }
-      },
-      error: function () {
-        // Handle errors if any
-        alert('Error fetching bill details.');
-      }
-      
-    });
-  });
-});
-
-</script>-->
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<?php include('modal.php'); ?>
 
 <script>
   $(document).ready(function () {
@@ -271,95 +176,159 @@ $(document).ready(function () {
     "order": [[1, 'desc']],
   });
 
-  // Handle click event for "View" button
-  $('#list').on('click', '.view-bill', function () {
-    var tableusers_id = $(this).data('user-id');
+//$(document).on('click', '.editBillingBtn', function () {
+  //  var billing_id = $(this).val();
+    //$.ajax({
+      //  type: "GET",
+        //url: "action.php?billing_id=" + billing_id,
+        ///success: function (response) {
+           // var res = jQuery.parseJSON(response);
+            //if (res.status == 404) {
+              //  alertify.error(res.message);
+            //} else if (res.status == 200) {
+               // $('#billing_id').val(res.data.id);
 
-    // Make an AJAX request to fetch bill details for the selected user
+                // Fetch homeowner's name using the tableusers_id
+//                var homeowner = res.homeowner;
+                // Check if the homeowner object exists and has the required properties
+  //              if (homeowner && homeowner.name) {
+      //              var homeownerId = res.data.tableusers_id; // Use the actual Id value instead of the name
+    //                var homeownerName = homeowner.name;
+
+                    // Set the selected option in the dropdown
+        //            $('#tableusers_id').val(homeownerId);
+
+                    // Display homeowner's name in the modal
+          //          $('#tableusers_id').attr('data-selected', homeownerName);
+            //    } else {
+                    // If the homeowner name is not available, you may want to display a default value or handle it accordingly
+              //      $('#tableusers_id').val('N/A');
+                //}
+
+                // Populate other fields
+               /// $('#reading_date').val(res.data.reading_date);
+               // $('#due_date').val(res.data.due_date);
+                //$('#reading').val(res.data.reading);
+                //$('#previous').val(res.data.previous);
+               // $('#penalties').val(res.data.penalties);
+               /// $('#service').val(res.data.service);
+               // $('#total').val(res.data.total);
+                //$('#status').val(res.data.status);
+
+                //$('#billingEditModal').modal('show');
+            //}
+        //},
+        //error: function (xhr, status, error) {
+          ///  console.error(xhr.responseText);
+       // }
+    //});
+//});
+
+///$(document).on('submit', '#updateBilling', function (e) {
+   // e.preventDefault();
+    //var formData = new FormData(this);
+   // formData.append("update_billing", true);
+    //$.ajax({
+    //    type: "POST",
+     //   url: "action.php",
+       // data: formData,
+      //  processData: false,
+      //  contentType: false,
+      //  success: function (response) {
+        //    var res = jQuery.parseJSON(response);
+        //    if (res.status == 422) {
+          //      $('#errorMessageUpdate').removeClass('d-none');
+          //      $('#errorMessageUpdate').text(res.message);
+         //   } else if (res.status == 200) {
+ //               $('#errorMessageUpdate').addClass('d-none');
+
+                // Redirect to billing.php after updating successfully
+   //             window.location.href = 'billing.php';
+
+                // Hide modal and reset form
+     //           $('#billingEditModal').modal('hide');
+       //         $('#updateBilling')[0].reset();
+
+                // Reload the DataTable (optional, remove if not needed)
+         //       $('#myTable').DataTable().ajax.reload();
+        //    } else if (res.status == 500) {
+  //              alert(res.message);
+          //  }
+      //  }
+ //   });
+//});
+
+
+$(document).on('click', '.viewBillingBtn', function () {
+    var billing_id = $(this).val();
     $.ajax({
-      url: 'fetch_bill_details.php',
-      method: 'GET',
-      data: { tableusers_id: tableusers_id },
-      success: function (response) {
-        try {
-          // Parse the JSON response
-          var data = JSON.parse(response);
+        type: "GET",
+        url: "action.php?billing_id=" + billing_id,
+        success: function (response) {
+            var res = jQuery.parseJSON(response);
+            if (res.status == 404) {
+                alertify.error(res.message);
+            } else if (res.status == 200) {
+                // Fetch homeowner's name using the tableusers_id
+                var homeowner = res.homeowner;
 
-          // Check if there is an error
-          if (data.error) {
-            alert(data.error);
-            return;
-          }
+                // Check if the homeowner object exists and has the required properties
+                if (homeowner && homeowner.name) {
+                    var homeownerName = homeowner.name;
 
-          // Update the modal content with the fetched bill details
-          $('#viewbills .modal-body #name').val(data.tableusers_id);
-          $('#viewbills .modal-body #readingDueDate').val(data.reading_date);
-          $('#viewbills .modal-body #duedate').val(data.due_date);
-          $('#viewbills .modal-body #current').val(data.reading);
-          $('#viewbills .modal-body #previousBalance').val(data.previous);
-          $('#viewbills .modal-body #service').val(data.service);
-          $('#viewbills .modal-body #penalties').val(data.penalties);
-          $('#viewbills .modal-body #total').val(data.total);
-          $('#viewbills .modal-body #status').val(data.status);
+                    // Display homeowner's name in the modal
+                    $('#view_tableusers_id').text(homeownerName);
+                } else {
+                    $('#view_tableusers_id').text('N/A'); // Set a default value if data is not as expected
+                }
 
-          // Show the modal
-          $('#viewbills').modal('show');
-        } catch (error) {
-          console.error('Error parsing JSON response:', error);
+                // Other fields remain the same
+                $('#view_reading_date').text(res.data.reading_date);
+                $('#view_due_date').text(res.data.due_date);
+                $('#view_reading').text(res.data.reading);
+                $('#view_previous').text(res.data.previous);
+                $('#view_penalties').text(res.data.penalties);
+                $('#view_service').text(res.data.service);
+                $('#view_total').text(res.data.total);
+
+                // Display "Pending" or "Paid" based on the value
+                var statusText = (res.data.status == 0) ? "Pending" : "Paid";
+                $('#view_status').text(statusText);
+
+                $('#billingViewModal').modal('show');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
         }
-      },
-      error: function () {
-        // Handle errors if any
-        alert('Error fetching bill details.');
-      }
     });
-  });
+});
 
-  // Handle click event for "Update" button in the edit modal
-  $('#editbills').on('click', '.update-bill', function () {
-    var formData = $('#editbills-form').serialize();
-
-    // Make an AJAX request to update the bill details
-    $.ajax({
-      url: 'update_bill.php',
-      method: 'GET',
-      data: { tableusers_id: tableusers_id },
-      success: function (response) {
-    try {
-        var data = JSON.parse(response);
-
-        if (data.status === 'success') {
-            // Update the modal content with the fetched bill details
-            $('#editbills .modal-body #name').val(data.data.tableusers_id);
-            $('#editbills .modal-body #readingDueDate').val(data.data.reading_date);
-            $('#editbills .modal-body #duedate').val(data.data.due_date);
-            $('#editbills .modal-body #current').val(data.data.reading);
-            $('#editbills .modal-body #previousBalance').val(data.data.previous);
-            $('#editbills .modal-body #service').val(data.data.service);
-            $('#editbills .modal-body #penalties').val(data.data.penalties);
-            $('#editbills .modal-body #total').val(data.data.total);
-            $('#editbills .modal-body #status').val(data.data.status);
-
-            // Show the modal
-            $('#editbills').modal('show');
-        } else {
-            // Handle errors
-            alert(data.message);
+    $(document).on('click', '.deleteBillingBtn', function (e) {
+        e.preventDefault();
+        if (confirm('Are you sure you want to delete this record?')) {
+            var billing_id = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: "action.php",
+                data: {
+                    'delete_billing': true,
+                    'billing_id': billing_id
+                },
+                success: function (response) {
+                    var res = jQuery.parseJSON(response);
+                    if (res.status == 500) {
+                        alert(res.message);
+                    } else {
+                        alertify.set('notifier', 'position', 'top-right');
+                        alertify.success(res.message);
+                        $('#list').load(location.href + " #list");
+                    }
+                }
+            });
         }
-    } catch (error) {
-        console.error('Error parsing JSON response:', error);
-    }
-},
-      error: function () {
-        // Handle errors if any
-        alert('Error updating bill details.');
-      }
     });
-  });
 });
 
 </script>
-<?php include('Addbills.php'); ?>
-<?php include('view_bills.php'); ?>
-<?php include('edit_bills.php'); ?>
-<?php include('Delete_Account.php'); ?>
+

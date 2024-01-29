@@ -6,42 +6,85 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 include 'config.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve form data (sanitize user input to prevent SQL injection)
-    $billing_id = intval($_POST['billing_id']);
-    $readingDate = $_POST['readingDueDate'];
-    $dueDate = $_POST['billDueDate'];
-    $currentAmount = floatval($_POST['current']);
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $previous = isset($_POST['previous']) ? floatval($_POST['previous']) : 0;
-    $service = isset($_POST['service']) ? floatval($_POST['service']) : 10;
-    $penalties = isset($_POST['penalties']) ? floatval($_POST['penalties']) : 0;
-
-    $totalAmount = $currentAmount + $service;
+    // Retrieve form data
+    $tableusers_id = $_POST['tableusers_id'];
+    $readingDueDate = $_POST['readingDueDate'];
+    $billDueDate = $_POST['billDueDate'];
+    $currentAmount = $_POST['current'];
+    $penalties = $_POST['penalties'];
+    $totalAmount = $_POST['totalamount'];
     $status = $_POST['status'];
 
-    // Use prepared statement to update existing record
-    $stmt = $conn->prepare("UPDATE tablebilling_list SET reading_date=?, due_date=?, reading=?, previous=?, service=?, total=?, status=? WHERE billing_id=?");
-    $stmt->bind_param("sssssssi", $readingDate, $dueDate, $currentAmount, $previous, $service, $totalAmount, $status, $billing_id);
+    // Extracting ID from $tableusers_id
+    list($userId) = explode(' - ', $tableusers_id);
+    $userId = intval($userId);  // Ensure $userId is an integer
 
-    if ($stmt->execute()) {
-        // Success
-        echo json_encode(array('status' => 'success', 'message' => 'Billing record updated successfully'));
+    // Check if the user exists
+    $userQuery = "SELECT * FROM tableusers WHERE Id = $userId";
+    $userResult = $conn->query($userQuery);
 
-        // Close the statement
-        $stmt->close();
+    if ($userResult === FALSE) {
+        // Handle SQL error
+        echo "Error checking user: " . $conn->error;
+    } elseif ($userResult->num_rows > 0) {
+        // User found, proceed with billing creation
 
-        // Call the function to send email notification using PHPMailer
-        sendEmailNotification($tableusers_id, $totalAmount, $dueDate, $conn);
+        // Set the default service fee to 10 pesos
+        $serviceFee = 10;
+
+        // Insert the billing details into your database using prepared statements
+        $insertQuery = $conn->prepare("INSERT INTO tablebilling_list (tableusers_id, reading_date, due_date, reading, penalties, service, total, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertQuery->bind_param("isssssss", $userId, $readingDueDate, $billDueDate, $currentAmount, $penalties, $serviceFee, $totalAmount, $status);
+
+        if ($insertQuery->execute() === TRUE) {
+            // Send email notification using PHPMailer
+            $mail = new PHPMailer(true);
+
+            try {
+                // Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_SERVER; // You can set DEBUG_SERVER, DEBUG_CLIENT, or DEBUG_OFF
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server host
+                $mail->SMTPAuth = true;
+                $mail->Username = 'billinghoa@gmail.com'; // Replace with your SMTP username
+                $mail->Password = 'sqtrxkdxrkbalgfu'; // Replace with your SMTP password
+                $mail->SMTPSecure = 'ssl'; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+                $mail->Port = 465; // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+                // Recipients
+                $mail->setFrom('billinghoa@gmail.com');
+                $mail->addAddress($userResult->fetch_assoc()['email']);
+
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = 'New Bill Generated';
+                $mail->Body = "Dear User,<br>A new bill has been generated for you. Here are the details:<br><br>
+                               Reading Date: $readingDueDate<br>
+                               Due Date: $billDueDate<br>
+                               Current Amount: $currentAmount<br>
+                               Penalties: $penalties<br>
+                               Service Fee: $serviceFee<br>
+                               Total Amount: $totalAmount<br>
+                               Status: $status<br><br>
+                               Please log in to check the details.";
+
+                $mail->send();
+                echo 'Billing created successfully. Email sent.';
+            } catch (Exception $e) {
+                echo "Error sending email: " . $e->getMessage();
+            }
+        } else {
+            echo "Error inserting billing: " . $conn->error;
+        }
+
+        // Close the prepared statement
+        $insertQuery->close();
+
     } else {
-        // Error
-        echo json_encode(array('status' => 'error', 'message' => 'Error updating billing record: ' . $conn->error));
+        echo "Error: User not found or invalid user ID.";
     }
-
-    // Close the database connection
-    $conn->close();
-} else {
-    // Invalid request method
-    echo json_encode(array('status' => 'error', 'message' => 'Invalid request method'));
 }
 ?>

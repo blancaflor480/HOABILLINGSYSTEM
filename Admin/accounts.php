@@ -153,9 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_autocommit($conn, false);
 
         // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tablearchives SELECT * FROM tableaccount WHERE Id = '$deleteId'";
+        $archiveQuery = "INSERT INTO tablearchives 
+                 SELECT *, 1 AS delete_flag FROM tableaccount 
+                 WHERE Id = '$deleteId'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
-
         // Delete the record from the main table
         $deleteQuery = "DELETE FROM tableaccount WHERE Id = '$deleteId'";
         $deleteResult = mysqli_query($conn, $deleteQuery);

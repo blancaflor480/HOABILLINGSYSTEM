@@ -69,7 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                Service Fee: $serviceFee<br>
                                Total Amount: $totalAmount<br>
                                Status: $status<br><br>
-                               Please log in to check the details.";
+                               Please log in to check the details.<br>
+
+
+                               <b>Disclaimer</b>: The message in and bills to this e-mail may be privileged and/or confidential and are intended only for authorized recipients. If you are not its intended recipient, please delete. Views and opinions expressed in this e-mail are those of the sender. They do not necessarily reflect the views of Rosedale Residence and its officials.
+
+                               <br><br>
+                               ** This is an auto-generated email.<b> DO NOT REPLY TO THIS MESSAGE.</b> **";
 
                 $mail->send();
                 echo 'Billing created successfully. Email sent.';

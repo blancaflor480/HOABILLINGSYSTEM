@@ -1,5 +1,7 @@
+
 <?php
 session_start();
+include('config.php');
 include('Sidebar.php');
 
 if (isset($_SESSION['uname'])) {
@@ -13,13 +15,16 @@ if (isset($_SESSION['uname'])) {
 $query  = mysqli_query($conn, "SELECT * FROM tableaccount WHERE uname = '$uname'") or die(mysqli_error());
 $row = mysqli_fetch_array($query);
 $type  = $row['type'];
+
+// Initialize $month to the current month
+$month = isset($_GET['month']) ? $_GET['month'] : date("Y-m");
+
+function format_num($number) {
+    // Customize this function based on your formatting needs
+    return number_format($number, 2); // Example: Format as a decimal with 2 decimal places
+}
+
 ?>
-
-<!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
-
 
 <style>
   .card {
@@ -30,7 +35,7 @@ $type  = $row['type'];
   .table td {
     text-align: center;
     vertical-align: middle;
-    font-size: 14px; /* Adjusted font size */
+    font-size: 15px; /* Adjusted font size */
   }
 
   .table img {
@@ -42,7 +47,7 @@ $type  = $row['type'];
 
   .dropdown-menu a {
     cursor: pointer;
-    font-size: 12px; /* Adjusted font size */
+    font-size: 15px; /* Adjusted font size */
   }
 
   .dropdown-menu a:hover {
@@ -52,6 +57,12 @@ $type  = $row['type'];
   .btn {
     font-size: 12px; /* Adjusted font size */
   }
+.viewBillingBtn,
+.editBillingBtn,
+.deleteBillingBtn {
+    font-size: 11px; /* Adjust the font size as needed */
+    padding: 2px 5px; /* Adjust the padding as needed */
+}
 
   /* Adjusted font size for DataTable controls */
   .dataTables_length,
@@ -67,103 +78,172 @@ $type  = $row['type'];
   }
 </style>
 
+
+<!-- Include these links to the head section of your HTML -->
+<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+
+
+
 <section class="home-section">
-<div class="text">Monthly Report</div>
-    <div class="col-lg-12">
-        <div class="card">
-          <h5 class="card-header">List of Accounts
-              <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#Add_account">
-                <span class="bx bx-printer"></span> Print
-              </button>
-             <!-- <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-archive"></span> Archive
-              </button>-->
-            </h5>
-          <div class="card-body">
-            <table class="table table-hover table-striped table-bordered" id="list">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Reading Date</th>
-                  <th>Due Date</th>
-                  <th>Customer</th>
-                  <th>Reading</th>
-                  <th>Comsumption</th>
-                  <th>Rate (m3)</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!--< ?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableaccount ORDER BY Id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
-                ?>-->
-                  <!--<tr>
-                    <td>< ?php echo $row['Id']; ?></td>
-                    <td>< ?php echo date("Y-m-d H:i", strtotime($row['date_created'])); ?></td>
-                    <td>
-                      < ?php if ($row['image'] != ""): ?>
-                        <img src="uploads/< ?php echo $row['image']; ?>" alt="Profile Image">
-                      < ?php else: ?>
-                        <img src="images/users.png" alt="Default Image">
-                      < ?php endif; ?>
-                    </td>
-                    <td>< ?php echo $row['fname'] . ' ' . $row['mname'] . ' ' . $row['lname']; ?></td>
-                    <td>< ?php echo $row['email']; ?></td>
-                    <td>< ?php echo $row['type']; ?></td>
-                    <td>
-                    <div class="dropdown">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-            Select
-        </a>
-        <div class="dropdown-menu">
-            <a class="dropdown-item" href="Edit_Account.php?< ?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit"><span class="fa fa-trash text-danger"></span> Delete</button>
-            </form>
+<div class="text">Monthly Rport</div>
+<div class="col-lg-12">
+<div class="card card-outline rounded-0 card-navy">
+   <div class="card-body">
+        <div class="container-fluid">
+            <fieldset class="border mb-4">
+                <legend class="mx-3 w-auto">Filter</legend>
+                <div class="container-fluid py-2 px-3">
+                    <form action="" id="filter-form">
+                        <div class="row align-items-end">
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                                <div class="form-group m-0">
+                                    <label for="month" class="control-label">Filter Month</label>
+                                    <input type="month" id="month" name="month" value="<?= $month ?>" class="form-control form-control-sm rounded-0" required>
+
+ 
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                                <button class="btn btn-primary bg-gradient-primary rounded-0"><i class="fa fa-filter"></i> Filter</button>
+                                <button class="btn btn-light bg-gradient-light rounded-0 border" type="button" id="print"><i class="fa fa-print"></i> Print</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </fieldset>
         </div>
+        <div class="container-fluid" id="printout">
+      <table class="table table-hover table-striped table-bordered" id="report-tbl">
+                <colgroup>
+                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Reading Date</th>
+                        <th>Due Date</th>
+                        <th>Homeowners Name</th>
+                        <th>Reading</th>
+                        <th>Penalty</th>
+                        <th>Service</th>
+                        <th>Status</th>
+                        
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+        <tbody>
+          <?php 
+          $i = 1;
+          $qry = $conn->query("SELECT b.*, c.code, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) as `name` FROM `tablebilling_list` b INNER JOIN tableusers c ON b.tableusers_id = c.Id WHERE DATE_FORMAT(b.reading_date, '%Y-%m') = '{$month}' ORDER BY UNIX_TIMESTAMP(`reading_date`) DESC, `name` ASC");
+
+          
+          
+              while($row = $qry->fetch_assoc()):
+          ?>
+             <tr>
+                            <td class="text-center"><?php echo $i++; ?></td>
+                            <td><?php echo date("Y-m-d",strtotime($row['reading_date'])) ?></td>
+                            <td><?php echo date("Y-m-d",strtotime($row['due_date'])) ?></td>
+                            <td>
+                                <div style="line-height:1em">
+                                    <div><?= ($row['name']) ?></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="line-height:1em">
+                                    <div><small class="text-muter">Previous: </small><?= format_num($row['previous']) ?></div>
+                                    <div><small class="text-muter">Current: </small><?= format_num($row['reading']) ?></div>
+                                </div>
+                            </td>
+                            <td class="text-center"><?php echo ($row['penalties']); ?></td>
+                            <td class="text-center"><?= format_num($row['service']) ?></td>
+                            <td class="text-center">
+                                <?php
+                                  switch($row['status']){
+                                    case 0:
+                                        echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 17px; font-size: 0.7rem;">
+                                PENDING</span>';
+                    break;
+                                    case 1:
+                                        echo '<span class="badge badge-success bg-gradient-success text-sm px-3 " Style="Height: 17px; font-size: 0.7rem;">PAID</span>';
+                                        break;
+                                }
+                                ?>
+                            </td>
+                            <td class="text-center"><?php echo format_num($row['total']) ?></td>
+                        </tr>
+          <?php endwhile; ?>
+                    <?php if($qry->num_rows <= 0): ?>
+                        <tr>
+                            <th class="text-center" colspan="9" style="font-weight: 300;">No data available.</th>
+                        </tr>
+                    <?php endif; ?>
+        </tbody>
+      </table>
     </div>
-                    </td>
-                  </tr>
-                <--< ?php } ?>-->
-              </tbody>
-            </table>
-          </div>
+  </div>
+</div>
+<noscript id="print-header">
+  <div>
+    <div class="d-flex w-100 align-items-center">
+      <div class="col-2 text-center">
+        <img src="images/rosedalelogo.png" alt=""  style="width:10em;height:5em;object-fit:cover;object-position:center center;">
+      </div>
+      <div class="col-8">
+        <div style="line-height:1em">
+          <h4 class="text-center">Rosedale Residence</h4>
+          <h3 class="text-center">Monthly Billing Report</h3>
+                    <div class="text-center">as of</div>
+                    <h4 class="text-center"><?= date("F, Y",strtotime($month."-1"))  ?></h4>
         </div>
       </div>
-   
+    </div>
+    <hr>
+  </div>
+</div>
+</noscript>
+
 </section>
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
-        }
-    }
-}
-?>
-
 <script>
-  $(document).ready(function () {
-    $('#list').DataTable({
-      "pagingType": "full_numbers",
-      "lengthMenu": [5, 10, 25, 50, 75, 100],
-      "pageLength": 10,
-      "order": [[1, 'desc']],
+$(document).ready(function(){
+    $('#report-tbl td, #report-tbl th').addClass('py-1 px-2 align-middle');
+    
+    $('#filter-form').submit(function(e){
+        e.preventDefault();
+        location.href = 'monthlyreport.php?' + $(this).serialize();
     });
-  });
-</script>
 
-<?php include('Add_account.php'); ?>
-<?php include('Delete_Account.php'); ?>
+    $('#print').click(function(){
+        console.log("Button clicked"); // Check if this line appears in the console
+
+        var h = $('head').clone();
+        var p = $('#printout').clone();
+        var ph = $($('noscript#print-header').html()).clone();
+
+        var nw = window.open('', '_blank','width=' + ($(window).width() * .80) + ',height=' + ($(window).height() * .90) + ',left=' + ($(window).width() * .1) + ',top=' + ($(window).height() * .05));
+        nw.document.querySelector("head").innerHTML = h.html();
+        nw.document.querySelector("body").innerHTML = ph[0].outerHTML + p[0].outerHTML;
+        nw.document.close();
+
+        start_loader();
+        setTimeout(() => {
+            nw.print();
+            setTimeout(() => {
+                nw.close();
+                end_loader();
+            }, 300);
+        }, 300);
+    });
+});
+
+</script>   

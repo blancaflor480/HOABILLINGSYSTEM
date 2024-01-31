@@ -34,7 +34,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Restore User</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Restore Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -44,8 +44,10 @@
         <thead class="table-dark">
           <tr>
             <th style="width: 5%; font-size: 0.7rem;">#</th>           
+         
             <th style="width: 20%; font-size: 0.7rem;">EMAIL ADDRESS</th>
-            <th style="width: 10%; font-size: 0.7rem;">POSITION</th>
+            <th style="width: 10%; font-size: 0.7rem;">GENDER</th>
+           
             <th style="width: 10%; font-size: 0.7rem;">RESTORE</th>
           
           </tr>
@@ -53,15 +55,15 @@
         <tbody>
        <?php
        $db = mysqli_connect("localhost", "root", "", "billing");
-          $cmd = mysqli_query($db, "SELECT Id,email,type from tablearchives where type BETWEEN 'Admin' AND 'Staff' order by Id DESC");
+          $cmd = mysqli_query($db, "SELECT Id,email,gender from tablearchives where Id = $Id order by Id DESC");
           while ($result = mysqli_fetch_assoc($cmd)) {
-            $id = $result["Id"];
+            $Id = $result["Id"];
             
               echo "<tr>";
               echo "<td>" . $result['Id'] . "</td>";
-              
               echo "<td>" . $result['email'] . "</td>";
-              echo "<td>" . $result['type'] . "</td>";
+              echo "<td>" . $result['gender'] . "</td>";
+              
               echo '<td>
                           <form method="post" class="text-center">
                               <button class="btn form-control btn-outline-dark text-dark w-75" type="submit" name="insert" value="' . $result['Id'] . '"> <i class="bx bx-user-plus"></i></button>
@@ -78,7 +80,7 @@
   </div>
 </div>
 <?php
-include ('config.php');
+include('config.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['insert'])) {
@@ -90,7 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (mysqli_num_rows($checkResult) == 0) {
             // The record does not exist in the main table, proceed with restoration
-            $archiveQuery = "INSERT INTO tableaccount SELECT * FROM tablearchives WHERE Id = '$buttonValue'";
+            $archiveQuery = "INSERT INTO tableusers SELECT Id, fname, mname, lname, gender, contact, email, bday, address, password, copassword, image, status, date_created, code FROM tablearchives 
+            WHERE Id = '$buttonValue'";
             $result1 = mysqli_query($db, $archiveQuery);
 
             if ($result1) {
@@ -99,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $deleteResult = mysqli_query($db, $deleteQuery);
 
                 if ($deleteResult) {
-                    echo '<script>setTimeout(function() { window.location.href = "accounts.php"; }, 10);</script>';
+                    echo '<script>setTimeout(function() { window.location.href = "customer.php"; }, 10);</script>';
                 } else {
                     echo "Error deleting record from archive table: " . mysqli_error($db);
                 }

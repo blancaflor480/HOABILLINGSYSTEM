@@ -6,7 +6,7 @@
   }
 
   .modal-dialog {
-    max-width: 45%; /* Adjusted maximum width */
+    max-width: 35%; /* Adjusted maximum width */
     margin: 5% auto; /* Centered on the screen */
   }
 
@@ -15,49 +15,49 @@
   }
 
   .modal-body label {
-    display: block;
+    display: inline-block; /* Make labels inline-block */
+    width: 100px; /* Set a fixed width for labels */
     margin-bottom: 5px;
     font-size: 0.9rem; /* Adjusted font size */
   }
 
   .modal-body input,
   .modal-body select {
-    width: calc(100% - 12px); /* Adjusted width */
+    width: calc(100% - 12px);
     padding: 6px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
     margin-bottom: 15px;
     box-sizing: border-box;
-    font-size: 0.9rem; /* Adjusted font size */
+    font-size: 0.9rem;
   }
 
   .modal-footer {
     text-align: center; /* Centered buttons */
   }
 </style>
-
 <!-- Modal -->
 <div class="modal fade" id="Addcustomer" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Create New Account for Customer</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Create Homeowers Account</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     <div class="modal-body">
-      <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
-      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkblue; margin-bottom: 10px;">Kindly complete the form with accurate and up-to-date information to ensure a smooth processing of your request.</h5><br>
-         <label for="fname">First Name</label>
-        <input type="text" id="fname" name="fname" />
-
-        <label for="mname">Middle Name</label>
-        <input type="text" id="mname" name="mname" />
-
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname" name="lname" />
+      <form method="POST" action="bk_addcustomer.php" enctype="multipart/form-data">
+      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred;"></h5>
+         <label for="fname" style="width: 90px;  margin-bottom: -22px;">First Name</label>
+         <label for="mname" style="width: 100px; margin-left: 170px; margin-bottom: -22px; ">Middle Name</label>
+         <label for="lname" style="width: 90px;margin-left: 330px; ">Last Name</label>
+        <input type="text" id="fname" name="fname" style="width: 160px;"/>
+        <input type="text" id="mname" name="mname" style="width: 160px;"/>
+        <input type="text" id="lname" name="lname" style="width: 160px;"/>
 
         <label for="email">Email</label>
-        <input type="text" id="email" name="email" />
+        <input type="email" id="email" name="email" />
 
         <label for="gender">Gender</label>
         <select id="gender" name="gender">
@@ -66,20 +66,16 @@
         <option value="Staff">Female</option>
         </select>
 
-        <label for="type">User Type</label>
-        <select id="type" name="type">
-        <option>---Select---</option>
-        <option value="Admin">Admin</option>
-        <option value="Staff">Staff</option>
-        </select>
+        <label for="email">Birthday</label>
+        <input type="date" id="bday" name="bday" />
 
-        <label for="username">Username</label>
-        <input type="text" id="uname" name="uname" />
+        <label for="email">Address</label>
+        <input type="text" id="address" name="address" />
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" />
 
-        <label for="copassword">Confirm Password</label>
+        <label for="copassword" style="width: 200px">Confirm Password</label>
         <input type="password" id="copassword" name="copassword" />
 
         <label for="pfp">Profile</label>

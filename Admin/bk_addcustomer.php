@@ -7,8 +7,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $mname = $_POST['mname'];
     $lname = $_POST['lname'];
     $email = $_POST['email'];
+    $bday = $_POST['bday'];
+    $address = $_POST['address'];
     $gender = $_POST['gender'];
-    $uname = $_POST['uname'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
 
     // Image upload handling
@@ -45,17 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         $target_file = "default_image.jpg";
     }
 
-    $type = $_POST['type'];
     
     // Insert user information into the database using prepared statements
-    $stmt = $conn->prepare("INSERT INTO tableaccount (fname, mname, lname, email, gender, uname, password, image, type) 
+    $stmt = $conn->prepare("INSERT INTO tableusers (fname, mname, lname, email, bday, address, gender, password, image) 
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->bind_param("sssssssss", $fname, $mname, $lname, $email, $gender, $uname, $password, $target_file, $type);
+    $stmt->bind_param("sssssssss", $fname, $mname, $lname, $email,  $bday,  $address, $gender, $password, $target_file);
 
     if ($stmt->execute()) {
         echo '<script>alert("Created successfully!")</script>';
-        header("Location: accounts.php");
+        header("Location: customer.php");
         exit();
     } else {
         echo '<script>alert("Error, Please try again!")</script>';

@@ -100,17 +100,17 @@ $type  = $row['type'];
                 </tr>
               </thead>
               <tbody>
-                <?php
-                  $result = mysqli_query($conn, "SELECT * FROM tableusers ORDER BY id ASC") or die(mysqli_error());
-                  while ($row = mysqli_fetch_array($result)) {
-                    $Id = $row['Id'];
+              <?php
+                 $result = mysqli_query($conn, "SELECT * FROM tableusers ORDER BY Id ASC") or die(mysqli_error());
+                 while ($row = mysqli_fetch_array($result)) {
+                $Id = $row['Id'];
                 ?>
                   <tr>
                     <td><?php echo $row['Id']; ?></td>
                     <td><?php echo date("Y-m-d H:i", strtotime($row['datereg'])); ?></td>
                     <td>
                       <?php if ($row['image'] != ""): ?>
-                        <img src="<?php echo $row['image']; ?>" alt="Profile Image">
+                        <img src="uploads/<?php echo $row['image']; ?>" alt="Profile Image">
                       <?php else: ?>
                         <img src="images/users.png" alt="Default Image">
                       <?php endif; ?>
@@ -126,9 +126,14 @@ $type  = $row['type'];
         <div class="dropdown-menu">
             <a class="dropdown-item" href="Edit_User.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <!-- Use a form for deletion -->
-            <form method="post">
-                <button class="dropdown-item"  name="delete" value="' . $result['Id'] . '" type="submit" style="font-size: 0.9rem;"><i class="bx bx-trash"></i> Delete</button>
-            </form>
+             <!-- Use a form for deletion -->
+             <form method="post" onsubmit="return confirm('Are you sure you want to delete this account?');">
+    <input type="hidden" name="deleteId" value="<?php echo $Id; ?>">
+    <button class="dropdown-item" name="deleteId" value="<?php echo $Id; ?>" type="submit" style="font-size: 0.9rem;">
+        <span class="bx bx-trash"></span> Delete
+    </button>
+</form>
+
         </div>
     </div>
                     </td>
@@ -143,22 +148,41 @@ $type  = $row['type'];
 </section>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
+    if (isset($_POST['deleteId'])) {
+        $deleteId = $_POST['deleteId'];
+
+        // Start a transaction
+        mysqli_autocommit($conn, false);
+
         // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableusers WHERE Id = '$buttonValue'";
+        $archiveQuery = "INSERT INTO tablearchives 
+             SELECT *, 1 AS delete_flag FROM tableusers 
+             WHERE Id = '$deleteId'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableusers SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
+        // Delete the record from the main table
+        $deleteQuery = "DELETE FROM tableusers WHERE Id = '$deleteId'";
+        $deleteResult = mysqli_query($conn, $deleteQuery);
+
+        if ($archiveResult && $deleteResult) {
+            // Commit the transaction
+            mysqli_commit($conn);
+            echo '<script>
+                    setTimeout(function() { 
+                        window.location.href = "customer.php"; 
+                    }, 10);
+                  </script>';
+        } else {
+            // Rollback the transaction in case of any failure
+            mysqli_rollback($conn);
+            echo "Error deleting record: " . mysqli_error($conn);
         }
+
+        // Restore the autocommit mode
+        mysqli_autocommit($conn, true);
     }
 }
 ?>
+
 
 <script>
   $(document).ready(function () {

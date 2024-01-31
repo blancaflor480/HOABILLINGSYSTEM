@@ -6,7 +6,7 @@
   }
 
   .modal-dialog {
-    max-width: 45%; /* Adjusted maximum width */
+    max-width: 35%; /* Adjusted maximum width */
     margin: 5% auto; /* Centered on the screen */
   }
 
@@ -15,10 +15,12 @@
   }
 
   .modal-body label {
-    display: block;
+    display: inline-block; /* Make labels inline-block */
+    width: 100px; /* Set a fixed width for labels */
     margin-bottom: 5px;
     font-size: 0.9rem; /* Adjusted font size */
   }
+
   .modal-body input,
   .modal-body select {
     width: calc(100% - 12px);
@@ -34,7 +36,6 @@
     text-align: center; /* Centered buttons */
   }
 </style>
-
 <!-- Modal -->
 <div class="modal fade" id="Addaccount" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -47,13 +48,13 @@
       </div>
     <div class="modal-body">
       <form method="POST" action="backendd_Addaccount.php" enctype="multipart/form-data">
-      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;">Please fill up!</h5>
-         <label for="fname" style="width: 190px;">First Name</label>
-         <label for="mname" style="width: 150px; margin-left: 200px; background-color: yellow">Middle Name</label>
-         <label for="lname" style="width: 200px; margin-left: 430px; background-color: yellow; ">Last Name</label>
-        <input type="text" id="fname" name="fname" style="width: 210px;"/>
-        <input type="text" id="mname" name="mname" style="width: 210px;"/>
-        <input type="text" id="lname" name="lname" style="width: 210px;"/>
+      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred;"></h5>
+         <label for="fname" style="width: 90px;  margin-bottom: -22px;">First Name</label>
+         <label for="mname" style="width: 100px; margin-left: 170px; margin-bottom: -22px; ">Middle Name</label>
+         <label for="lname" style="width: 90px;margin-left: 330px; ">Last Name</label>
+        <input type="text" id="fname" name="fname" style="width: 160px;"/>
+        <input type="text" id="mname" name="mname" style="width: 160px;"/>
+        <input type="text" id="lname" name="lname" style="width: 160px;"/>
 
         <label for="email">Email</label>
         <input type="text" id="email" name="email" />
@@ -78,7 +79,7 @@
         <label for="password">Password</label>
         <input type="password" id="password" name="password" />
 
-        <label for="copassword">Confirm Password</label>
+        <label for="copassword" style="width: 200px">Confirm Password</label>
         <input type="password" id="copassword" name="copassword" />
 
         <label for="pfp">Profile</label>

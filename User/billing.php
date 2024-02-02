@@ -194,12 +194,13 @@ $qry->bind_result($id, $reading_date, $due_date, $name, $status, $total);
                <div id="onlinePaymentForm" style="margin-top: 20px; display: none;">
     <form method="POST" action="bk_payment.php" id="onlinePaymentForm" enctype="multipart/form-data">
         <input type="hidden" name="billing_id" id="billing_id" value="">
+        <div class="text" style="font-weight: 500;">HOA GCASH NUMBER: 09657347859</div><br>
         <div class="form-group">
-            <label for="total">Total Amount</label>
-            <input type="text" class="form-control" id="total" name="total" readonly>
+            <label for="total" style="font-size: 0.9rem">Total Amount</label>
+            <input type="text" class="form-control form-control-sm" id="total" name="total" readonly>
         </div>
         <div class="form-group">
-            <label for="status" class="control-label">Payment Type</label>
+            <label for="status" class="control-label" style="font-size: 0.9rem">Payment Type</label>
                                 <select name="paymode" id="paymode"
                                         class="form-control form-control-sm rounded-0" required>
                                     <option placeholder="Please Select Here" disabled>Please Select Here</option>
@@ -209,16 +210,23 @@ $qry->bind_result($id, $reading_date, $due_date, $name, $status, $total);
                                 </select>
         </div>
         <div class="form-group">
-            <label for="reference_id">Reference ID</label>
-            <input type="text" class="form-control" name="referenceId" id="referenceId" required>
+            <label for="reference_id" style="font-size: 0.9rem">Reference ID</label>
+            <input type="text" class="form-control form-control-sm" name="referenceId" id="referenceId" required>
+        </div>
+        <div class="form-group">
+            <label for="receipt" style="font-size: 0.9rem">Upload GCash Receipt</label>
+            <input type="file" class="form-control form-control-sm" name="receipt_file" id="receipt_file" accept=".pdf, .jpg, .jpeg, .png" required>
         </div>
 
+
         <div class="form-group">
-            <label for="amountpay">Pay amount</label>
-            <input type="text" class="form-control" id="amountpay" name="amountpay">
-        </div>
-        <button type="submit" class="btn btn-success">Pay Online</button>
+            <label for="amountpay" style="font-size: 0.9rem">Pay amount</label>
+            <input type="text" class="form-control form-control-sm" id="amountpay" name="amountpay">
+        </div><br>
+        <div class="text-center">
+        <button type="submit" class="btn btn-success">Pay</button>
         <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+    </div>
     </form>
 </div>
             </div>

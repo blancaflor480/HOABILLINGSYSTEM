@@ -81,18 +81,26 @@ $type  = $row['type'];
             <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                         <span class="bi bi-receipt"></span> Generate Bills
                     </button>
-                    <a href="billing_transaction.php">
-                        <button type="button" class="btn btn-primary float-right">
-                            <span class="bi bi-card-checklist"></span> Transaction
+
+                    <a href="history_transaction.php">
+                        <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
+                            <span class="bi bi-card-checklist"></span> History
                         </button>
                     </a>
+                    <a href="billing.php">
+                        <button type="button"  class="btn btn-primary float-right">
+                            <span class="bi bi-card-checklist"></span> Bills
+                        </button>
+                    </a>
+
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
-                            Select Pending
+                            Pending
                         </button>
                         <div class="dropdown-menu">
                             <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
                             <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
+                             <a href="billing_unpaid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Unpaid</a>
                             <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
                         </div>
                     </div>
@@ -119,7 +127,7 @@ $type  = $row['type'];
     $query = "SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) AS name
           FROM `tablebilling_list` b 
           INNER JOIN tableusers c ON b.tableusers_id = c.id
-          WHERE b.status = 0
+          WHERE b.status = 2
           ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, name ASC";
 
     $query_run = mysqli_query($conn, $query);
@@ -137,17 +145,25 @@ $type  = $row['type'];
                     <?php
                     switch ($billingRecord['status']) {
                         case 0:
-                            echo '<span class="badge badge-secondary bg-gradient-secondary text-lg px-2 ">Pending</span>';
-                            break;
-                        case 1:
-                            echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
-                            break;
+                                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3">
+                                                UNPAID</span>';
+                                            break;
+                                        case 1:
+                                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3">
+                                                PAID</span>';
+                                            break;
+                                        case 2:
+                                            echo '<span class="badge badge-warning  bg-gradient-warning text-lg px-3">
+                                                PENDING</span>';
+                                            break;
                     }
                     ?>
                 </td>
-                <td><?= $billingRecord['total']; ?></td>
+                <td><b><?= $billingRecord['total']; ?><b></td>
                 <td>
-                    <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
+        
+
+        <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
     
 <a href="edit_bills.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success"><i class="bi bi-pencil-square"></i> Edit</a>
 

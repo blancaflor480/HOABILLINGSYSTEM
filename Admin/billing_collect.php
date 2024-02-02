@@ -59,12 +59,15 @@ include('Sidebar.php');
 }
 
 if (isset($_GET['tableusers_id'])) {
-    $user = $conn->prepare("SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name` 
+    
+    $user = $conn->prepare("SELECT b.*, 
+                              CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
+                              p.receipt_path, p.reference_id
                         FROM `tablebilling_list` b 
                         INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
-                        WHERE c.Id = ? 
+                        LEFT JOIN `tablepayments` p ON b.tableusers_id = p.id
+                        WHERE c.Id = ?
                         ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
-
     $user->bind_param("s", $_GET['tableusers_id']);
     $user->execute();
     $meta = $user->get_result();
@@ -131,6 +134,20 @@ if (isset($_GET['tableusers_id'])) {
                                        name="total"
                                        required
                                        value="<?= isset($meta['total']) ? $meta['total'] : '' ?>"/>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="service" class="control-label">Referrence ID</label>
+                                <input type="text" class="form-control form-control-sm rounded-0" id="reference_id"
+                                       readonly
+                                       value="<?= isset($meta['reference_id']) ? $meta['reference_id'] : '' ?>"/>
+                            </div>
+                             <div class="form-group mb-3">
+                                <label for="service" class="control-label">Gcash Receipt</label>
+                                <?php if (isset($meta['receipt_path']) && !empty($meta['receipt_path'])) : ?>
+                                <a href="<?= $meta['receipt_path']; ?>" target="_blank" class="btn btn-dark btn-sm">View Receipt</a>
+                                <?php else : ?>
+                                    <p>No Gcash Receipt uploaded</p>
+                                <?php endif; ?>
                             </div>
                             <div class="form-group">
                                 <label for="status" class="control-label">Status</label>

@@ -100,6 +100,7 @@ $type  = $row['type'];
                         <div class="dropdown-menu">
                             <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
                             <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
+                             <a href="billing_unpaid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Unpaid</a>
                             <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
                         </div>
                     </div>
@@ -143,13 +144,17 @@ $type  = $row['type'];
                     <?php
                     switch ($billingRecord['status']) {
                         case 0:
-                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Pending</span>';
-                            break;
-                        case 1:
-                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Paid</span>';
-                            break;
+                                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3">
+                                                UNPAID</span>';
+                                            break;
+                                        case 1:
+                                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3">
+                                                PAID</span>';
+                                            break;
+                                        case 2:
+                                            echo '<span class="badge badge-warning  bg-gradient-warning text-lg px-3">
+                                                PENDING</span>';
+                                            break;
                     }
                     ?>
                 </td>

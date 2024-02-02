@@ -87,20 +87,20 @@ $type  = $row['type'];
                             <span class="bi bi-card-checklist"></span> History
                         </button>
                     </a>
-                    <a href="billing.php">
+                    <a href="billing_transaction.php">
                         <button type="button"  class="btn btn-primary float-right">
-                            <span class="bi bi-card-checklist"></span> Bills
+                            <span class="bi bi-card-checklist"></span> Transaction
                         </button>
                     </a>
 
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
-                            Paid
+                            Unpaid
                         </button>
                         <div class="dropdown-menu">
                             <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
                             <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
-                             <a href="billing_unpaid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Unpaid</a>
+                            <a href="billing_unpaid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Unpaid</a>
                             <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ $type  = $row['type'];
     $query = "SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) AS name
           FROM `tablebilling_list` b 
           INNER JOIN tableusers c ON b.tableusers_id = c.id
-          WHERE b.status = 1
+          WHERE b.status = 0
           ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, name ASC";
 
     $query_run = mysqli_query($conn, $query);

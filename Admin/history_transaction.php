@@ -144,12 +144,10 @@ $type  = $row['type'];
                     <?php
                     switch ($billingRecord['paymode']) {
                         case 0:
-                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Walk in</span>';
+                            echo '<div class="text-lg" Style="font-size: 0.9rem;  font-weight: 500;">Walk in</div>';
                             break;
                         case 1:
-                            echo '<span class="badge badge-primary  bg-gradient-primary text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">Online Payment
-                                </span>';
+                            echo '<div class="text-lg" Style="font-size: 0.9rem;  font-weight: 500;">Online payment</div>';
                             break;
                     }
                     ?>
@@ -157,14 +155,18 @@ $type  = $row['type'];
                 <td>
                     <?php
                     switch ($billingRecord['status']) {
-                        case 0:
-                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Pending</span>';
-                            break;
-                        case 1:
-                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                Paid</span>';
-                            break;
+                       case 0:
+                                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3">
+                                                UNPAID</span>';
+                                            break;
+                                        case 1:
+                                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3">
+                                                PAID</span>';
+                                            break;
+                                        case 2:
+                                            echo '<span class="badge badge-warning  bg-gradient-warning text-lg px-3">
+                                                PENDING</span>';
+                                            break;
                     }
                     ?>
                 </td>

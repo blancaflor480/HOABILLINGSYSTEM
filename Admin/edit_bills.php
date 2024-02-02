@@ -115,11 +115,15 @@ include('Sidebar.php');
                                 <select name="status" id="status"
                                         class="form-control form-control-sm rounded-0" required>
                                     <option value="0" <?php echo isset($meta['status']) && $meta['status'] == 0 ? 'selected' : '' ?>>
-                                        Pending
+                                        Unpaid
                                     </option>
                                     <option value="1" <?php echo isset($meta['status']) && $meta['status'] == 1 ? 'selected' : '' ?>>
                                         Paid
                                     </option>
+                                    <option value="2" <?php echo isset($meta['status']) && $meta['status'] == 2 ? 'selected' : '' ?>>
+                                        Pending
+                                    </option>
+                                    
                                 </select>
                             </div>
                         </form>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2024 at 01:40 PM
+-- Generation Time: Feb 02, 2024 at 03:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -118,8 +118,8 @@ CREATE TABLE `tablebilling_list` (
 --
 
 INSERT INTO `tablebilling_list` (`id`, `tableusers_id`, `reading_date`, `due_date`, `reading`, `previous`, `penalties`, `service`, `total`, `amountpay`, `paymode`, `referrenceId`, `screenshoot`, `status`, `date_created`, `date_updated`) VALUES
-(8, 1, '2024-02-02', '2024-02-29', 100.00, 0.00, 10.00, 10.00, 100.00, 0.00, 1, '', '', 2, '2024-01-28 16:33:25', '2024-02-02 18:16:45'),
-(38, 3, '2024-01-30', '2024-01-31', 300.00, 0.00, 0.00, 10.00, 310.00, 310.00, 1, '', '', 1, '2024-01-30 18:20:57', '2024-02-02 14:04:40');
+(8, 1, '2024-02-02', '2024-02-29', 100.00, 0.00, 10.00, 10.00, 110.00, 100.00, 0, '', '', 2, '2024-01-28 16:33:25', '2024-02-02 22:26:24'),
+(38, 3, '2024-01-30', '2024-01-31', 300.00, 0.00, 0.00, 10.00, 310.00, 310.00, 1, '', '', 1, '2024-01-30 18:20:57', '2024-02-02 22:24:47');
 
 -- --------------------------------------------------------
 
@@ -158,17 +158,16 @@ CREATE TABLE `tablepayments` (
   `billing_id` int(30) NOT NULL,
   `amount` float(12,2) NOT NULL,
   `reference_id` varchar(50) NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+  `date_created` datetime NOT NULL DEFAULT current_timestamp(),
+  `receipt_path` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tablepayments`
 --
 
-INSERT INTO `tablepayments` (`id`, `billing_id`, `amount`, `reference_id`, `date_created`) VALUES
-(1, 8, 310.00, '20110211', '2024-02-02 18:07:53'),
-(2, 8, 300.00, '20110211', '2024-02-02 18:12:49'),
-(3, 8, 300.00, '20110211', '2024-02-02 18:16:45');
+INSERT INTO `tablepayments` (`id`, `billing_id`, `amount`, `reference_id`, `date_created`, `receipt_path`) VALUES
+(1, 8, 200.00, '20110211', '2024-02-02 21:52:24', 0x75706c6f6164732f6d61646172612e6a7067);
 
 -- --------------------------------------------------------
 
@@ -296,7 +295,7 @@ ALTER TABLE `tablecomplaint`
 -- AUTO_INCREMENT for table `tablepayments`
 --
 ALTER TABLE `tablepayments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tablesystem_info`

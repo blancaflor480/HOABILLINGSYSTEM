@@ -73,7 +73,7 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-    <div class="text"><i class="bi bi-receipt"></i>&nbsp;Transaction</div>
+    <div class="text"><i class="bi bi-receipt"></i>&nbsp;History Transaction</div>
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
@@ -87,9 +87,9 @@ $type  = $row['type'];
                             <span class="bi bi-card-checklist"></span> History
                         </button>
                     </a>
-                    <a href="billing.php">
+                    <a href="billing_transaction.php">
                         <button type="button"  class="btn btn-primary float-right">
-                            <span class="bi bi-card-checklist"></span> Billing
+                            <span class="bi bi-card-checklist"></span> Transaction
                         </button>
                     </a>
 
@@ -114,6 +114,7 @@ $type  = $row['type'];
                             <th>Reading Date</th>
                             <th>Due Date</th>
                             <th>Full name</th>
+                            <th>Payment Mode</th>
                             <th>Status</th>
                             <th>Amount</th>
                             <th>Action</th>
@@ -139,6 +140,20 @@ $type  = $row['type'];
                 <td><?= date("Y-m-d", strtotime($billingRecord['reading_date'])); ?></td>
                 <td><?= date("Y-m-d", strtotime($billingRecord['due_date'])); ?></td>
                 <td><?= $billingRecord['name']; ?></td> <!-- Display homeowner's name -->
+                 <td>
+                    <?php
+                    switch ($billingRecord['paymode']) {
+                        case 0:
+                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                Walk in</span>';
+                            break;
+                        case 1:
+                            echo '<span class="badge badge-primary  bg-gradient-primary text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">Online Payment
+                                </span>';
+                            break;
+                    }
+                    ?>
+                </td>
                 <td>
                     <?php
                     switch ($billingRecord['status']) {
@@ -157,8 +172,8 @@ $type  = $row['type'];
                 <td>
         
 
-       
-       <a href="billing_collect.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success"><i class="bi bi-pencil-square"></i> Collect</a>
+        <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
+    
 
                 </td>
             </tr>

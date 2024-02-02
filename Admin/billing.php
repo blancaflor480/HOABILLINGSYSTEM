@@ -81,11 +81,18 @@ $type  = $row['type'];
             <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                         <span class="bi bi-receipt"></span> Generate Bills
                     </button>
+
+                    <a href="history_transaction.php">
+                        <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
+                            <span class="bi bi-card-checklist"></span> History
+                        </button>
+                    </a>
                     <a href="billing_transaction.php">
-                        <button type="button" class="btn btn-primary float-right">
+                        <button type="button"  class="btn btn-primary float-right">
                             <span class="bi bi-card-checklist"></span> Transaction
                         </button>
                     </a>
+
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
                             Select All
@@ -136,17 +143,21 @@ $type  = $row['type'];
                     <?php
                     switch ($billingRecord['status']) {
                         case 0:
-                            echo '<span class="badge badge-secondary bg-gradient-secondary text-lg px-2 ">Pending</span>';
+                            echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                Pending</span>';
                             break;
                         case 1:
-                            echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
+                            echo '<span class="badge badge-success  bg-gradient-success text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
+                                Paid</span>';
                             break;
                     }
                     ?>
                 </td>
-                <td><?= $billingRecord['total']; ?></td>
+                <td><b><?= $billingRecord['total']; ?><b></td>
                 <td>
-                    <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
+        
+
+        <button type="button" value="<?= $billingRecord['id']; ?>" class="viewBillingBtn btn btn-primary btn-sm" data-toggle="modal" data-target="#billingViewModal"><i class="bi bi-eye"></i> View</button>
     
 <a href="edit_bills.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success"><i class="bi bi-pencil-square"></i> Edit</a>
 

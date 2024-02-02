@@ -109,6 +109,8 @@
   </div>
 </div>
 
+<!-- Add this modal code after your existing modals -->
+
 
 <!-- Edit Record Modal -->
 <!--<div class="modal fade" id="billingEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -205,16 +207,14 @@
     <p id="view_tableusers_id" class="form-control"></p>
 </div> 
 <div class="mb-3">
-                    <label for="reading_date">Reading Date</label>
-                    <p id="view_reading_date" class="form-control"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="due_date">Due Date</label>
-                    <p id="view_due_date" class="form-control"></p>
+                <label for="reading_date" style="width: 190px; margin-bottom: -22px">Reading Date</label>
+                    <label for="due_date" style="width: 250px; margin-left: 205px; ">Due Date</label>
+                    <p id="view_reading_date" style="width: 200px; margin-bottom: -38px" class="form-control">
+                    <p id="view_due_date" style="width: 215px; margin-left: 205px;" class="form-control"></p></p>
                 </div>
 
                 <div class="mb-3">
-                    <label for="reading">Reading</label>
+                    <label for="reading">Current</label>
                     <p id="view_reading" class="form-control"></p>
                 </div>
                 <div class="mb-3">
@@ -231,9 +231,11 @@
                     <label for="service">Service</label>
                     <p id="view_service" class="form-control"></p>
                 </div>
+                
+
                 <div class="mb-3">
                     <label for="total">Total</label>
-                    <p id="view_total" class="form-control"></p>
+                    <p id="view_total" style="font-weight: 500; background-color: #C8C8C8;" class="form-control"></p>
                 </div>
                     
                 <div class="mb-3">
@@ -243,6 +245,8 @@
       
       </div>
       <div class="modal-footer">
+
+
 <button type="button" class="btn btn-primary" onclick="printBillingDetails()">Print</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
          </div>
@@ -360,6 +364,56 @@ function updateBillingDetails() {
 document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
 
 </script>
+
+<div class="modal fade" id="collectPaymentModal" tabindex="-1" role="dialog" aria-labelledby="collectPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="collectPaymentModalLabel">Collect Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="collectPaymentForm">
+                    <div class="form-group">
+                        <label for="tableusers_id">Homeowner ID</label>
+                        <input type="text" class="form-control" id="tableusers_id" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentAmount">Current Amount:</label>
+                        <input type="text" class="form-control" id="currentAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="penalties">Penalties:</label>
+                        <input type="text" class="form-control" id="penalties" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceFee">Service Fee:</label>
+                        <input type="text" class="form-control" id="serviceFee" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalAmount">Total Amount:</label>
+                        <input type="text" class="form-control" id="totalAmount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalAmount">Charge Amount:</label>
+                        <input type="text" class="form-control" id="amountpay" required>
+                    </di+v>
+                    <div class="form-group">
+                     <label for="paymentType">Payment Type:</label>
+                     <select class="form-control" id="paymode" name="paymode" required>
+                     <option value="online">Online</option>
+                     <option value="walkin">Walk-in</option>
+                </select>
+                </div>
+                     <button type="submit" class="btn btn-primary">Submit Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     //Dito ilalagay para sa editmodal 

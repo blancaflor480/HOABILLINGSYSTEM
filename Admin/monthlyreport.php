@@ -172,10 +172,13 @@ function format_num($number) {
                                   switch($row['status']){
                                     case 0:
                                         echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 17px; font-size: 0.7rem;">
-                                PENDING</span>';
+                                UNPAID</span>';
                     break;
                                     case 1:
                                         echo '<span class="badge badge-success bg-gradient-success text-sm px-3 " Style="Height: 17px; font-size: 0.7rem;">PAID</span>';
+                                        break;
+                                         case 2:
+                                        echo '<span class="badge badge-warning bg-gradient-warning text-sm px-3 " Style="Height: 17px; font-size: 0.7rem;">PENDING</span>';
                                         break;
                                 }
                                 ?>

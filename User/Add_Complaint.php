@@ -36,6 +36,7 @@
 </style>
 
 <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="AddComplaint" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -45,21 +46,24 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    <div class="modal-body">
-      <form method="POST" action="bk_complaint.php" enctype="multipart/form-data">
-      <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;"></h5>
-         
-        <label for="mname">Type of Complaint</label>
-    <select name="typecomplaint" id="typemessage">
+      <div class="modal-body">
+        <form method="POST" action="bk_complaint.php" enctype="multipart/form-data">
+          <h5 class="modal-title" id="staticBackdropLabel" style="font-size: 15px; color: darkred; margin-bottom: 10px;"></h5>
+          
+          <label for="typecomplaint">Type of Complaint</label>
+          <select name="typecomplaint" id="typecomplaint">
             <option>---Please Select---</option>
             <option value="Bill not correct">Bill not correct</option>
             <option value="Bill generated late">Bill generated late</option>
             <option value="Transaction not processed">Transaction not processed</option>
-            <option value="Previous complaint not process">Previous complaint not process</option>
-    </select>
-        <label for="text">Please type your concern</label>
-        <textarea type="text" id="text" name="description"></textarea>
- 
+            <option value="Previous complaint not processed">Previous complaint not processed</option>
+          </select>
+          
+          <label for="billId">Bill ID</label>
+          <input type="text" id="billId" name="bill_id" placeholder="Enter Bill ID">
+
+          <label for="description">Please type your concern</label>
+          <textarea type="text" id="description" name="description"></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -67,7 +71,6 @@
       </div>
       </form>
     </div>    
-      
-    </div>
   </div>
 </div>
+  

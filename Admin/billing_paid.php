@@ -82,17 +82,6 @@ $type  = $row['type'];
                         <span class="bi bi-receipt"></span> Generate Bills
                     </button>
 
-                    <a href="history_transaction.php">
-                        <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
-                            <span class="bi bi-card-checklist"></span> History
-                        </button>
-                    </a>
-                    <a href="billing.php">
-                        <button type="button"  class="btn btn-primary float-right">
-                            <span class="bi bi-card-checklist"></span> Bills
-                        </button>
-                    </a>
-
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
                             Paid

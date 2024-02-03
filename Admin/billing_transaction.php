@@ -77,11 +77,8 @@ $type  = $row['type'];
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
-                <?php if ($type == 'Admin'): ?>
-            <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
-                        <span class="bi bi-receipt"></span> Generate Bills
-                    </button>
-
+                
+           
                     <a href="history_transaction.php">
                         <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
                             <span class="bi bi-card-checklist"></span> History
@@ -92,18 +89,24 @@ $type  = $row['type'];
                             <span class="bi bi-card-checklist"></span> Billing
                         </button>
                     </a>
-
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
-                            Select All
+                     <div class="dropdown" >
+                        <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" aria-label="Filter by Status" data-toggle="dropdown" aria-expanded="false">
+                            Select 
                         </button>
                         <div class="dropdown-menu">
-                            <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
-                            <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
-                            <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                   
+    <a type="button" class="filter-btn dropdown-item" data-status="all" style="font-size: 0.7rem;">
+     <i class="bi bi-check-all"></i> All</a>
+    <a type="button" class="filter-btn dropdown-item" data-status="unpaid" style="font-size: 0.7rem;">
+        <i class="bi bi-wallet"></i> Unpaid</a>
+    <a type="button"  class="filter-btn dropdown-item" data-status="paid" style="font-size: 0.7rem;">
+        <i class="bi bi-wallet"></i> Paid</a>
+    <a type="button" class="filter-btn dropdown-item" data-status="pending" style="font-size: 0.7rem;"> 
+        <i class="bi bi-hourglass-split"></i> Pending</a>
+</div>
+</div>
+
+                
             </h5>
             <div class="card-body">
                 <table class="table table-hover table-striped table-bordered" id="list">
@@ -126,7 +129,7 @@ $type  = $row['type'];
     $query = "SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) AS name
           FROM `tablebilling_list` b 
           INNER JOIN tableusers c ON b.tableusers_id = c.id
-          WHERE b.status = 0 OR b.status = 2
+          WHERE b.status = 0 OR b.status = 1 OR b.status = 2
           ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, name ASC";
 
     $query_run = mysqli_query($conn, $query);
@@ -161,10 +164,11 @@ $type  = $row['type'];
                 <td><b><?= $billingRecord['total']; ?><b></td>
                 <td>
         
-
-       
-       <a href="billing_collect.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success"><i class="bi bi-pencil-square"></i> Collect</a>
-
+<?php if ($billingRecord['status'] != 1): ?>
+    <a href="billing_collect.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success">
+        <i class="bi bi-pencil-square"></i> Collect
+    </a>
+<?php endif; ?>
                 </td>
             </tr>
         <?php
@@ -271,7 +275,26 @@ $type  = $row['type'];
       //  }
  //   });
 //});
+   // Add an event listener for filter buttons
+    // Function to filter the table based on the selected status
+    function applyStatusFilter(status) {
+        var table = $('#list').DataTable();
 
+        if (status === 'all') {
+            // Show all rows
+            table.columns(5).search('').draw();
+        } else {
+            // Filter by status column (assuming status column is at index 5)
+            table.columns(5).search(status).draw();
+        }
+    }
+
+    $('.filter-btn').on('click', function () {
+        var statusFilter = $(this).data('status');
+        applyStatusFilter(statusFilter);
+    });
+
+    
 
 $(document).on('click', '.viewBillingBtn', function () {
     var billing_id = $(this).val();

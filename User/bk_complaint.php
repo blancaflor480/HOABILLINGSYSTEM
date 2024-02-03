@@ -11,15 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_SESSION['email'];
     $typecomplaint = mysqli_real_escape_string($conn, $_POST['typecomplaint']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $bill_id = mysqli_real_escape_string($conn, $_POST['bill_id']);
+    $status = 0; // Set default status to '0' (Unprocessed)
 
-    // Set the default status to "Unprocessed"
-    $status = "Unprocessed";
+    // Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("INSERT INTO tablecomplaint (tableusers_id, typecomplaint, description, bill_id, status) 
+                            VALUES ((SELECT id FROM tableusers WHERE email = ?), ?, ?, ?, ?)");
+    $stmt->bind_param("ssssi", $email, $typecomplaint, $description, $bill_id, $status);
 
-    // Insert the complaint data into the table
-    $sql = "INSERT INTO tablecomplaint (tableusers_id, typecomplaint, description, status) 
-            VALUES ((SELECT id FROM tableusers WHERE email = '$email'), '$typecomplaint', '$description', '$status')";
-    
-    $result = mysqli_query($conn, $sql);
+    $result = $stmt->execute();
 
     if ($result) {
         // Redirect or perform other actions upon successful submission
@@ -30,5 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo '<script>alert("Failed to submit complaint. Please try again."); window.location.href = "complaint.php";</script>';
         exit();
     }
+    $stmt->close();
 }
 ?>

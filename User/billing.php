@@ -104,9 +104,9 @@ if (!$result) {
                       INNER JOIN tableusers c ON b.tableusers_id = c.id 
                       WHERE c.email = ? AND b.status = 0 OR b.status = 2 
                       ORDER BY unix_timestamp(`reading_date`) DESC, `name` ASC ");
-$qry->bind_param("s", $email);
-$qry->execute();
-$qry->bind_result($id, $reading_date, $due_date, $name, $status, $total);
+                     $qry->bind_param("s", $email);
+                     $qry->execute();
+                     $qry->bind_result($id, $reading_date, $due_date, $name, $status, $total);
 
 
                         while ($qry->fetch()) {

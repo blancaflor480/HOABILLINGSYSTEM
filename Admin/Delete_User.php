@@ -45,9 +45,7 @@
           <tr>
             <th style="width: 5%; font-size: 0.7rem;">#</th>           
          
-            <th style="width: 20%; font-size: 0.7rem;">EMAIL ADDRESS</th>
-            <th style="width: 10%; font-size: 0.7rem;">GENDER</th>
-           
+            <th style="width: 20%; font-size: 0.7rem;">EMAIL ADDRESS</th>           
             <th style="width: 10%; font-size: 0.7rem;">RESTORE</th>
           
           </tr>
@@ -55,14 +53,13 @@
         <tbody>
        <?php
        $db = mysqli_connect("localhost", "root", "", "billing");
-          $cmd = mysqli_query($db, "SELECT Id,email,gender from tablearchives where Id = $Id order by Id DESC");
+          $cmd = mysqli_query($db, "SELECT Id,email from tablearchives where Id = $Id order by Id DESC");
           while ($result = mysqli_fetch_assoc($cmd)) {
             $Id = $result["Id"];
             
               echo "<tr>";
               echo "<td>" . $result['Id'] . "</td>";
               echo "<td>" . $result['email'] . "</td>";
-              echo "<td>" . $result['gender'] . "</td>";
               
               echo '<td>
                           <form method="post" class="text-center">

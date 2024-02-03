@@ -127,9 +127,10 @@ $type  = $row['type'];
             <a class="dropdown-item" href="Edit_User.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
             <!-- Use a form for deletion -->
              <!-- Use a form for deletion -->
-             <form method="post" onsubmit="return confirm('Are you sure you want to delete this account?');">
+             <form method="post" onsubmit="return 
+             confirm('Are you sure you want to delete this account?');">
     <input type="hidden" name="deleteId" value="<?php echo $Id; ?>">
-    <button class="dropdown-item" name="deleteId" value="<?php echo $Id; ?>" type="submit" style="font-size: 0.9rem;">
+    <button class="dropdown-item" type="submit" style="font-size: 0.9rem;">
         <span class="bx bx-trash"></span> Delete
     </button>
 </form>
@@ -147,6 +148,7 @@ $type  = $row['type'];
    
 </section>
 <?php
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['deleteId'])) {
         $deleteId = $_POST['deleteId'];
@@ -156,25 +158,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Move the record to the archive table
         $archiveQuery = "INSERT INTO tablearchives 
-             SELECT *, 1 AS delete_flag FROM tableusers 
-             WHERE Id = '$deleteId'";
+                 SELECT *, 1 AS delete_flag FROM tableusers 
+                 WHERE Id = '$deleteId'";
         $archiveResult = mysqli_query($conn, $archiveQuery);
-        // Delete the record from the main table
-        $deleteQuery = "DELETE FROM tableusers WHERE Id = '$deleteId'";
-        $deleteResult = mysqli_query($conn, $deleteQuery);
 
-        if ($archiveResult && $deleteResult) {
-            // Commit the transaction
-            mysqli_commit($conn);
-            echo '<script>
-                    setTimeout(function() { 
-                        window.location.href = "customer.php"; 
-                    }, 10);
-                  </script>';
+        // Check if archiving was successful before proceeding with deletion
+        if ($archiveResult) {
+            // Delete the record from the main table
+            $deleteQuery = "DELETE FROM tableusers WHERE Id = '$deleteId'";
+            $deleteResult = mysqli_query($conn, $deleteQuery);
+
+            if ($deleteResult) {
+                // Commit the transaction
+                mysqli_commit($conn);
+                echo '<script>setTimeout(function() { window.location.href = "customer.php"; }, 10);</script>';
+            } else {
+                // Rollback the transaction in case of deletion failure
+                mysqli_rollback($conn);
+                echo "Error deleting record: " . mysqli_error($conn);
+            }
         } else {
-            // Rollback the transaction in case of any failure
+            // Rollback the transaction in case of archiving failure
             mysqli_rollback($conn);
-            echo "Error deleting record: " . mysqli_error($conn);
+            echo "Error archiving record: " . mysqli_error($conn);
         }
 
         // Restore the autocommit mode
@@ -182,7 +188,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 <script>
   $(document).ready(function () {

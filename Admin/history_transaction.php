@@ -78,10 +78,7 @@ $type  = $row['type'];
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
                 <?php if ($type == 'Admin'): ?>
-            <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
-                        <span class="bi bi-receipt"></span> Generate Bills
-                    </button>
-
+            
                     <a href="history_transaction.php">
                         <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
                             <span class="bi bi-card-checklist"></span> History
@@ -93,16 +90,23 @@ $type  = $row['type'];
                         </button>
                     </a>
 
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
-                            Select All
+                     <div class="dropdown"  aria-label="Filter by Status" >
+                        <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;"data-toggle="dropdown" aria-expanded="false">
+                            Select payment 
                         </button>
-                        <div class="dropdown-menu">
-                            <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
-                            <a href="billing_pending.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-hourglass-split"></i> Pending</a>
-                            <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
-                        </div>
-                    </div>
+                       <div class="dropdown" aria-label="Filter by Payment Mode">
+    <div class="dropdown-menu">
+        <a type="button" class="filter-btn dropdown-item" data-mode="all" style="font-size: 0.7rem;">
+            <i class="bi bi-check-all"></i> All
+        </a>
+        <a type="button" class="filter-btn dropdown-item" data-mode="walk in" style="font-size: 0.7rem;">
+            <i class="bi bi-wallet"></i> Walk-in
+        </a>
+        <a type="button" class="filter-btn dropdown-item" data-mode="online" style="font-size: 0.7rem;">
+            <i class="bi bi-wallet"></i> Online Payment
+        </a>
+    </div>
+</div>
                 <?php endif; ?>
             </h5>
             <div class="card-body">
@@ -127,6 +131,7 @@ $type  = $row['type'];
     $query = "SELECT b.*, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) AS name
           FROM `tablebilling_list` b 
           INNER JOIN tableusers c ON b.tableusers_id = c.id
+          WHERE b.status = 0 OR b.status = 1 OR b.status = 2
           ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, name ASC";
 
     $query_run = mysqli_query($conn, $query);
@@ -283,6 +288,23 @@ $type  = $row['type'];
       //  }
  //   });
 //});
+function applyModeFilter(mode) {
+        var table = $('#list').DataTable();
+
+        if (mode === 'all') {
+            // Show all rows
+            table.columns(5).search('').draw();
+        } else {
+            // Filter by payment mode column (assuming payment mode column is at index 5)
+            table.columns(5).search(mode).draw();
+        }
+    }
+
+    $('.filter-btn').on('click', function () {
+        var modeFilter = $(this).data('mode');
+        applyModeFilter(modeFilter);
+    });
+
 
 
 $(document).on('click', '.viewBillingBtn', function () {

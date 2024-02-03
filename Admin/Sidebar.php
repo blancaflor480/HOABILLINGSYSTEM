@@ -303,6 +303,14 @@
           <span class="tooltip">Billing</span>
         </li>
         <li>
+          <a href="billing_transaction.php">
+            <i class="bi bi-table"></i>
+            <span class="links_name">Transaction</span>
+          </a>
+          <span class="tooltip">Transaction</span>
+        </li>
+        
+        <li>
           <a href="accounts.php">
             <i class="bx bx-user"></i>
             <span class="links_name">Account</span>

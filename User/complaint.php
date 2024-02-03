@@ -1,23 +1,23 @@
 <?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header("Location: index.php?error=Login%20First");
-        die();
-    }
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: index.php?error=Login%20First");
+    die();
+}
 
-    include 'config.php';
+include 'config.php';
 
-  $email = $_SESSION['email'];
-  $conn_String = mysqli_connect("localhost", "root", "", "billing");
-  $stmt = $conn_String->prepare("SELECT * FROM tableusers WHERE email = '{$_SESSION['email']}'");
-  $stmt->execute();
-  $result = $stmt->get_result()->fetch_assoc();
-  
-  if (!$result) {
+$email = $_SESSION['email'];
+
+$stmt = $conn->prepare("SELECT * FROM tableusers WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result()->fetch_assoc();
+
+if (!$result) {
     header("Location: index.php?error=Login%20First");
     exit();
-  }
-
+}
 ?>
 
 <?php include('Sidebar.php'); ?>
@@ -73,65 +73,68 @@
 </style>
 
 <section class="home-section">
-<div class="text">Complaint</div>
-    <div class="col-lg-12">
-        <div class="card">
-          <h5 class="card-header">List of Customer Complaint
-             <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#AddComplaint">
-                <span class="bx bx-plus"></span> New Complaint              
-            </button>
-            </h5>
-          <div class="card-body">
-            <table class="table table-hover table-striped table-bordered" id="list">
-              <thead>
-                <tr>
-                  <th>Complaint #</th>
-                  <th>Date Time</th>
-                  <th>Complaint</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-        <?php 
-					$i = 1;
-						$qry = $conn->query("SELECT b.*, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as
-             `name` from `tablecomplaint` b inner join 
-             tableusers c on b.tableusers_id = c.id 
-             order by unix_timestamp(`date_time`) desc, `name` asc ");
-						while($row = $qry->fetch_assoc()):
-					?>
-                  <tr>
-                    <td><?php echo $row['Id']; ?></td>
-                    <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
-                    <td><?php echo $row['description']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
-                  </tr>
-                <?php endwhile ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-   
-</section>
+  <div class="text">Complaint</div>
+  <div class="col-lg-12">
+    <div class="card">
+      <h5 class="card-header">List of Customer Complaint
+        <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#AddComplaint">
+          <span class="bx bx-plus"></span> New Complaint              
+        </button>
+      </h5>
+      <div class="card-body">
+        <table class="table table-hover table-striped table-bordered" id="list">
+          <thead>
+            <tr>
+              <th>Complaint #</th>
+              <th>Date Time</th>
+              <th>Type of Complaint</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $qry = $conn->prepare("SELECT Id, tableusers_id, email, typecomplaint, description, status, date_time FROM `tablecomplaint` WHERE `tableusers_id` = ?");
+$qry->bind_param("i", $result['Id']);
+$qry->execute();
+$qry->bind_result($complaintId, $tableusers_id, $email, $typecomplaint, $description, $status, $date_time);
+
+while ($qry->fetch()) {
+?>
+    <tr>
+        <td><?= $complaintId; ?></td>
+        <td><?= $date_time; ?></td>
+        <td><?= $typecomplaint; ?></td>
+        <td>
+        <?php
+switch ($status) {
+    case 0:
+        $badge = '<span class="badge badge-danger bg-gradient-danger text-lg px-3">UNPROCESS</span>';
+        break;
+    case 1:
+        $badge = '<span class="badge badge-success bg-gradient-success text-lg px-3">PROCESS</span>';
+        break;
+    case 2:
+        $badge = '<span class="badge badge-warning bg-gradient-warning text-lg px-3">PENDING</span>';
+        break;
+    default:
+        $badge = ''; // Add a default case if needed
+}
+
+echo $badge;
+?>
+</td>
+
+            </tr>
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['delete'])) {
-        $buttonValue = $_POST['delete'];
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tableaccount_archive SELECT * FROM tableaccount WHERE Id = '$buttonValue'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-        
-        // Update the status to 'Offline'
-        $updateQuery = "UPDATE tableaccount SET status='Offline' WHERE Id = '$buttonValue'";
-        $updateResult = mysqli_query($conn, $updateQuery);
-        
-        if ($archiveResult && $updateResult) {
-            echo '<script>setTimeout(function() { window.location.href = "account.php"; }, 10);</script>';
-        }
-    }
 }
 ?>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
   $(document).ready(function () {
@@ -139,7 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       "pagingType": "full_numbers",
       "lengthMenu": [5, 10, 25, 50, 75, 100],
       "pageLength": 10,
-      "order": [[1, 'desc']],
+      "order": [
+        [1, 'desc']
+      ],
     });
   });
 </script>

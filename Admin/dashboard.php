@@ -210,7 +210,7 @@ if (mysqli_num_rows($query) > 0){
 <?php
 include 'config.php';
 
-$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE status = 'unprocessed'");
+$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE stats = 0");
 
 if (mysqli_num_rows($query) > 0) {
     $row = mysqli_fetch_assoc($query);

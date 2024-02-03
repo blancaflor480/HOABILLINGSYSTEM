@@ -10,14 +10,6 @@ if (isset($_SESSION['uname'])) {
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["response"])) {
-    // Handle the response button click, update the complaint status, etc.
-    $complaintId = $_POST["complaintId"]; // Assuming you have a hidden input in your form with the complaintId
-    // Perform the update query based on the complaintId
-    $updateQuery = "UPDATE tablecomplaint SET status = 'Processed' WHERE Id = $complaintId";
-    mysqli_query($conn, $updateQuery);
-}
-
 $query  = mysqli_query($conn, "SELECT * FROM tableaccount WHERE uname = '$uname'") or die(mysqli_error());
 $row = mysqli_fetch_array($query);
 $type  = $row['type'];
@@ -72,6 +64,33 @@ $type  = $row['type'];
   .paginate_button.previous, .paginate_button.next {
     font-size: 12px;
   }
+
+  .notification {
+    position: fixed;
+    top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.notification .icon {
+    margin-right: 10px;
+}
+
+.notification.success {
+    background-color: #28a745;
+}
+
+.notification.error {
+    background-color: #dc3545;
+}
 </style>
 
 <section class="home-section">
@@ -114,13 +133,31 @@ $type  = $row['type'];
                     <td><?php echo date("Y-m-d H:i", strtotime($row['date_time'])); ?></td>
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['description']; ?></td>
-                    <td><?php echo $row['status']; ?></td>
                     <td>
-                    <form method="post">
-                                    
-                     <button class="btn btn-success"  name="complaintId" value="<?php echo $row['Id']; ?>" type="submit">Response</button>  
-                                      </form>
-                  </td>
+                       <?php
+switch ($row['stats']) {
+    case 0:
+        $badge = '<span class="badge badge-danger bg-gradient-danger text-lg px-3">UNPROCESS</span>';
+        break;
+    case 1:
+        $badge = '<span class="badge badge-success bg-gradient-success text-lg px-3">PROCESS</span>';
+        break;
+    case 2:
+        $badge = '<span class="badge badge-warning bg-gradient-warning text-lg px-3">PENDING</span>';
+        break;
+    
+}
+
+echo $badge;
+?>
+
+                    </td>
+                    <td>
+    
+        <!-- Add the View button with a data-toggle attribute for the modal -->
+        <button class="btn btn-warning view-btn" data-toggle="modal" data-target="#viewComplaintModal" data-complaint-id="<?php echo $row['Id']; ?>">View</button>
+
+</td>
                   </tr>
                 <?php endwhile ?>
               </tbody>
@@ -140,6 +177,101 @@ $type  = $row['type'];
       "order": [[1, 'desc']],
     });
   });
+</script>
+<!-- Modal for Viewing Complaint Details -->
+<div class="modal fade" id="viewComplaintModal" tabindex="-1" role="dialog" aria-labelledby="viewComplaintModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewComplaintModalLabel">View Complaint Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Display complaint details here -->
+                <div id="complaintDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" value="1" class="btn btn-success">Process</button>
+                <button type="submit" value="2" class="btn btn-warning">Pending</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var complaintId; // Declare the variable globally
+
+    // Function to load complaint details
+    function loadComplaintDetails(id) {
+        $.ajax({
+            url: 'get_complaint_details.php',
+            type: 'GET',
+            data: { complaintId: id },
+            success: function (response) {
+                $('#complaintDetails').html(response);
+                $('#viewComplaintModal').modal('show');
+            },
+            error: function () {
+                alert('Error fetching complaint details.');
+            }
+        });
+    }
+
+ // Function to show a temporary notification
+function showNotification(message, type) {
+    var notification = $('<div class="notification ' + type + '">').text(message);
+    $('body').append(notification);
+
+    notification.fadeIn('fast', function () {
+        setTimeout(function () {
+            notification.fadeOut('fast', function () {
+                notification.remove();
+            });
+        }, 2000);
+    });
+}
+
+
+
+    // Function to handle Processed and Pending button clicks
+    function handleButtonClicked(status) {
+        // Use AJAX to update the complaint status
+        $.ajax({
+            url: 'update_complaint_details.php',
+            type: 'POST',
+            data: { complaintId: complaintId, stats: status },
+            success: function (response) {
+                showNotification(response);
+                $('#viewComplaintModal').modal('hide');
+            },
+             error: function () {
+            // Display error notification
+            showNotification('Error updating complaint status.', 'error');
+          }
+        });
+    }
+
+    // Handle View button click
+    $('.view-btn').click(function () {
+        complaintId = $(this).data('complaint-id');
+        loadComplaintDetails(complaintId);
+    });
+
+    // Handle Processed button click
+    $('#viewComplaintModal .btn-success').click(function () {
+        handleButtonClicked(1);
+    });
+
+    // Handle Pending button click
+    $('#viewComplaintModal .btn-warning').click(function () {
+        handleButtonClicked(2);
+    });
+
+    // Periodically refresh the data every 5 seconds
+    setInterval(function () {
+        loadComplaintDetails(complaintId);
+    }, 1000); // Adjust the interval as needed
 </script>
 
 <?php include('Add_account.php'); ?>

@@ -79,11 +79,13 @@ function format_num($number) {
 </style>
 
 
-<!-- Include these links to the head section of your HTML -->
-<link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
-<script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 
 
 <section class="home-section">
@@ -108,6 +110,8 @@ function format_num($number) {
                             <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                                 <button class="btn btn-primary bg-gradient-primary rounded-0"><i class="fa fa-filter"></i> Filter</button>
                                 <button class="btn btn-light bg-gradient-light rounded-0 border" type="button" id="print"><i class="fa fa-print"></i> Print</button>
+                               <button class="btn btn-light bg-gradient-light rounded-0 border" type="button" id="excel-export"><i class="fa fa-file-excel"></i> Excel Export</button>
+
                             </div>
                         </div>
                     </form>
@@ -218,22 +222,22 @@ function format_num($number) {
 
 </section>
 <script>
-$(document).ready(function(){
+$(document).ready(function () {
     $('#report-tbl td, #report-tbl th').addClass('py-1 px-2 align-middle');
-    
-    $('#filter-form').submit(function(e){
+
+    $('#filter-form').submit(function (e) {
         e.preventDefault();
         location.href = 'monthlyreport.php?' + $(this).serialize();
     });
 
-    $('#print').click(function(){
-        console.log("Button clicked"); // Check if this line appears in the console
+    $('#print').click(function () {
+        console.log("Button clicked");
 
         var h = $('head').clone();
         var p = $('#printout').clone();
         var ph = $($('noscript#print-header').html()).clone();
 
-        var nw = window.open('', '_blank','width=' + ($(window).width() * .80) + ',height=' + ($(window).height() * .90) + ',left=' + ($(window).width() * .1) + ',top=' + ($(window).height() * .05));
+        var nw = window.open('', '_blank', 'width=' + ($(window).width() * .80) + ',height=' + ($(window).height() * .90) + ',left=' + ($(window).width() * .1) + ',top=' + ($(window).height() * .05));
         nw.document.querySelector("head").innerHTML = h.html();
         nw.document.querySelector("body").innerHTML = ph[0].outerHTML + p[0].outerHTML;
         nw.document.close();
@@ -248,5 +252,4 @@ $(document).ready(function(){
         }, 300);
     });
 });
-
 </script>   

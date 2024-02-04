@@ -1,4 +1,4 @@
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <style>
   #addbills img {
     max-width: 100%;
@@ -106,13 +106,14 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" form="billing-form">Close</button>
-        <button type="submit" name="submit" class="btn btn-success">Create</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" name="submit" class="btn btn-success" id="submitBtn">Create</button>
       </div>
       </form>
     </div>
   </div>
 </div>
+
 <script>
 function updateTotalAmount() {
     var currentAmount = parseFloat(document.getElementById('current').value) || 0;
@@ -188,7 +189,129 @@ function updateBillingDetails() {
 }
 
 document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
+
+// Function to show SweetAlert notifications
+function showNotification(type, message) {
+    Swal.fire({
+      icon: type,
+      title: type.charAt(0).toUpperCase() + type.slice(1), // Capitalize the first letter
+      text: message,
+      showConfirmButton: false,
+      timer: 2000 // Adjust the duration as needed
+    });
+}
+
+// Parse the JSON response and show the notification
+function handleResponse(response) {
+    if (response.notify) {
+        showNotification(response.notify, response[response.notify]);
+    }
+}
+
+// Add event listener to handle response after submitting the form
+document.getElementById('billing-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    // Use Fetch API to submit the form data asynchronously
+    fetch(this.action, {
+        method: this.method,
+        body: new FormData(this),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle the JSON response
+        handleResponse(data);
+
+        // Redirect to the specified URL after success
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
 </script>
+
+
+<!--<script>
+function updateTotalAmount() {
+    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
+    var serviceSelect = document.getElementById('serviceSelect');
+    var selectedOption = serviceSelect.value;
+    var serviceFee;
+
+    if (selectedOption === 'custom') {
+        serviceFee = parseFloat(document.getElementById('customServiceFee').value) || 0;
+    } else {
+        serviceFee = parseFloat(selectedOption) || 0;
+    }
+
+    var penalties = parseFloat(document.getElementById('penalties').value) || 0;
+
+    var totalAmount = currentAmount + serviceFee + penalties;
+
+    if (!isNaN(totalAmount)) {
+        document.getElementById('total').value = totalAmount.toFixed(2);
+    }
+}
+
+// Attach the updateTotalAmount function to the 'input' event of the current amount field
+document.getElementById('current').addEventListener('input', updateTotalAmount);
+
+// Attach the updateTotalAmount function to the 'change' event of the service fee field
+document.getElementById('serviceSelect').addEventListener('change', function() {
+    var selectedOption = this.value;
+    var customServiceFeeInput = document.getElementById('customServiceFee');
+
+    if (selectedOption === 'custom') {
+        customServiceFeeInput.style.display = 'block';
+    } else {
+        customServiceFeeInput.style.display = 'none';
+    }
+
+    updateTotalAmount();
+});
+
+// Add event listener for the 'input' event on the customServiceFee field
+document.getElementById('customServiceFee').addEventListener('input', updateTotalAmount);
+
+function updateBillingDetails() {
+    var selectedUserId = document.getElementById('tableusers_id').value;
+    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.error) {
+                    console.error('Error: ' + response.error);
+                } else {
+                    document.getElementById('previous').value = parseFloat(response.previousBalance) || 0;
+
+                    document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
+
+                    updateTotalAmount(); // Call the updateTotalAmount function to recalculate total
+                }
+            } else {
+                console.error('Error: ' + xhr.status);
+            }
+        }
+    };
+
+    xhr.open('POST', 'get_billing_details.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    
+    // Adjust the data being sent to match what your PHP script expects
+    xhr.send('userId=' + selectedUserId);
+}
+
+document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
+</script>--->
+<!-- Include SweetAlert CDN in your HTML file -->
 
 <!-- Add this modal code after your existing modals -->
 
@@ -318,6 +441,12 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
                     <label for="total">Total</label>
                     <p id="view_total" style="font-weight: 500; background-color: #C8C8C8;" class="form-control"></p>
                 </div>
+
+                <div class="mb-3">
+                    <label for="amountpay">Charge Amount</label>
+                    <p id="view_amountpay" style="font-weight: 500; background-color: #C8C8C8;" class="form-control"></p>
+                </div>
+                
                     
                 <div class="mb-3">
                     <label for="status">Status</label>
@@ -345,6 +474,7 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
     var penalties = document.getElementById('view_penalties').innerText;
     var service = document.getElementById('view_service').innerText;
     var total = document.getElementById('view_total').innerText;
+    var amountpay = document.getElementById('view_amountpay').innerText;  
     var status = document.getElementById('view_status').innerText;
 
     // Create a new window for printing
@@ -369,6 +499,7 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
           <p><strong>Penalties:</strong> ${penalties}</p>
           <p><strong>Service:</strong> ${service}</p>
           <p><strong>Total:</strong> ${total}</p>
+          <p><strong>Charge:</strong> ${amountpay}</p>
           <p><strong>Status:</strong> ${status}</p>
         </body>
       </html>

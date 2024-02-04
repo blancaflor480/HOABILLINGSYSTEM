@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include('config.php');
@@ -24,6 +23,32 @@ function format_num($number) {
     return number_format($number, 2); // Example: Format as a decimal with 2 decimal places
 }
 
+// Fetch records for export
+$exportQuery = $conn->query("SELECT b.*, c.code, CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname, '')) as `name` FROM `tablebilling_list` b INNER JOIN tableusers c ON b.tableusers_id = c.Id WHERE DATE_FORMAT(b.reading_date, '%Y-%m') = '{$month}' ORDER BY UNIX_TIMESTAMP(`reading_date`) DESC, `name` ASC");
+
+$records = [];
+while ($row = $exportQuery->fetch_assoc()) {
+    $records[] = $row;
+}
+
+if (isset($_POST["export_csv_data"])) {
+    $csv_file = "phpzag_csv_export_" . date('Ymd') . ".csv";
+    header("Content-Type: text/csv");
+    header("Content-Disposition: attachment; filename=\"$csv_file\"");
+    $fh = fopen('php://output', 'w');
+    $is_coloumn = true;
+    if (!empty($records)) {
+        foreach ($records as $record) {
+            if ($is_coloumn) {
+                fputcsv($fh, array_keys($record));
+                $is_coloumn = false;
+            }
+            fputcsv($fh, array_values($record));
+        }
+        fclose($fh);
+    }
+    exit;
+}
 ?>
 
 <style>
@@ -89,7 +114,7 @@ function format_num($number) {
 
 
 <section class="home-section">
-<div class="text">Monthly Rport</div>
+<div class="text"><i class="bx bx-folder"></i> Monthly Rport</div>
 <div class="col-lg-12">
 <div class="card card-outline rounded-0 card-navy">
    <div class="card-body">
@@ -109,9 +134,12 @@ function format_num($number) {
                             </div>
                             <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                                 <button class="btn btn-primary bg-gradient-primary rounded-0"><i class="fa fa-filter"></i> Filter</button>
-                                <button class="btn btn-light bg-gradient-light rounded-0 border" type="button" id="print"><i class="fa fa-print"></i> Print</button>
-                               <button class="btn btn-light bg-gradient-light rounded-0 border" type="button" id="excel-export"><i class="fa fa-file-excel"></i> Excel Export</button>
-
+                                <button class="btn btn-primary bg-gradient-light rounded-0 border" type="button" id="print"><i class="fa fa-print"></i> Print</button>
+                                <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+    <button class="btn btn-success bg-gradient-light rounded-0 border" type="submit" id="export_csv_data" name='export_csv_data'>
+    <i class="bi bi-file-earmark-spreadsheet-fill"></i> Export to CSV
+    </button>
+</form>
                             </div>
                         </div>
                     </form>
@@ -251,5 +279,48 @@ $(document).ready(function () {
             }, 300);
         }, 300);
     });
+    $('#export_csv_data').click(function (e) {
+        e.preventDefault();
+
+        // Extract header
+        var header = [];
+        $('#report-tbl thead th').each(function () {
+            header.push('"' + $(this).text().trim() + '"');
+        });
+
+        // Extract rows
+        var rows = [];
+        $('#report-tbl tbody tr').each(function () {
+            var row = [];
+            $(this).find('td').each(function () {
+                var cellContent = $(this).hasClass('text-center') ? '="' + $(this).text().trim() + '"' : '"' + $(this).text().trim() + '"';
+                // Check if the column is "Due Date" and format accordingly
+                if ($(this).index() === 2) {
+                    cellContent = '="' + $(this).text().trim() + '"';
+                }
+                row.push(cellContent);
+            });
+            rows.push(row.join(','));
+        });
+
+        // Combine header and rows
+        var csvContent = header.join(',') + '\n' + rows.join('\n');
+
+        // Create a Blob containing the CSV data
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+        // Create a link element to trigger the download
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'monthly_report.csv';
+
+        // Append the link to the document and trigger the click event
+        document.body.appendChild(link);
+        link.click();
+
+        // Remove the link element from the document
+        document.body.removeChild(link);
+    });
+
 });
-</script>   
+</script>

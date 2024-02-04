@@ -94,7 +94,7 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-<div class="text">Complaint</div>
+<div class="text"><i class="bx bx-envelope"></i> Complaint</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">List of Customer Complaint
@@ -102,9 +102,6 @@ $type  = $row['type'];
               <button type="button" class="btn btn-primary float-right mx-2" data-toggle="modal" data-target="#Add_account">
                 <span class="bx bx-printer"></span> Print              
             </button>
-              <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-archive"></span> Archive
-              </button>
             <?php endif; ?>
           </h5>
           <div class="card-body">

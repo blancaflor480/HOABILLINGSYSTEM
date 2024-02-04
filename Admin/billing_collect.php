@@ -119,13 +119,13 @@ include('Sidebar.php');
                         if (isset($_GET['tableusers_id'])) {
 
                             $user = $conn->prepare("SELECT b.*, 
-                                  CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
-                                  p.receipt_path, p.reference_id, p.amount
-                            FROM `tablebilling_list` b 
-                            INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
-                            LEFT JOIN `tablepayments` p ON b.tableusers_id = p.id
-                            WHERE c.Id = ?
-                            ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
+                      CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
+                      p.receipt_path, p.reference_id, p.amount
+                FROM `tablebilling_list` b 
+                INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
+                LEFT JOIN `tablepayments` p ON b.id = p.billing_id
+                WHERE c.Id = ?
+                ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
                             $user->bind_param("s", $_GET['tableusers_id']);
                             $user->execute();
                             $meta = $user->get_result();
@@ -223,7 +223,7 @@ include('Sidebar.php');
                                 <label for="amountpay" class="control-label">Charge Amount</label>
                                 <input type="text" class="form-control form-control-sm rounded-0" id="amountpay"
                                        name="amountpay" id="amountpay" required
-                                       value="<?= isset($meta['amountpay']) ? $meta['amountpay'] : '' ?>"/>
+                                       value="<?= isset($meta['amount']) ? $meta['amount'] : '' ?>"/>
                             </div>
                              <div class="form-group">
                                 <label for="status" class="control-label">Payment Type</label>

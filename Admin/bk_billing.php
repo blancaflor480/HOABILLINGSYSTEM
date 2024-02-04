@@ -17,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $penalties = $_POST['penalties'];
     $serviceFee = $_POST['service']; // Get the service fee from the user input
     $totalAmount = floatval($currentAmount) + floatval($penalties) + floatval($serviceFee); // Calculate total amount
-
     $status = $_POST['status'];
 
     // Extracting ID from $tableusers_id
@@ -30,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($userResult === FALSE) {
         // Handle SQL error
-        echo "Error checking user: " . $conn->error;
+        echo json_encode(['error' => 'Error checking user: ' . $conn->error]);
     } elseif ($userResult->num_rows > 0) {
         // User found, proceed with billing creation
 
@@ -76,19 +75,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                ** This is an auto-generated email.<b> DO NOT REPLY TO THIS MESSAGE.</b> **";
 
                 $mail->send();
-                echo 'Billing created successfully. Email sent.';
-            } catch (Exception $e) {
-                echo "Error sending email: " . $e->getMessage();
-            }
-        } else {
-            echo "Error inserting billing: " . $conn->error;
-        }
+                echo json_encode(['success' => 'Billing created successfully. Email sent.', 'redirect' => 'billing.php']);
+        echo '<script>window.location.href = "billing.php";</script>'; // Redirect to billing.php after successful billing creation
+    } catch (Exception $e) {
+        echo json_encode(['error' => 'Error sending email: ' . $e->getMessage()]);
+    }
+} else {
+    echo json_encode(['error' => 'Error inserting billing: ' . $conn->error]);
+}
 
         // Close the prepared statement
         $insertQuery->close();
 
     } else {
-        echo "Error: User not found or invalid user ID.";
+        echo json_encode(['error' => 'Error: User not found or invalid user ID.']);
     }
 }
 ?>

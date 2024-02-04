@@ -73,30 +73,31 @@ if(isset($_GET['billing_id'])) {
     }
 }
 
-if(isset($_POST['delete_billing']))
-{
+
+if (isset($_POST['delete_billing'])) {
     $billing_id = mysqli_real_escape_string($conn, $_POST['billing_id']);
 
     $query = "DELETE FROM tablebilling_list WHERE id='$billing_id'";
     $query_run = mysqli_query($conn, $query);
 
-    if($query_run)
-    {
+    if ($query_run) {
         $res = [
-            'status' => 200,
+            'status' => 'success',
             'message' => 'Record Deleted Successfully'
         ];
-        echo json_encode($res);
-        return;
-    }
-    else
-    {
+    } else {
         $res = [
-            'status' => 500,
+            'status' => 'error',
             'message' => 'Record Not Deleted'
         ];
+    }
+
+    // Check for DataTables request
+    if (isset($_POST['draw'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['data' => [$res]]);
+    } else {
         echo json_encode($res);
-        return;
     }
 }
 

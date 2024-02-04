@@ -172,6 +172,9 @@ $type  = $row['type'];
                                             echo '<span class="badge badge-warning  bg-gradient-warning text-lg px-3">
                                                 PENDING</span>';
                                             break;
+                                            default:
+                                            echo '<span class="badge badge-info bg-gradient-info text-lg px-3">UNKNOWN STATUS</span>';
+                                            break;
                     }
                     ?>
                 </td>
@@ -336,11 +339,21 @@ $(document).on('click', '.viewBillingBtn', function () {
                 $('#view_reading').text(res.data.reading);
                 $('#view_previous').text(res.data.previous);
                 $('#view_penalties').text(res.data.penalties);
-                $('#view_service').text(res.data.service);
+                $('#view_service').text(res.data.service);                
                 $('#view_total').text(res.data.total);
+                $('#view_amountpay').text(res.data.amountpay);
+                
 
                 // Display "Pending" or "Paid" based on the value
-                var statusText = (res.data.status == 0) ? "Pending" : "Paid";
+                var statusText;
+if (res.data.status == 0) {
+    statusText = "Unpaid";
+} else if (res.data.status == 1) {
+    statusText = "Paid";
+} else {
+    statusText = "Pending";
+}
+
                 $('#view_status').text(statusText);
 
                 $('#billingViewModal').modal('show');

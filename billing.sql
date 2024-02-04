@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 03, 2024 at 05:10 PM
+-- Generation Time: Feb 04, 2024 at 07:53 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -53,6 +53,7 @@ CREATE TABLE `tableaccount` (
 
 INSERT INTO `tableaccount` (`Id`, `fname`, `mname`, `lname`, `gender`, `contact`, `email`, `bday`, `address`, `uname`, `password`, `copassword`, `image`, `type`, `status`, `date_created`, `code`) VALUES
 (1, 'Administrator', NULL, NULL, '', NULL, '', NULL, NULL, 'Admin', '21232f297a57a5a743894a0e4a801fc3', '21232f297a57a5a743894a0e4a801fc3', NULL, 'Admin', '', '2024-01-10 15:48:07', ''),
+(2, 'Jade Ryan', 'L.', 'Blancaflor', 'Male', NULL, 'bryanblancaflor007@gmail.com', NULL, NULL, 'jade123', 'b220e82dde8abcb5dfe247ff49606009', 'b220e82dde8abcb5dfe247ff49606009', 0x696d616765332e706e67, 'Staff', 'Active', '2024-01-24 05:13:50', ''),
 (3, 'Maria Angelica', 'M.', 'Rubrico', 'Female', '093805380538', 'ma.angel@gmail.com', '2003-03-20', 'Imus', 'angel123', 'ab1dbd386662b62477b62087a389256a', '$2y$10$aGHr3Oh2nKrfgegz1H1cmOQe9vFPCmyzZlA4yM4ywwAPLwwEglkMG', 0x3430363430313432375f3730353631383034313533313237325f383931373031353531383131373836383934395f6e2e6a7067, 'Staff', 'Active', '2024-01-06 14:09:52', ''),
 (4, 'Mona Lyn', 'C', 'Bularon', 'Female', '09380538503', 'monalyh@gmail.com', '2024-01-04', 'Imus', 'mona123', 'ae072073547c70e279230fba9742791c', '$2y$10$dOj8B7jDmQu3yL8m1atug.x50.t8iKRpUdDW0QO3DaQtKh7btSHbu', 0x6d6f6e612e6a7067, 'Admin', '', '2024-01-23 10:58:36', ''),
 (6, 'Bryan', 'L.', 'Blancaflor', 'Female', NULL, 'blancaflor1203@gmail.com', NULL, NULL, 'bry123', '56152d5df8f1f3eec5279955371d9dc3', '', 0x636f6e766572742e6a7067, 'Staff', '', '2024-01-10 15:34:01', '');
@@ -92,8 +93,7 @@ INSERT INTO `tablearchives` (`Id`, `fname`, `mname`, `lname`, `gender`, `contact
 (8, 'kuku', 'M.', 'Blancaflor', 'Admin', NULL, 'baobao17@gmail.com', NULL, NULL, 'kuku123', '$2y$10$.mwIYcg/5GIWbf9rtyAatO8hM/g6Na1hDf.IHNinZKIXKqzpMLR.W', '', 0x75706c6f6164732f6c6f636174696f6e2e706e67, 'Admin', '', '2024-01-10 14:20:59', '', 1),
 (9, 'kristine', 'M.', 'Delmundo123', 'Male', NULL, 'delmundo@gmail.com', NULL, NULL, 'tintin', 'b220e82dde8abcb5dfe247ff49606009', '', 0x6d61646172612e6a7067, 'Admin', '', '2024-01-31 00:11:21', '', 1),
 (5, 'John Paul', 'Allera', 'Magno', 'Admin', NULL, 'baker@gmail.com', NULL, NULL, 'jp123', '$2y$10$juxFaJUDWWjKvu9R.CH/a.EFXkt.nGAKoRaoJZ3.KpE.VCJiXD2Mu', '', 0x75706c6f6164732f54757271756f69736520426569676520486f7573652044657369676e2053747564696f204c6f676f2e706e67, 'Admin', '', '2024-01-07 07:10:32', '', 1),
-(10, 'kristine', 'M.', 'Delmundo', 'Staff', NULL, 'delmundo@gmail.com', NULL, NULL, 'tintin', '$2y$10$8eBDK9SpiSWVdfdZSUBGVOI4y.CcBERWd0BIvxTIwSSN9g7mcan5i', '', 0x64656661756c745f696d6167652e6a7067, 'Admin', '', '2024-02-03 07:00:01', '', 1),
-(2, 'Jade Ryan', 'L.', 'Blancaflor', 'Male', NULL, 'bryanblancaflor007@gmail.com', NULL, NULL, 'jade123', 'b220e82dde8abcb5dfe247ff49606009', 'b220e82dde8abcb5dfe247ff49606009', 0x696d616765332e706e67, 'Staff', 'Active', '2024-01-24 05:13:50', '', 1);
+(10, 'kristine', 'M.', 'Delmundo', 'Staff', NULL, 'delmundo@gmail.com', NULL, NULL, 'tintin', '$2y$10$8eBDK9SpiSWVdfdZSUBGVOI4y.CcBERWd0BIvxTIwSSN9g7mcan5i', '', 0x64656661756c745f696d6167652e6a7067, 'Admin', '', '2024-02-03 07:00:01', '', 1);
 
 -- --------------------------------------------------------
 
@@ -125,8 +125,8 @@ CREATE TABLE `tablebilling_list` (
 --
 
 INSERT INTO `tablebilling_list` (`id`, `tableusers_id`, `reading_date`, `due_date`, `reading`, `previous`, `penalties`, `service`, `total`, `amountpay`, `paymode`, `referrenceId`, `screenshoot`, `status`, `date_created`, `date_updated`) VALUES
-(8, 1, '2024-02-02', '2024-02-29', 100.00, 0.00, 10.00, 0.00, 110.00, 200.00, 0, '', '', 1, '2024-01-28 16:33:25', '2024-02-03 23:35:46'),
-(38, 3, '2024-01-30', '2024-01-31', 300.00, 0.00, 0.00, 10.00, 310.00, 310.00, 1, '', '', 2, '2024-01-30 18:20:57', '2024-02-03 23:53:05');
+(8, 1, '2024-02-02', '2024-02-29', 100.00, 0.00, 10.00, 5.00, 105.00, 105.00, 0, '', '', 2, '2024-01-28 16:33:25', '2024-02-05 00:42:43'),
+(93, 3, '2024-02-04', '2024-02-29', 100.00, 0.00, 0.00, 10.00, 110.00, 110.00, 0, '', '', 1, '2024-02-05 01:11:46', '2024-02-05 01:48:58');
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ CREATE TABLE `tablecomplaint` (
 --
 
 INSERT INTO `tablecomplaint` (`Id`, `tableusers_id`, `email`, `typecomplaint`, `description`, `bill_id`, `stats`, `date_time`) VALUES
-(0, 3, '', 'Bill not correct', 'adadadad', 201102, 2, '2024-02-03 10:49:13');
+(0, 1, '', 'Bill not correct', 'qqqqqq', 201102, 1, '2024-02-04 23:57:22');
 
 -- --------------------------------------------------------
 
@@ -172,8 +172,7 @@ CREATE TABLE `tablepayments` (
 --
 
 INSERT INTO `tablepayments` (`id`, `billing_id`, `amount`, `reference_id`, `date_created`, `receipt_path`) VALUES
-(2, 8, 201.00, '20110212', '2024-02-02 23:19:34', 0x75706c6f6164732f726563656970742e6a7067),
-(3, 38, 201.00, '200011', '2024-02-02 23:24:31', 0x75706c6f6164732f726563656970742e6a7067);
+(6, 93, 110.00, '', '2024-02-05 01:48:58', '');
 
 -- --------------------------------------------------------
 
@@ -186,13 +185,6 @@ CREATE TABLE `tablesystem_info` (
   `meta_field` text NOT NULL,
   `meta_value` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tablesystem_info`
---
-
-INSERT INTO `tablesystem_info` (`id`, `meta_field`, `meta_value`) VALUES
-(16, 'name', 'ROSEDALE RESIDENCE');
 
 -- --------------------------------------------------------
 
@@ -230,7 +222,8 @@ CREATE TABLE `tableusers` (
 INSERT INTO `tableusers` (`Id`, `transaction_Id`, `fname`, `mname`, `lname`, `bday`, `gender`, `address`, `email`, `contact`, `password`, `copassword`, `status`, `category`, `image`, `code`, `datereg`, `Logintime`, `logoutime`, `delete_flag`) VALUES
 (1, 202110123, 'Jade Ryan', 'Leba', 'Blancaflor', '2002-08-17', 'Male', 'Tramo St. Kaingen, Bacoor City of Cavite', 'bryanblancaflor007@gmail.com', '09679559166', '21232f297a57a5a743894a0e4a801fc3', 'b220e82dde8abcb5dfe247ff49606009', 1, 'Residences', 0x313238783132382e706e67, '', '2023-12-28 13:28:03', '2024-01-17 14:14:42', '2024-01-17 14:15:15', 0),
 (3, 0, 'Kristine joy', 'M', 'Delmundo', '2003-01-28', 'Female', 'Molino 1, Paula', 'blancaflor480@gmail.com', '09380438403', 'b220e82dde8abcb5dfe247ff49606009', '', 1, 'Residences', 0x6d61646172612e6a7067, '', '2024-01-22 22:57:00', '2024-01-22 14:57:00', '2024-01-22 14:57:00', 0),
-(5, 0, 'jaderyan', 'leba', 'blancaflor', '2024-01-31', 'Male', 'Kaingen', 'delmundo@gmail.com', '0099999', '21232f297a57a5a743894a0e4a801fc3', '', 0, 'Residences', '', '', '2024-01-27 14:43:55', '2024-01-27 06:43:55', '2024-01-27 06:43:55', 0);
+(5, 0, 'jaderyan', 'leba', 'blancaflor', '2024-01-31', 'Male', 'Kaingen', 'delmundo@gmail.com', '0099999', '21232f297a57a5a743894a0e4a801fc3', '', 0, 'Residences', '', '', '2024-01-27 14:43:55', '2024-01-27 06:43:55', '2024-01-27 06:43:55', 0),
+(7, 0, 'Kuku', 'Leba', 'Pabilando', '2024-02-29', 'Admin', 'Maliksi - C153', 'kuku@gmail.com', '', '$2y$10$gl/AnlWjOA7YM8igG4SLuOrzDe9O/UhAVtZum7ZLPlVWkYkjTDV8u', '', 0, '', 0x64656661756c745f696d6167652e6a7067, '', '2024-02-05 00:55:01', '2024-02-04 16:55:01', '2024-02-04 16:55:01', 0);
 
 --
 -- Indexes for dumped tables
@@ -289,25 +282,25 @@ ALTER TABLE `tableaccount`
 -- AUTO_INCREMENT for table `tablebilling_list`
 --
 ALTER TABLE `tablebilling_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `tablepayments`
 --
 ALTER TABLE `tablepayments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tablesystem_info`
 --
 ALTER TABLE `tablesystem_info`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `tableusers`
 --
 ALTER TABLE `tableusers`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -317,7 +310,7 @@ ALTER TABLE `tableusers`
 -- Constraints for table `tablebilling_list`
 --
 ALTER TABLE `tablebilling_list`
-  ADD CONSTRAINT `tableusers_id_fk_bl` FOREIGN KEY (`tableusers_id`) REFERENCES `tableusers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `tableusers_id_fk_bl` FOREIGN KEY (`tableusers_id`) REFERENCES `tableusers` (`Id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `tablecomplaint`

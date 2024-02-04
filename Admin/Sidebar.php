@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -292,9 +293,9 @@
         <li>
           <a href="customer.php">
             <i class="bx bx-group"></i>
-            <span class="links_name">Customer</span>
+            <span class="links_name">Homeowners</span>
           </a>
-          <span class="tooltip">Customer</span>
+          <span class="tooltip">Homeowners</span>
         </li>
         <li>
           <a href="billing.php">

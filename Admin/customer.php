@@ -70,10 +70,10 @@ $type  = $row['type'];
 </style>
 
 <section class="home-section">
-<div class="text"><i class="bi bi-people"></i> Customer</div>
+<div class="text"><i class="bi bi-people"></i> Homeowners</div>
     <div class="col-lg-12">
         <div class="card">
-          <h5 class="card-header">List of Customer
+          <h5 class="card-header">List of Homeowners
             <?php if ($type == 'Admin'): ?>
               <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addcustomer">
                 <span class="bx bx-user-plus"></span> Create New Customer
@@ -81,8 +81,8 @@ $type  = $row['type'];
               <button type="button" class="btn btn-warning float-right mx-2" data-toggle="modal" data-target="#delete_user">
                 <span class="bx bx-archive"></span> Archive
               </button>
-              <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#delete_account">
-                <span class="bx bx-printer"></span> Print
+              <button type="submit" class="btn btn-primary float-right" data-toggle="modal" data-target="#delete_account">
+                <span class="bi bi-database-fill-down"></span> Import
               </button>
             <?php endif; ?>
           </h5>

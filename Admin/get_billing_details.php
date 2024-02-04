@@ -1,9 +1,6 @@
 <?php
 include 'config.php';
 
-$defaultServiceFee = 10; // Set the default service fee
-$defaultPenalties = 0; // Set the default penalties
-
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -29,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Provide default values when no data is found
             $response = array(
                 'previousBalance' => 0,
-                'serviceFee' => $defaultServiceFee,
-                'penalties' => $defaultPenalties,
+                'serviceFee' => 0, // Set the default service fee to 0
+                'penalties' => 0,
                 'totalAmount' => 0
             );
 
@@ -41,21 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Log the SQL query and error for debugging
         error_log("SQL Query: $query | Error: " . $stmt->error);
     }
-
-    // Log additional information for debugging
-    $response['tableusers_id'] = $tableusers_id;
 } else {
     $response['error'] = 'Invalid request method';
 }
 
 // Return a consistent JSON structure
-if (isset($response['error'])) {
-    $response['success'] = false;
-} else {
-    $response['success'] = true;
-}
-
-// Send the JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
 ?>

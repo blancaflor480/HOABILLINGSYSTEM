@@ -82,9 +82,14 @@
           <input type="text" id="previous" name="previous" style="width: 217px;" required="required" readonly 
           value="<?= isset($previous) ? $previous : '' ?>" disabled/>
 
-           <label for="serviceFee">Service Fee</label>
-          <input type="number" id="service" name="service" readonly/>
-
+           <label for="service">Service Fee</label>
+<select name="service" id="serviceSelect" required>
+    <option value="" disabled selected>Please Select Here</option>
+    <option value="5.00" <?php echo isset($service) && $service == 5.00 ? 'selected' : '' ?>>5.00</option>
+    <option value="10.00" <?php echo isset($service) && $service == 10.00 ? 'selected' : '' ?>>10.00</option>
+    <option value="custom">Custom</option>
+</select>
+<input type="text" id="customServiceFee" name="customServiceFee" style="display: none;" />
           <label type="hidden" for="penalties"></label>
           <input type="hidden" id="penalties" name="penalties" readonly/>
 
@@ -108,6 +113,82 @@
     </div>
   </div>
 </div>
+<script>
+function updateTotalAmount() {
+    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
+    var serviceSelect = document.getElementById('serviceSelect');
+    var selectedOption = serviceSelect.value;
+    var serviceFee;
+
+    if (selectedOption === 'custom') {
+        serviceFee = parseFloat(document.getElementById('customServiceFee').value) || 0;
+    } else {
+        serviceFee = parseFloat(selectedOption) || 0;
+    }
+
+    var penalties = parseFloat(document.getElementById('penalties').value) || 0;
+
+    var totalAmount = currentAmount + serviceFee + penalties;
+
+    if (!isNaN(totalAmount)) {
+        document.getElementById('total').value = totalAmount.toFixed(2);
+    }
+}
+
+// Attach the updateTotalAmount function to the 'input' event of the current amount field
+document.getElementById('current').addEventListener('input', updateTotalAmount);
+
+// Attach the updateTotalAmount function to the 'change' event of the service fee field
+document.getElementById('serviceSelect').addEventListener('change', function() {
+    var selectedOption = this.value;
+    var customServiceFeeInput = document.getElementById('customServiceFee');
+
+    if (selectedOption === 'custom') {
+        customServiceFeeInput.style.display = 'block';
+    } else {
+        customServiceFeeInput.style.display = 'none';
+    }
+
+    updateTotalAmount();
+});
+
+// Add event listener for the 'input' event on the customServiceFee field
+document.getElementById('customServiceFee').addEventListener('input', updateTotalAmount);
+
+function updateBillingDetails() {
+    var selectedUserId = document.getElementById('tableusers_id').value;
+    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.error) {
+                    console.error('Error: ' + response.error);
+                } else {
+                    document.getElementById('previous').value = parseFloat(response.previousBalance) || 0;
+
+                    document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
+
+                    updateTotalAmount(); // Call the updateTotalAmount function to recalculate total
+                }
+            } else {
+                console.error('Error: ' + xhr.status);
+            }
+        }
+    };
+
+    xhr.open('POST', 'get_billing_details.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    
+    // Adjust the data being sent to match what your PHP script expects
+    xhr.send('userId=' + selectedUserId);
+}
+
+document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
+</script>
 
 <!-- Add this modal code after your existing modals -->
 
@@ -302,68 +383,6 @@
 
 </script>
 
-<script>
-function updateTotalAmount() {
-    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
-    var serviceFee = parseFloat(document.getElementById('service').value) || 0;
-    var penalties = parseFloat(document.getElementById('penalties').value) || 0;
-
-    var totalAmount = currentAmount + serviceFee + penalties;
-
-    // Check if totalAmount is a valid number before calling toFixed
-    if (!isNaN(totalAmount)) {
-        document.getElementById('total').value = totalAmount.toFixed(2);
-    }
-}
-
-// Attach the updateTotalAmount function to the 'input' event of the current amount field
-document.getElementById('current').addEventListener('input', updateTotalAmount);
-
-
-
-function updateBillingDetails() {
-    var selectedUserId = document.getElementById('tableusers_id').value;
-    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
-
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-                var response = JSON.parse(xhr.responseText);
-
-                if (response.error) {
-                    console.error('Error: ' + response.error);
-                } else {
-                    document.getElementById('previous').value = parseFloat(response.previousBalance) || 0;
-                    
-                    // Set the service fee to 10 pesos
-                    document.getElementById('service').value = 10;
-                    
-                    document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
-
-                    var totalAmount = currentAmount + 10 + (parseFloat(response.penalties) || 0);
-
-                    // Check if totalAmount is a valid number before calling toFixed
-                    if (!isNaN(totalAmount)) {
-                        document.getElementById('total').value = totalAmount.toFixed(2);
-                    } 
-                }
-            } else {
-                console.error('Error: ' + xhr.status);
-            }
-        }
-    };
-
-    xhr.open('POST', 'get_billing_details.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    
-    // Adjust the data being sent to match what your PHP script expects
-    xhr.send('userId=' + selectedUserId);
-}
-
-document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
-
-</script>
 
 <div class="modal fade" id="collectPaymentModal" tabindex="-1" role="dialog" aria-labelledby="collectPaymentModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

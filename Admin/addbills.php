@@ -77,15 +77,17 @@
         
           <label for="currentAmount" style="width: 190px; margin-bottom: -22px">Current Amount</label>
           <label for="previousBalance" style="width: 250px; margin-left: 205px; ">Previous Balance</label>
-          <input type="text" id="current" name="current" style="width: 200px;" required="required"/>
-          <input type="text" id="previous" name="previous" style="width: 217px;" required="required" readonly 
+          <input type="number" id="current" name="current" style="width: 200px;" required="required"/>
+          <input type="number" id="previous" name="previous" style="width: 217px;" required="required" readonly 
           value="<?= isset($previous) ? $previous : '' ?>" disabled/>
 
            <label for="serviceFee">Service Fee</label>
-          <input type="number" id="service" name="service" readonly/>
-
-          <label type="hidden" for="penalties"></label>
-          <input type="hidden" id="penalties" name="penalties" readonly/>
+          <select name="service" id="service" required>
+          <option>Please Select Here</option> 
+                <option value="5.00" <?php echo isset($service) && $service == 5.00 ? 'selected' : '' ?>>5.00</option>
+                <option value="10.00" <?php echo isset($service) && $service == 10.00 ? 'selected' : '' ?>>10.00</option>
+                <option value="15.00" <?php echo isset($service) && $service == 15.00 ? 'selected' : '' ?>>15.00</option>
+            </select>
 
           <label for="totalAmount">Total Amount</label>
           <input type="number" id="total" name="totalamount" readonly/>
@@ -108,65 +110,53 @@
   </div>
 </div>
 <script>
-function updateTotalAmount() {
-    var currentAmount = parseFloat(document.getElementById('current').value) || 0;
-    var serviceFee = parseFloat(document.getElementById('service').value) || 0;
-    var penalties = parseFloat(document.getElementById('penalties').value) || 0;
-
-    var totalAmount = currentAmount + serviceFee + penalties;
-
-    // Check if totalAmount is a valid number before calling toFixed
-    if (!isNaN(totalAmount)) {
-        document.getElementById('total').value = totalAmount.toFixed(2);
-    }
-}
-
-// Attach the updateTotalAmount function to the 'input' event of the current amount field
-document.getElementById('current').addEventListener('input', updateTotalAmount);
-
-
-
-function updateBillingDetails() {
+  function updateBillingDetails() {
     var selectedUserId = document.getElementById('tableusers_id').value;
     var currentAmount = parseFloat(document.getElementById('current').value) || 0;
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
+            console.log('Response:', xhr.responseText); // Log the entire response for debugging
+
+            try {
                 var response = JSON.parse(xhr.responseText);
 
                 if (response.error) {
                     console.error('Error: ' + response.error);
                 } else {
                     document.getElementById('previous').value = parseFloat(response.previousBalance) || 0;
-                    
-                    // Set the service fee to 10 pesos
-                    document.getElementById('service').value = 10;
-                    
+
+                    // Use the selected service fee from the dropdown
+                    var selectedServiceFee = parseFloat(document.getElementById('service').value) || 0;
+                    document.getElementById('service').value = selectedServiceFee;
+
                     document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
 
-                    var totalAmount = currentAmount + 10 + (parseFloat(response.penalties) || 0);
+                    // Update the totalAmount calculation to include the selected serviceFee
+                    var totalAmount = currentAmount + selectedServiceFee + (parseFloat(response.penalties) || 0);
 
                     // Check if totalAmount is a valid number before calling toFixed
                     if (!isNaN(totalAmount)) {
                         document.getElementById('total').value = totalAmount.toFixed(2);
-                    } 
+                    }
                 }
-            } else {
-                console.error('Error: ' + xhr.status);
+            } catch (e) {
+                console.error('Error parsing JSON: ' + e);
             }
         }
     };
 
     xhr.open('POST', 'get_billing_details.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    
+
     // Adjust the data being sent to match what your PHP script expects
-    xhr.send('userId=' + selectedUserId);
-}
+    xhr.send('tableusers_id=' + selectedUserId);
+  }
 
-document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
+  // Attach the updateBillingDetails function to the 'change' event of the tableusers_id select element
+  document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
 
+  // Attach the updateBillingDetails function to the 'change' event of the service dropdown
+  document.getElementById('service').addEventListener('change', updateBillingDetails);
 </script>
-

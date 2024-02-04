@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="boostrap-icon/bootstrap-icon/font/bootstrap-icons.css">
   <script src="bootstrap-4.6.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
 /* Google Font Link */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');

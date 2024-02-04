@@ -4,7 +4,8 @@
 session_start();
 include('config.php');
 include('Sidebar.php');
-?>
+?><!-- SweetAlert CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <section class="home-section">
     <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> COLLECT PAYMENT</p></div>
@@ -15,69 +16,126 @@ include('Sidebar.php');
                 <div class="card-body">
                     <div class="container-fluid">
                         
-                        <?php
-                       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
-    $reading_date = $_POST['reading_date'];
-    $previous = isset($_POST['previous']) ? $_POST['previous'] : null;
-    $reading = $_POST['reading'];
-    $service = $_POST['service'];
-    $total = $_POST['total'];
-    $due_date = $_POST['due_date'];
-    $status = $_POST['status'];
-    $amountpay = $_POST['amountpay'];
-    $paymode = $_POST['paymode'];
+             <?php
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                            $id = $_POST['id'];
+                            $reading_date = $_POST['reading_date'];
+                            $previous = isset($_POST['previous']) ? $_POST['previous'] : null;
+                            $reading = $_POST['reading'];
+                            $service = $_POST['service'];
+                            $total = $_POST['total'];
+                            $due_date = $_POST['due_date'];
+                            $status = $_POST['status'];
+                            $paymode = $_POST['paymode'];
+                            $amountpay = $_POST['amountpay']; // Assuming $_POST['amount'] is the payment amount
 
-    $update_query = $conn->prepare("UPDATE tablebilling_list 
-                                    SET reading_date = ?, previous = ?, reading = ?, service = ?, total = ?, due_date = ?, status = ?, amountpay = ?, paymode = ? 
-                                    WHERE tableusers_id = ?");
-    $update_query->bind_param("ssssssssss", $reading_date, $previous, $reading, $service, $total, $due_date, $status, $amountpay, $paymode, $id);
+                            $update_query = $conn->prepare("UPDATE tablebilling_list 
+                                                        SET reading_date = ?, previous = ?, reading = ?, service = ?, total = ?, due_date = ?, status = ?, amountpay = ?, paymode = ? 
+                                                        WHERE tableusers_id = ?");
+                            $update_query->bind_param("ssssssssss", $reading_date, $previous, $reading, $service, $total, $due_date, $status, $amountpay, $paymode, $id);
 
-    if ($update_query->execute()) {
-        if (isset($_POST['paymode'])) {
-            $paymode = $_POST['paymode'];
-            $payment_status = ($amountpay > 0) ? 1 : 0;
+                            if ($update_query->execute()) {
+                                if (isset($_POST['paymode'])) {
+                                    $paymode = $_POST['paymode'];
+                                    $payment_status = ($amountpay > 0) ? 1 : 0;
 
-            $status_query = $conn->prepare("UPDATE tablebilling_list SET status = ? WHERE tableusers_id = ?");
-            $status_query->bind_param("ss", $payment_status, $id);
-            $status_query->execute();
+                                    // Check if the billing_id exists before updating status and inserting payment details
+                                    $billing_id_exists_query = $conn->prepare("SELECT id FROM tablebilling_list WHERE tableusers_id = ?");
+                                    $billing_id_exists_query->bind_param("s", $id);
+                                    $billing_id_exists_query->execute();
+                                    $billing_id_exists_result = $billing_id_exists_query->get_result();
 
-            // Removed the JSON response here
-            // Add JavaScript alert and redirection
-        echo "<script>
-                alert('Payment Successfully.');
-                window.location.href = 'billing_transaction.php';
-              </script>";
-        } else {
-            echo json_encode(array('status' => 'error', 'message' => 'Failed to update billing information.'));
-        }
-    } else {
-        echo json_encode(array('status' => 'error', 'message' => 'Failed to update billing information.'));
-    }
+                                    if ($billing_id_exists_result && $billing_id_exists_result->num_rows > 0) {
+                                        $billing_row = $billing_id_exists_result->fetch_assoc();
+                                        $billing_id = $billing_row['id'];
 
-    exit();
-}
+                                        // Billing ID exists, proceed with updating status and inserting payment details
+                                        $status_query = $conn->prepare("UPDATE tablebilling_list SET status = ? WHERE id = ?");
+                                        $status_query->bind_param("ss", $payment_status, $billing_id);
 
-if (isset($_GET['tableusers_id'])) {
-    
-    $user = $conn->prepare("SELECT b.*, 
-                              CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
-                              p.receipt_path, p.reference_id
-                        FROM `tablebilling_list` b 
-                        INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
-                        LEFT JOIN `tablepayments` p ON b.tableusers_id = p.id
-                        WHERE c.Id = ?
-                        ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
-    $user->bind_param("s", $_GET['tableusers_id']);
-    $user->execute();
-    $meta = $user->get_result();
+                                        if ($status_query->execute()) {
+                                            $insert_payment_query = $conn->prepare("INSERT INTO tablepayments (billing_id, amount) VALUES (?, ?)");
+                                            $insert_payment_query->bind_param("ii", $billing_id, $amountpay);
 
-    if ($meta && $meta->num_rows > 0) {
-        $meta = $meta->fetch_assoc();
-    } else {
-        echo '<script> alert("User not found."); location.replace("billing_transaction.php");</script>';
-    }
-}
+                                            if ($insert_payment_query->execute()) {
+                                                // Success notification
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Payment Successfully',
+                                                            text: 'Payment has been successfully updated.',
+                                                            confirmButtonColor: '#4CAF50', // Green color
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                window.location.href = 'billing_transaction.php';
+                                                            }
+                                                        });
+                                                    </script>";
+                                            } else {
+                                                // Error notification
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Error',
+                                                            text: 'Failed to insert payment details. Error: " . $conn->error . "',
+                                                        });
+                                                    </script>";
+                                            }
+                                        } else {
+                                            // Error notification
+                                            echo "<script>
+                                                    Swal.fire({
+                                                        icon: 'error',
+                                                        title: 'Error',
+                                                        text: 'Failed to update billing status. Error: " . $conn->error . "',
+                                                    });
+                                                </script>";
+                                        }
+                                    } else {
+                                        // Error notification
+                                        echo "<script>
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error',
+                                                    text: 'Failed to update billing information.',
+                                                });
+                                            </script>";
+                                    }
+                                } else {
+                                    // Error notification
+                                    echo "<script>
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: 'Failed to update billing information. Error: " . $conn->error . "',
+                                            });
+                                        </script>";
+                                }
+
+                                exit();
+                            }
+                        }
+
+                        if (isset($_GET['tableusers_id'])) {
+
+                            $user = $conn->prepare("SELECT b.*, 
+                                  CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
+                                  p.receipt_path, p.reference_id, p.amount
+                            FROM `tablebilling_list` b 
+                            INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
+                            LEFT JOIN `tablepayments` p ON b.tableusers_id = p.id
+                            WHERE c.Id = ?
+                            ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
+                            $user->bind_param("s", $_GET['tableusers_id']);
+                            $user->execute();
+                            $meta = $user->get_result();
+
+                            if ($meta && $meta->num_rows > 0) {
+                                $meta = $meta->fetch_assoc();
+                            } else {
+                                echo '<script> alert("User not found."); location.replace("billing_transaction.php");</script>';
+                            }
+                        }
                         ?>
                         <form method="POST" id="billing-form">
                             <input type="hidden" name="id" value="<?= isset($meta['tableusers_id']) ? $meta['tableusers_id'] : '' ?>">
@@ -164,7 +222,7 @@ if (isset($_GET['tableusers_id'])) {
                              <div class="form-group mb-3">
                                 <label for="amountpay" class="control-label">Charge Amount</label>
                                 <input type="text" class="form-control form-control-sm rounded-0" id="amountpay"
-                                       name="amountpay" required
+                                       name="amountpay" id="amountpay" required
                                        value="<?= isset($meta['amountpay']) ? $meta['amountpay'] : '' ?>"/>
                             </div>
                              <div class="form-group">

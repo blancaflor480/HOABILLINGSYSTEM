@@ -3,7 +3,13 @@ session_start();
 include('config.php');
 include('Sidebar.php');
 ?>
+<head>
+    <!-- SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
 
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
 <section class="home-section">
     <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> EDIT BILLS</p></div>
     <br><br>
@@ -12,7 +18,7 @@ include('Sidebar.php');
             <div class="card rounded-0 shadow">
                 <div class="card-body">
                     <div class="container-fluid">
-                        <?php
+                               <?php
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $id = $_POST['id'];
                             $reading_date = $_POST['reading_date'];
@@ -29,9 +35,27 @@ include('Sidebar.php');
                             $update_query->bind_param("ssssssss", $reading_date, $previous, $reading, $service, $total, $due_date, $status, $id);
 
                             if ($update_query->execute()) {
-                                echo json_encode(array('status' => 'success', 'message' => 'Billing information updated successfully.'));
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "success",
+                                        title: "Billing information updated successfully.",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    }).then(() => {
+                                        window.location.href = "billing.php";
+                                    });
+                                </script>';
+                                exit();
                             } else {
-                                echo json_encode(array('status' => 'error', 'message' => 'Failed to update billing information.'));
+                                echo '<script>
+                                    Swal.fire({
+                                        icon: "error",
+                                        title: "Failed to update billing information.",
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                </script>';
+                                exit();
                             }
                             exit();
                         }
@@ -50,7 +74,7 @@ include('Sidebar.php');
                             if ($meta && $meta->num_rows > 0) {
                                 $meta = $meta->fetch_assoc();
                             } else {
-                                echo '<script> alert("User not found."); location.replace("billing.php");</script>';
+                                echo '<script> Swal.fire("User not found.", "", "error").then(() => location.replace("billing.php")); </script>';
                             }
                         }
                         ?>
@@ -91,11 +115,23 @@ include('Sidebar.php');
                                        value="<?= isset($meta['reading']) ? $meta['reading'] : '' ?>"/>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="service" class="control-label">Service Fee</label>
-                                <input type="text" class="form-control form-control-sm rounded-0" id="service"
-                                       name="service" required readonly
-                                       value="<?= isset($meta['service']) ? $meta['service'] : $_settings->info('service_fee') ?>"/>
+                                <label for="service" class="control-label">Service</label>
+                                <select name="service" id="service"
+                                        class="form-control form-control-sm rounded-0" required>
+                                   <option value="" disabled selected>Please Select Here</option>
+                                    <option value="5.00" <?php echo isset($meta['service']) && $meta['service'] == 5.00 ? 'selected' : '' ?>>
+                                        5.00
+                                    </option>
+                                    <option value="10.00" <?php echo isset($meta['service']) && $meta['service'] == 10.00 ? 'selected' : '' ?>>
+                                        10.00
+                                    </option>
+                                    <option value="custom">Custom</option>
+
+                                </select>
+                                <input type="text" id="customServiceFee" name="customServiceFee" style="display: none;" />
+
                             </div>
+                            
                             <div class="form-group mb-3">
                                 <label for="total" class="control-label">Total Bill</label>
                                 <input type="text" 
@@ -144,6 +180,15 @@ include('Sidebar.php');
         var previousAmount = parseFloat(document.getElementById('previous').value) || 0;
         var serviceFee = parseFloat(document.getElementById('service').value) || 0;
 
+        if (serviceFee === 0) {
+            // If service fee is 0, show the custom service fee input
+            document.getElementById('customServiceFee').style.display = 'block';
+            serviceFee = parseFloat(document.getElementById('customServiceFee').value) || 0;
+        } else {
+            // If service fee is not 0, hide the custom service fee input
+            document.getElementById('customServiceFee').style.display = 'none';
+        }
+
         var totalAmount = currentAmount + previousAmount + serviceFee;
 
         // Check if totalAmount is a valid number before calling toFixed
@@ -170,7 +215,7 @@ include('Sidebar.php');
                         document.getElementById('penalties').value = parseFloat(response.penalties) || 0;
 
                         var totalAmount = parseFloat(response.previousBalance) + 10 +
-                                          (parseFloat(response.penalties) || 0);
+                            (parseFloat(response.penalties) || 0);
 
                         // Check if totalAmount is a valid number before calling toFixed
                         if (!isNaN(totalAmount)) {
@@ -194,6 +239,8 @@ include('Sidebar.php');
 
     document.getElementById('tableusers_id').addEventListener('change', updateBillingDetails);
 
-    // Attach the updateTotalAmount function to the 'input' event of the reading field
+    // Attach the updateTotalAmount function to the 'input' event of the reading and service fields
     document.getElementById('reading').addEventListener('input', updateTotalAmount);
+    document.getElementById('service').addEventListener('change', updateTotalAmount);
+    document.getElementById('customServiceFee').addEventListener('input', updateTotalAmount);
 </script>

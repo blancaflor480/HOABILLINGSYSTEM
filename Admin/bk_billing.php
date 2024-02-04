@@ -15,7 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $billDueDate = $_POST['billDueDate'];
     $currentAmount = $_POST['current'];
     $penalties = $_POST['penalties'];
-    $totalAmount = $_POST['totalamount'];
+    $serviceFee = $_POST['service']; // Get the service fee from the user input
+    $totalAmount = floatval($currentAmount) + floatval($penalties) + floatval($serviceFee); // Calculate total amount
+
     $status = $_POST['status'];
 
     // Extracting ID from $tableusers_id
@@ -31,9 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error checking user: " . $conn->error;
     } elseif ($userResult->num_rows > 0) {
         // User found, proceed with billing creation
-
-        // Set the default service fee to 10 pesos
-        $serviceFee = 10;
 
         // Insert the billing details into your database using prepared statements
         $insertQuery = $conn->prepare("INSERT INTO tablebilling_list (tableusers_id, reading_date, due_date, reading, penalties, service, total, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -70,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                Total Amount: $totalAmount<br>
                                Status: $status<br><br>
                                Please log in to check the details.<br>
-
 
                                <b>Disclaimer</b>: The message in and bills to this e-mail may be privileged and/or confidential and are intended only for authorized recipients. If you are not its intended recipient, please delete. Views and opinions expressed in this e-mail are those of the sender. They do not necessarily reflect the views of Rosedale Residence and its officials.
 

@@ -163,73 +163,77 @@ td, th {
   <section class="home-section">
      <div class="text"><li class="bi bi-person-fill" style="list-style: none;"></i> Hi <?php echo $row['fname']  ?>!</div>
 	  <div id="main">
-
 		
-		<!--<div class="col-div-6">
-		<div class="profile">
-
-			<img src="images/users.png" class="pro-img" />
-			<i class="fa fa-user-circle-o" aria-hidden="true"></i>
-			<p><?php echo $row['fname']  ?> <span><?php echo $row['type']  ?> </span></p>
-		</div>
-	</div>
-		<div class="clearfix"></div>
-	-->
 <div>  
 <h4 style="font-weight: 500;">Welcome to Billing Management System</h4> 
 </div>   
-<!--< ?php 
+<?php 
 include 'config.php';
-$query = mysqli_query($conn, "SELECT * FROM tablebilling_list WHERE status='1' AND tableusers_id='1'");
+$email = $_SESSION['email'];
+
+$query = mysqli_query($conn, "SELECT * FROM tablebilling_list WHERE status='1' AND tableusers_id='?'");
 if (mysqli_num_rows($query) > 0){
-     $row = mysqli_fetch_assoc($query);
-   
- }
-?>-->
+    $row = mysqli_fetch_assoc($query);
+}
+?>
 
 		<div class="clearfix"></div>
 		<br/>
 		
 		
-		<div class="col-div-3" >
-			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><!--< ?php echo $row['numberofpaid'] ?>-->...<br/><span style="font-size: 15px">Payed Bills</span></p>
-				<i class="bi bi-paypal box-icons"></i>
-			</div>
-		</div>
+		<div class="col-div-3">
+<a href="billing.php">
+    <div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+        <p><?php echo $row['status'] ?? 0 ?><br/><span style="font-size: 15px">Payed Bills</span></p>
+        <i class="bi bi-paypal box-icons"></i>
+    </div>
+    </a>
+</div>
+
 
 <?php
 include 'config.php';
+$email = $_SESSION['email'];
 
-$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofpending FROM tablebilling_list WHERE status = 0");
+$query = mysqli_query($conn_String, "SELECT COUNT(id) AS numberofpending FROM tablebilling_list WHERE status = 2");
+$row = mysqli_fetch_assoc($query);
 
 if (mysqli_num_rows($query) > 0) {
-    $row = mysqli_fetch_assoc($query);
-
     $numberofpending = $row['numberofpending'];
 } else {
-    $numberofpending = 0;
+    $numberofpending = 2;
 }
-?>		
-		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><?php echo $row['numberofpending'] ?><br/><span style="font-size: 15px">Pending Billing</span></p>
-				<i class="bi bi-receipt box-icons"></i>
-			</div>
-		</div>
-<!--< ?php 
+?>
+
+<div class="col-div-3">
+<a href="billing.php">
+    <div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+        <p><?php echo $numberofpending ?><br/><span style="font-size: 15px">Pending Billing</span></p>
+        <i class="bi bi-receipt box-icons"></i>
+    </div>
+</a>
+</div>
+<?php 
 include 'config.php';
-$query = mysqli_query($conn, "SELECT count(id) AS numberofcomplaint, id from complaint");
+$email = $_SESSION['email'];
+
+// Assuming your tablecomplaint has a column for the user's email
+$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE email = '$email' AND stats = 0");
+
 if (mysqli_num_rows($query) > 0){
-     $row = mysqli_fetch_assoc($query);
- }
-?>-->
+    $row = mysqli_fetch_assoc($query);
+} else {
+    $row['numberofcomplaint'] = 0;
+}
+?>
 		
 		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-				<p><!--< ?php echo $row['numberofcomplaint']; ?>-->...<br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
+		<a href="complaint.php">
+    <div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+				<p><?php echo $row['numberofcomplaint']; ?><br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
 				<i class="bx bx-envelope box-icons"></i>
 			</div>
+    </a>
 		</div>
 <?php 
 include 'config.php';

@@ -44,9 +44,9 @@ if (isset($_POST['update'])) {
         move_uploaded_file($_FILES["image"]["tmp_name"], "uploads/" . $image_name);
 
         // Update the user with the new image using parameterized query
-        $stmt = $conn_String->prepare("UPDATE tableusers SET fname=?, mname=?, lname=?, bday=?, gender=?, contact=?, address=?, category=?, image=? WHERE email=?");
-        $stmt->bind_param("sssssssss", $fname, $mname, $lname, $bday, $gender, $contact, $address, $category, $image_name, $email);
-        $stmt->execute();
+$stmt = $conn_String->prepare("UPDATE tableusers SET fname=?, mname=?, lname=?, bday=?, gender=?, contact=?, address=?, category=?, image=? WHERE email=?");
+$stmt->bind_param("ssssssssss", $fname, $mname, $lname, $bday, $gender, $contact, $address, $category, $image_name, $email);
+$stmt->execute();
 
         if ($stmt->affected_rows > 0) {
             echo '<script>alert("Successfully Update customer Info!"); window.location="dashboard.php"</script>';

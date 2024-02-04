@@ -16,7 +16,7 @@ include('Sidebar.php');
                 <div class="card-body">
                     <div class="container-fluid">
                         
-             <?php
+            <!--< ?php
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $id = $_POST['id'];
                             $reading_date = $_POST['reading_date'];
@@ -116,6 +116,171 @@ include('Sidebar.php');
                             }
                         }
 
+                        if (isset($_GET['tableusers_id'])) {
+
+                            $user = $conn->prepare("SELECT b.*, 
+                      CONCAT(c.lname, ', ', c.fname, ' ', COALESCE(c.mname,'')) AS `name`,
+                      p.receipt_path, p.reference_id, p.amount
+                FROM `tablebilling_list` b 
+                INNER JOIN `tableusers` c ON b.tableusers_id = c.Id 
+                LEFT JOIN `tablepayments` p ON b.id = p.billing_id
+                WHERE c.Id = ?
+                ORDER BY UNIX_TIMESTAMP(b.reading_date) DESC, `name` ASC ");
+                            $user->bind_param("s", $_GET['tableusers_id']);
+                            $user->execute();
+                            $meta = $user->get_result();
+
+                            if ($meta && $meta->num_rows > 0) {
+                                $meta = $meta->fetch_assoc();
+                            } else {
+                                echo '<script> alert("User not found."); location.replace("billing_transaction.php");</script>';
+                            }
+                        }
+                        ?>--><?php 
+                        use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
+
+function sendPaymentNotification($userId, $userEmail) {
+    global $conn;
+
+    $subject = 'Payment Successfully Updated';
+    $message = 'Dear Homeowner, your payment has been successfully paid.';
+
+    $mail = new PHPMailer(true);
+
+    try {
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'billinghoa@gmail.com';
+        $mail->Password   = 'sqtrxkdxrkbalgfu';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port       = 465;
+
+        $mail->setFrom('billinghoa@gmail.com');
+        $mail->addAddress($userEmail);
+
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $message;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $reading_date = $_POST['reading_date'];
+    $previous = isset($_POST['previous']) ? $_POST['previous'] : null;
+    $reading = $_POST['reading'];
+    $service = $_POST['service'];
+    $total = $_POST['total'];
+    $due_date = $_POST['due_date'];
+    $status = $_POST['status'];
+    $paymode = $_POST['paymode'];
+    $amountpay = $_POST['amountpay'];
+
+    $update_query = $conn->prepare("UPDATE tablebilling_list 
+                                    SET reading_date = ?, previous = ?, reading = ?, service = ?, total = ?, due_date = ?, status = ?, amountpay = ?, paymode = ? 
+                                    WHERE tableusers_id = ?");
+    $update_query->bind_param("ssssssssss", $reading_date, $previous, $reading, $service, $total, $due_date, $status, $amountpay, $paymode, $id);
+
+    if ($update_query->execute()) {
+        if (isset($_POST['paymode'])) {
+            $paymode = $_POST['paymode'];
+            $payment_status = ($amountpay > 0) ? 1 : 0;
+
+            $billing_id_exists_query = $conn->prepare("SELECT id FROM tablebilling_list WHERE tableusers_id = ?");
+            $billing_id_exists_query->bind_param("s", $id);
+            $billing_id_exists_query->execute();
+            $billing_id_exists_result = $billing_id_exists_query->get_result();
+
+            if ($billing_id_exists_result && $billing_id_exists_result->num_rows > 0) {
+                $billing_row = $billing_id_exists_result->fetch_assoc();
+                $billing_id = $billing_row['id'];
+
+                $status_query = $conn->prepare("UPDATE tablebilling_list SET status = ? WHERE id = ?");
+                $status_query->bind_param("ss", $payment_status, $billing_id);
+
+                if ($status_query->execute()) {
+                    $insert_payment_query = $conn->prepare("INSERT INTO tablepayments (billing_id, amount) VALUES (?, ?)");
+                    $insert_payment_query->bind_param("ii", $billing_id, $amountpay);
+
+                    if ($insert_payment_query->execute()) {
+                        // Fetch user email for sending notification
+                        $userEmailQuery = $conn->prepare("SELECT email FROM `tableusers` WHERE Id = ?");
+                        $userEmailQuery->bind_param("s", $id);
+                        $userEmailQuery->execute();
+                        $userEmailResult = $userEmailQuery->get_result();
+
+                        if ($userEmailResult && $userEmailResult->num_rows > 0) {
+                            $userEmailData = $userEmailResult->fetch_assoc();
+                            $userEmail = $userEmailData['email'];
+
+                            // Send payment notification
+                            sendPaymentNotification($id, $userEmail);
+                        }
+
+                        echo "<script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Payment Successfully',
+                                    text: 'Payment has been successfully updated.',
+                                    confirmButtonColor: '#4CAF50'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = 'billing_transaction.php';
+                                    }
+                                });
+                            </script>";
+                    } else {
+                        echo "<script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to insert payment details. Error: " . $conn->error . "'
+                                });
+                            </script>";
+                    }
+                } else {
+                    echo "<script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to update billing status. Error: " . $conn->error . "'
+                            });
+                        </script>";
+                }
+            } else {
+                echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to update billing information.'
+                        });
+                    </script>";
+            }
+        } else {
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to update billing information. Error: " . $conn->error . "'
+                    });
+                </script>";
+        }
+
+        exit();
+    }
+}
+                        
+                        
                         if (isset($_GET['tableusers_id'])) {
 
                             $user = $conn->prepare("SELECT b.*, 

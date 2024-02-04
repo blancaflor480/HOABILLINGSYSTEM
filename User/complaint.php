@@ -73,7 +73,7 @@ if (!$result) {
 </style>
 
 <section class="home-section">
-  <div class="text">Complaint</div>
+  <div class="text"> <i class="bx bx-envelope"></i> Complaint</div>
   <div class="col-lg-12">
     <div class="card">
       <h5 class="card-header">List of Customer Complaint
@@ -93,10 +93,10 @@ if (!$result) {
           </thead>
           <tbody>
             <?php
-            $qry = $conn->prepare("SELECT Id, tableusers_id, email, typecomplaint, description, status, date_time FROM `tablecomplaint` WHERE `tableusers_id` = ?");
+            $qry = $conn->prepare("SELECT Id, tableusers_id, email, typecomplaint, description, stats, date_time FROM `tablecomplaint` WHERE `tableusers_id` = ?");
 $qry->bind_param("i", $result['Id']);
 $qry->execute();
-$qry->bind_result($complaintId, $tableusers_id, $email, $typecomplaint, $description, $status, $date_time);
+$qry->bind_result($complaintId, $tableusers_id, $email, $typecomplaint, $description, $stats, $date_time);
 
 while ($qry->fetch()) {
 ?>
@@ -106,7 +106,7 @@ while ($qry->fetch()) {
         <td><?= $typecomplaint; ?></td>
         <td>
         <?php
-switch ($status) {
+switch ($stats) {
     case 0:
         $badge = '<span class="badge badge-danger bg-gradient-danger text-lg px-3">UNPROCESS</span>';
         break;

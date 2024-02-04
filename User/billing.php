@@ -72,12 +72,12 @@ if (!$result) {
 </style>
 
 <section class="home-section">
-    <div class="text">Billing</div>
+    <div class="text"><i class="bx bx-pie-chart-alt-2"></i> Billing</div>
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">Dues Bills
                 <a class="btn btn-primary float-right mx-2" href="billing_history.php">
-                    <span class="bi bi-receipt"></span> History Transaction
+                    <span class="bi bi-receipt"></span  > History Transaction
                 </a>
                 <a class="btn btn-warning float-right" href="complaint.php">
                     <span class="bx bx-envelope"></span> Complaint
@@ -98,7 +98,7 @@ if (!$result) {
                     </thead>
 
                     <tbody>
-                        <?php
+                    <?php
                         $qry = $conn->prepare("SELECT b.id, b.reading_date, b.due_date, concat(c.lname, ', ', c.fname, ' ', coalesce(c.mname,'')) as `name`, b.status, b.total
                       FROM `tablebilling_list` b 
                       INNER JOIN tableusers c ON b.tableusers_id = c.id 
@@ -136,6 +136,7 @@ if (!$result) {
                                 </td>
                                 <td><b><?= $total; ?><b></td>
                                 <td>
+                                <?php if ($status != 2): ?>
     <button type="button" value="<?= $id; ?>" class="payBtn btn btn-success btn-sm" 
                 data-toggle="modal" data-target="#paymentModal" 
                 data-total="<?= $total; ?>"
@@ -143,6 +144,7 @@ if (!$result) {
                 onclick="selectPaymentOption('online', <?= $id; ?>, <?= $total; ?>)">
                 <i class="bi bi-credit-card"></i> Pay
             </button>
+            <?php endif; ?>
 </td>
                             </tr>
                         <?php

@@ -81,7 +81,7 @@
 </style>
 
 <section class="home-section">
-<div class="text"><small style="font-size: 1rem">Billing Due ></small>  Billing History Transaction</div>
+<div class="text"><small style="font-size: 1rem"><i class="bx bx-pie-chart-alt-2"></i> Billing Due ></small>  Billing History Transaction</div>
     <div class="col-lg-12">
         <div class="card">
           <h5 class="card-header">Bills History
@@ -134,18 +134,23 @@
                     <td><?php echo $row['previous']; ?></td>
                     <td><b><?php echo $row['total']; ?></b></td>
                     <td>
-                    <?php
-								  switch($row['status']){
-									case 0:
-										echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3" Style="Height: 20px; font-size: 0.7rem;">
-                                PENDING</span>';
-                    break;
-									case 1:
-										echo '<span class="badge badge-success bg-gradient-success text-sm px-3 ">Paid</span>';
-										break;
-								}
-								?>
-                    </td>
+    <?php
+        $status = $row['status']; // Assuming 'status' is the column name in your database table for the billing status
+        switch ($status) {
+            case 0:
+                echo '<span class="badge badge-danger  bg-gradient-danger text-lg px-3">UNPAID</span>';
+                break;
+            case 1:
+                echo '<span class="badge badge-success  bg-gradient-success text-lg px-3">PAID</span>';
+                break;
+            case 2:
+                echo '<span class="badge badge-warning  bg-gradient-warning text-lg px-3">PENDING</span>';
+                break;
+            default:
+                echo '<span class="badge badge-secondary  bg-gradient-secondary text-lg px-3">UNKNOWN</span>';
+        }
+    ?>
+</td>
                     
                    </tr>
                 <?php endwhile ?>

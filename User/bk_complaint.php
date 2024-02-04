@@ -12,12 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $typecomplaint = mysqli_real_escape_string($conn, $_POST['typecomplaint']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $bill_id = mysqli_real_escape_string($conn, $_POST['bill_id']);
-    $status = 0; // Set default status to '0' (Unprocessed)
+    $stats = 0; // Set default status to '0' (Unprocessed)
 
     // Use prepared statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO tablecomplaint (tableusers_id, typecomplaint, description, bill_id, status) 
+    $stmt = $conn->prepare("INSERT INTO tablecomplaint (tableusers_id, typecomplaint, description, bill_id, stats) 
                             VALUES ((SELECT id FROM tableusers WHERE email = ?), ?, ?, ?, ?)");
-    $stmt->bind_param("ssssi", $email, $typecomplaint, $description, $bill_id, $status);
+    $stmt->bind_param("ssssi", $email, $typecomplaint, $description, $bill_id, $stats);
 
     $result = $stmt->execute();
 

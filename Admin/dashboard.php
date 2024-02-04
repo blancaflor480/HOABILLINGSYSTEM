@@ -157,16 +157,7 @@ td, th {
 	  <div id="main">
 
 		
-		<!--<div class="col-div-6">
-		<div class="profile">
-
-			<img src="images/users.png" class="pro-img" />
-			<i class="fa fa-user-circle-o" aria-hidden="true"></i>
-			<p><?php echo $row['fname']  ?> <span><?php echo $row['type']  ?> </span></p>
-		</div>
-	</div>
-		<div class="clearfix"></div>
-	-->
+		
 <div>  
 <h4 style="font-weight: 500;">Welcome to Billing Management System</h4> 
 </div>   
@@ -207,10 +198,10 @@ if (mysqli_num_rows($query) > 0){
       </a>
 			</div>
 		</div>
-<?php
+    <?php
 include 'config.php';
 
-$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE stats = 0");
+$query = mysqli_query($conn, "SELECT COUNT(id) AS numberofcomplaint FROM tablecomplaint WHERE stats IN (0, 1, 2)");
 
 if (mysqli_num_rows($query) > 0) {
     $row = mysqli_fetch_assoc($query);
@@ -221,14 +212,14 @@ if (mysqli_num_rows($query) > 0) {
 }
 ?>
 		
-		<div class="col-div-3">
-			<div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
-			<a href="complaint.php" style="text-decoration: none;">	
-      <p><?php echo $row['numberofcomplaint']; ?><br/><span style="font-size: 15px">Unprocessed Complaint</span></p>
-				<i class="bx bx-envelope box-icons"></i>
-</a>
-			</div>
-		</div>
+<div class="col-div-3">
+    <div class="box" style="border-radius: 10px; background-color: #31304D; width: 90%">
+        <a href="complaint.php" style="text-decoration: none;">	
+            <p><?php echo $numberofcomplaint; ?><br/><span style="font-size: 15px">Complaint</span></p>
+            <i class="bx bx-envelope box-icons"></i>
+        </a>
+    </div>
+</div>
 <?php 
 include 'config.php';
 $query = mysqli_query($conn, "SELECT count(Id) AS numberofaccount, Id from tableaccount");

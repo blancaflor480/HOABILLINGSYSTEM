@@ -137,7 +137,7 @@ include('Sidebar.php');
                             }
                         }
                         ?>--><?php 
-                        use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
@@ -447,17 +447,73 @@ function confirmAndPrint() {
 
     // Construct the HTML content for printing
     var printContent = `
-        <html>
-        <head>
-            <title>Billing Information</title>
-        </head>
-        <body>
-            <h1>Billing Information</h1>
-            <p>Client: ${document.getElementById('tableusers_id').options[document.getElementById('tableusers_id').selectedIndex].text}</p>
-            <p>Reading Date: ${document.getElementById('reading_date').value}</p>
-            <!-- Add more content as needed -->
-        </body>
-        </html>
+    <html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .receipt-container {
+            width: 80mm; /* Set the width based on the roll width */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 0;
+            font-size: 1.5em; /* Larger font size for the title */
+        }
+
+        p {
+            margin: 4px 0;
+            color: #555;
+            font-size: 0.7em; /* Smaller font size for paragraphs */
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+    <title>Billing Receipt</title>
+</head>
+<body>
+    <div class="receipt-container">
+        <h1>Billing Receipt</h1>
+        <span>-----------------------------------------</span>
+        <p><strong>Fullname:</strong> ${document.getElementById('tableusers_id').options[document.getElementById('tableusers_id').selectedIndex].text}</p>
+        <p><strong>Reading Date:</strong> ${document.getElementById('reading_date').value}</p>
+        <p><strong>Due Date:</strong> ${document.getElementById('due_date').value}</p>
+        <p><strong>Current Amount:</strong> ${document.getElementById('reading').value}</p>
+        <p><strong>Service Fee:</strong> ${document.getElementById('service').value}</p>
+        <p><strong>Total Bills:</strong> ${document.getElementById('total').value}</p>
+        <p><strong>Status:</strong> ${document.getElementById('status').options[document.getElementById('status').selectedIndex].text}</p>
+        <p><strong>Charges Amount:</strong> ${document.getElementById('amountpay').value}</p>
+        <p><strong>Type of payment:</strong> ${document.getElementById('paymode').options[document.getElementById('paymode').selectedIndex].text}</p>
+        <span>-----------------------------------------</span>
+        </div>
+
+    <div class="footer">
+        <p>Thank you for your payment!</p>
+    </div>
+</body>
+</html>
+
     `;
 
     // Create a new window and write the HTML content

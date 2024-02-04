@@ -26,6 +26,7 @@ if (!$result) {
 <link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <style>
     .card {

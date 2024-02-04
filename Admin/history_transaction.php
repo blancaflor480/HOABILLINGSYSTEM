@@ -77,7 +77,7 @@ $type  = $row['type'];
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
-                <?php if ($type == 'Admin'): ?>
+               
             
                     <a href="history_transaction.php">
                         <button type="button" style="margin-left: 5px;" class="btn btn-danger float-right">
@@ -107,7 +107,7 @@ $type  = $row['type'];
         </a>
     </div>
 </div>
-                <?php endif; ?>
+          
             </h5>
             <div class="card-body">
                 <table class="table table-hover table-striped table-bordered" id="list">

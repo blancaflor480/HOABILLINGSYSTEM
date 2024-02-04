@@ -79,7 +79,7 @@ $type  = $row['type'];
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
-                <?php if ($type == 'Admin'): ?>
+                
             <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                         <span class="bi bi-receipt"></span> Generate Bills
                     </button>
@@ -95,7 +95,7 @@ $type  = $row['type'];
                             <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
                         </div>
                     </div>
-                <?php endif; ?>
+                
             </h5>
             <div class="card-body">
                 <table class="table table-hover table-striped table-bordered" id="list">

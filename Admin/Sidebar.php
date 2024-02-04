@@ -3,7 +3,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>Admin</title>
+    <title>RRBMS | Ebilling</title>
     <!--<link rel="stylesheet" href="style.css" />-->
     <!-- Boxicons CDN Link -->
   <link rel="stylesheet" href="Bootstrap/boxicons-master/css/boxicons.min.css">
@@ -275,6 +275,21 @@
     </style>
   </head>
   <body>
+  <?php
+include 'config.php';
+  if (isset($_SESSION['uname'])) {
+    $uname = $_SESSION['uname'];
+} else {
+    // Handle the case when the session variable is not set, redirect or show an error.
+    header("Location: index.php");
+    exit();
+}
+
+$query  = mysqli_query($conn, "SELECT * FROM tableaccount WHERE uname = '$uname'") or die(mysqli_error());
+$row = mysqli_fetch_array($query);
+$type  = $row['type'];
+?>
+
     <div class="sidebar">
       <div class="logo-details">
         <i class="bx bx-building-house icon"></i>
@@ -290,6 +305,7 @@
           </a>
           <span class="tooltip">Dashboard</span>
         </li>
+        <?php if ($type == 'Admin'): ?>
         <li>
           <a href="customer.php">
             <i class="bx bx-group"></i>
@@ -297,6 +313,7 @@
           </a>
           <span class="tooltip">Homeowners</span>
         </li>
+        <?php endif; ?>
         <li>
           <a href="billing.php">
             <i class="bx bx-pie-chart-alt-2"></i>
@@ -312,6 +329,7 @@
           <span class="tooltip">Transaction</span>
         </li>
         
+        <?php if ($type == 'Admin'): ?>
         <li>
           <a href="accounts.php">
             <i class="bx bx-user"></i>
@@ -319,6 +337,7 @@
           </a>
           <span class="tooltip">Account</span>
         </li>
+        <?php endif; ?>
         <li>
           <a href="monthlyreport.php">
             <i class="bx bx-folder"></i>
@@ -333,6 +352,8 @@
           </a>
           <span class="tooltip">Complaint</span>
         </li>
+        
+        <?php if ($type == 'Admin'): ?>
         <li>
           <a href="settings.php">
             <i class="bx bx-cog"></i>
@@ -340,7 +361,7 @@
           </a>
           <span class="tooltip">Setting</span>
         </li>
-
+        <?php endif; ?>
 
 <?php 
 include ('config.php');

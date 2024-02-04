@@ -19,7 +19,9 @@ $type  = $row['type'];
 <link rel="stylesheet" type="text/css" href="DataTables-1.13.8/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/jquery-3.5.1.js"></script>
 <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
-
+<!-- SweetAlert CSS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Alertify CSS -->
 <style>
   .card {
     margin: 0px;
@@ -77,16 +79,14 @@ $type  = $row['type'];
     <div class="col-lg-12">
         <div class="card">
             <h5 class="card-header">List of Homeowners Bills
-                <?php if ($type == 'Admin'): ?>
+                
             <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                         <span class="bi bi-receipt"></span> Generate Bills
                     </button>
 
-                
-
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" data-toggle="dropdown" aria-expanded="false">
-                            Pending
+                            Select All
                         </button>
                         <div class="dropdown-menu">
                             <a href="billing.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-check-all"></i> All</a>
@@ -95,7 +95,7 @@ $type  = $row['type'];
                             <a href="billing_paid.php" class="dropdown-item" style="font-size: 0.7rem;"><i class="bi bi-wallet"></i> Paid</a>
                         </div>
                     </div>
-                <?php endif; ?>
+                
             </h5>
             <div class="card-body">
                 <table class="table table-hover table-striped table-bordered" id="list">
@@ -184,88 +184,6 @@ $type  = $row['type'];
     "order": [[1, 'desc']],
   });
 
-//$(document).on('click', '.editBillingBtn', function () {
-  //  var billing_id = $(this).val();
-    //$.ajax({
-      //  type: "GET",
-        //url: "action.php?billing_id=" + billing_id,
-        ///success: function (response) {
-           // var res = jQuery.parseJSON(response);
-            //if (res.status == 404) {
-              //  alertify.error(res.message);
-            //} else if (res.status == 200) {
-               // $('#billing_id').val(res.data.id);
-
-                // Fetch homeowner's name using the tableusers_id
-//                var homeowner = res.homeowner;
-                // Check if the homeowner object exists and has the required properties
-  //              if (homeowner && homeowner.name) {
-      //              var homeownerId = res.data.tableusers_id; // Use the actual Id value instead of the name
-    //                var homeownerName = homeowner.name;
-
-                    // Set the selected option in the dropdown
-        //            $('#tableusers_id').val(homeownerId);
-
-                    // Display homeowner's name in the modal
-          //          $('#tableusers_id').attr('data-selected', homeownerName);
-            //    } else {
-                    // If the homeowner name is not available, you may want to display a default value or handle it accordingly
-              //      $('#tableusers_id').val('N/A');
-                //}
-
-                // Populate other fields
-               /// $('#reading_date').val(res.data.reading_date);
-               // $('#due_date').val(res.data.due_date);
-                //$('#reading').val(res.data.reading);
-                //$('#previous').val(res.data.previous);
-               // $('#penalties').val(res.data.penalties);
-               /// $('#service').val(res.data.service);
-               // $('#total').val(res.data.total);
-                //$('#status').val(res.data.status);
-
-                //$('#billingEditModal').modal('show');
-            //}
-        //},
-        //error: function (xhr, status, error) {
-          ///  console.error(xhr.responseText);
-       // }
-    //});
-//});
-
-///$(document).on('submit', '#updateBilling', function (e) {
-   // e.preventDefault();
-    //var formData = new FormData(this);
-   // formData.append("update_billing", true);
-    //$.ajax({
-    //    type: "POST",
-     //   url: "action.php",
-       // data: formData,
-      //  processData: false,
-      //  contentType: false,
-      //  success: function (response) {
-        //    var res = jQuery.parseJSON(response);
-        //    if (res.status == 422) {
-          //      $('#errorMessageUpdate').removeClass('d-none');
-          //      $('#errorMessageUpdate').text(res.message);
-         //   } else if (res.status == 200) {
- //               $('#errorMessageUpdate').addClass('d-none');
-
-                // Redirect to billing.php after updating successfully
-   //             window.location.href = 'billing.php';
-
-                // Hide modal and reset form
-     //           $('#billingEditModal').modal('hide');
-       //         $('#updateBilling')[0].reset();
-
-                // Reload the DataTable (optional, remove if not needed)
-         //       $('#myTable').DataTable().ajax.reload();
-        //    } else if (res.status == 500) {
-  //              alert(res.message);
-          //  }
-      //  }
- //   });
-//});
-
 
 $(document).on('click', '.viewBillingBtn', function () {
     var billing_id = $(this).val();
@@ -298,9 +216,17 @@ $(document).on('click', '.viewBillingBtn', function () {
                 $('#view_penalties').text(res.data.penalties);
                 $('#view_service').text(res.data.service);
                 $('#view_total').text(res.data.total);
+                $('#view_amountpay').text(res.data.amountpay);
 
                 // Display "Pending" or "Paid" based on the value
-                var statusText = (res.data.status == 0) ? "Pending" : "Paid";
+                var statusText;
+if (res.data.status == 0) {
+    statusText = "Unpaid";
+} else if (res.data.status == 1) {
+    statusText = "Paid";
+} else {
+    statusText = "Pending";
+}
                 $('#view_status').text(statusText);
 
                 $('#billingViewModal').modal('show');
@@ -311,11 +237,22 @@ $(document).on('click', '.viewBillingBtn', function () {
         }
     });
 });
+$(document).on('click', '.deleteBillingBtn', function (e) {
+    e.preventDefault();
+    var billing_id = $(this).val();
 
-    $(document).on('click', '.deleteBillingBtn', function (e) {
-        e.preventDefault();
-        if (confirm('Are you sure you want to delete this record?')) {
-            var billing_id = $(this).val();
+    // Use SweetAlert for confirmation
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Confirm'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed, proceed with deletion
             $.ajax({
                 type: "POST",
                 url: "action.php",
@@ -328,15 +265,24 @@ $(document).on('click', '.viewBillingBtn', function () {
                     if (res.status == 500) {
                         alert(res.message);
                     } else {
-                        alertify.set('notifier', 'position', 'top-right');
-                        alertify.success(res.message);
-                        $('#list').load(location.href + " #list");
+                        // Display success message using SweetAlert
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: res.message,
+                            icon: 'success',
+                        });
+
+                        // Delay the DataTable reload by 1 second
+                        setTimeout(function () {
+                            // Reload the DataTable data
+                            $('#list').DataTable().ajax.reload();
+                        }, 1000);
                     }
                 }
             });
         }
     });
 });
-
+});
 </script>
 

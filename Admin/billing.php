@@ -78,7 +78,7 @@ $type  = $row['type'];
     <div class="text"><i class="bi bi-receipt"></i>&nbsp;Billing</div>
     <div class="col-lg-12">
         <div class="card">
-            <h5 class="card-header">List of Homeowners Bills
+            <h5 class="card-header">List of homeowner's bills
                 
             <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#addbills">
                         <span class="bi bi-receipt"></span> Generate Bills
@@ -243,7 +243,7 @@ $(document).on('click', '.deleteBillingBtn', function (e) {
     // Use SweetAlert for confirmation
     Swal.fire({
         title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
+        text: 'This action cannot be reversed',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d33',

@@ -91,7 +91,7 @@ $type  = $row['type'];
                     </a>
                      <div class="dropdown" >
                         <button class="btn btn-secondary dropdown-toggle float-right" style="margin-top: -24px; margin-right: 8px;" aria-label="Filter by Status" data-toggle="dropdown" aria-expanded="false">
-                            Select 
+                            Select status
                         </button>
                         <div class="dropdown-menu">
                    
@@ -166,7 +166,7 @@ $type  = $row['type'];
         
 <?php if ($billingRecord['status'] != 1): ?>
     <a href="billing_collect.php?tableusers_id=<?= $billingRecord['tableusers_id']; ?>" class="editBillingBtn btn btn-success">
-        <i class="bi bi-pencil-square"></i> Collect
+        <i class='bx bx-money-withdraw'></i> Collect
     </a>
 <?php endif; ?>
                 </td>

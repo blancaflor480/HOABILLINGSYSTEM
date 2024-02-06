@@ -69,7 +69,7 @@ if (isset($_POST['update'])) {
      });
  </script>
 ';
-    echo "<script>alert('Successfully Update customer Info!'); window.location='customer.php'</script>";
+    echo "<script>alert('Successfully Update Homeowners Info!'); window.location='customer.php'</script>";
 }
 ?>
 
@@ -80,7 +80,7 @@ if (isset($_POST['update'])) {
     <script type="text/javascript" charset="utf8" src="DataTables-1.13.8/js/jquery.dataTables.js"></script>
 
     <section class="home-section">
-    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> EDIT HOMEOWNER DETAILS</p></div>
+    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><small>Homeowners</small> > <i class="bi bi-pencil-square"></i> EDIT HOMEOWNER DETAILS</p></div>
     <br><br>
     <div class="container justify-content-center" style="margin-top: -5em;">
         <div class="col-lg-11 col-md-6 col-sm-11 col-xs-11">
@@ -100,13 +100,13 @@ if (isset($_POST['update'])) {
                             <div class="form-group mb-3">
                                 <label for="tableusers_id" class="control-label">First name</label>
                                 <input type="text" class="form-control form-control-sm rounded-0" 
-                                       name="fname" required="required"
+                                       name="fname" style="background-color: #DEDEDE;" required="required"
                                     
                                        value="<?= isset($meta['fname']) ? $meta['fname'] : '' ?>"/>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="tableusers_id" class="control-label">Middle name</label>
-                                <input type="text" class="form-control form-control-sm rounded-0"                                       name="mname" required="required"
+                                <input type="text" class="form-control form-control-sm rounded-0"                                       name="mname" style="background-color: #DEDEDE;" required="required"
                                        
                                        value="<?= isset($meta['mname']) ? $meta['mname'] : '' ?>"/>
                             </div>
@@ -114,7 +114,7 @@ if (isset($_POST['update'])) {
                             <div class="form-group mb-3">
                                 <label for="tableusers_id" class="control-label">Last name</label>
                                 <input type="text" class="form-control form-control-sm rounded-0" 
-                                       name="lname" required="required"
+                                       name="lname" style="background-color: #DEDEDE;" required="required"
                                        
                                        value="<?= isset($meta['lname']) ? $meta['lname'] : '' ?>"/>
                             </div>
@@ -154,10 +154,10 @@ if (isset($_POST['update'])) {
                                        value="<?= isset($meta['address']) ? $meta['address'] : '' ?>"/>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="status" class="control-label">category</label>
+                                <label for="status" class="control-label">Category</label>
                                 <select name="category"
                                         class="form-control form-control-sm rounded-0" required>
-                                    <option disabled>Select gender</option>
+                                    <option disabled>Select category</option>
                              <option <?php if ($meta['category'] == 'Residence') echo 'selected'; ?>>Residences</option>
                              <option <?php if ($meta['category'] == 'Non Residence') echo 'selected'; ?>>Non Residences</option>
                                    
@@ -181,14 +181,14 @@ if (isset($_POST['update'])) {
                             </div>
                             
                             <div class="form-group mb-3">
-                                <label for="tableusers_id" class="control-label">Confirm Password</label>
+                                <label for="tableusers_id" class="control-label">Confirm  Password</label>
                                 <input type="password" class="form-control form-control-sm rounded-0" 
                                        name="copassword" 
                                        
                                        value="<?= isset($meta['copassword']) ? $meta['copassword'] : '' ?>"/>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="tableusers_id" class="control-label">Profile</label>
+                                <label for="tableusers_id" class="control-label">Profile Image</label>
                                 <input type="file" class="form-control form-control-sm rounded-0" style="height: 35px;" id="previous"
                                        name="image" required="required"
                                        readonly
@@ -198,7 +198,7 @@ if (isset($_POST['update'])) {
                         </form>
                     </div><br>
                     <div class="text-center" style="margin: 10px;">
-                        <button class="btn btn-primary btn-sm bg-gradient-primary rounded-0" data-toggle="modal" data-target="#confirmationModal">
+                        <button class="btn btn-success btn-sm bg-gradient-success rounded-0" data-toggle="modal" data-target="#confirmationModal">
                             <i class="fa fa-save"></i> Update
                         </button>
                         <a class="btn btn-light btn-sm bg-gradient-light border rounded-0" href="accounts.php">
@@ -223,7 +223,7 @@ if (isset($_POST['update'])) {
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to update the homeowner information?
+                <center>Are you sure you want to update the homeowner's information?</center>
             </div>
             <div class="modal-footer d-flex justify-content-center">
             <button type="submit" class="btn btn-success" form="billing-form" name="update">Save</button>

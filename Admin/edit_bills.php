@@ -11,7 +11,7 @@ include('Sidebar.php');
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <section class="home-section">
-    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> EDIT BILLS</p></div>
+    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><small>Bills</small> > <i class="bi bi-pencil-square"></i> EDIT BILLS</p></div>
     <br><br>
     <div class="container justify-content-center" style="margin-top: -5em;">
         <div class="col-lg-11 col-md-6 col-sm-11 col-xs-11">
@@ -82,7 +82,7 @@ include('Sidebar.php');
                         <form method="POST" id="billing-form">
                             <input type="hidden" name="id" value="<?= isset($meta['tableusers_id']) ? $meta['tableusers_id'] : '' ?>">
                             <div class="form-group mb-3">
-                                <label for="tableusers_id" class="control-label">Client</label>
+                                <label for="tableusers_id" class="control-label">Homeowner's Name</label>
                                 <select name="tableusers_id" id="tableusers_id" class="form-control form-control-sm rounded-0"
                                         required="required">
                                     <option value="" <?= !isset($meta['tableusers_id']) ? 'selected' : '' ?> disabled></option>
@@ -115,7 +115,7 @@ include('Sidebar.php');
                                        value="<?= isset($meta['reading']) ? $meta['reading'] : '' ?>"/>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="service" class="control-label">Service</label>
+                                <label for="service" class="control-label">Service Fee</label>
                                 <select name="service" id="service"
                                         class="form-control form-control-sm rounded-0" required>
                                    <option value="" disabled selected>Please Select Here</option>
@@ -165,7 +165,7 @@ include('Sidebar.php');
                         </form>
                     </div><br>
                     <div class="text-center" style="margin: 10px;">
-                        <button  class="btn btn-primary btn-sm bg-gradient-primary rounded-0" form="billing-form"><i class="fa fa-save"></i> Save</button>
+                        <button  class="btn btn-success btn-sm bg-gradient-success rounded-0" form="billing-form"><i class="fa fa-save"></i> Save</button>
                         <a class="btn btn-light btn-sm bg-gradient-light border rounded-0" href="billing.php"><i class="fa fa-angle-left"></i> Cancel</a>
                     </div>
                 </div>

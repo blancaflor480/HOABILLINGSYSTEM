@@ -54,7 +54,7 @@
          <label for="lname" style="width: 90px;margin-left: 330px; ">Last Name</label>
         <input type="text" id="fname" name="fname" style="width: 160px;"/>
         <input type="text" id="mname" name="mname" style="width: 160px;"/>
-        <input type="text" id="lname" name="lname" style="width: 160px;"/>
+        <input type="text" id="lname" name="lname" style="width: 169px;"/>
 
         <label for="email">Email</label>
         <input type="email" id="email" name="email" />

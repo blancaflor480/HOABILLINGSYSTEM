@@ -407,7 +407,7 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
       </div>
       <div class="modal-body">
        <div class="mb-3">
-    <label for="tableusers_id">Name</label>
+    <label for="tableusers_id">Full Name</label>
     <p id="view_tableusers_id" class="form-control"></p>
 </div> 
 <div class="mb-3">
@@ -418,7 +418,7 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
                 </div>
 
                 <div class="mb-3">
-                    <label for="reading">Current</label>
+                    <label for="reading">Current Amount</label>
                     <p id="view_reading" class="form-control"></p>
                 </div>
                 <div class="mb-3">
@@ -432,7 +432,7 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
                 </div>
                 
                 <div class="mb-3">
-                    <label for="service">Service</label>
+                    <label for="service">Service </label>
                     <p id="view_service" class="form-control"></p>
                 </div>
                 
@@ -482,27 +482,77 @@ document.getElementById('tableusers_id').addEventListener('change', updateBillin
 
     // Design the print content
     printWindow.document.write(`
-      <html>
-        <head>
-          <title>Billing Details - ${homeownerName}</title>
-          <style>
-            /* Add your print styles here */
-          </style>
-        </head>
-        <body>
-          <h2>Billing Details</h2>
-          <p><strong>Homeowner Name:</strong> ${homeownerName}</p>
-          <p><strong>Reading Date:</strong> ${readingDate}</p>
-          <p><strong>Due Date:</strong> ${dueDate}</p>
-          <p><strong>Reading:</strong> ${reading}</p>
-          <p><strong>Previous:</strong> ${previous}</p>
-          <p><strong>Penalties:</strong> ${penalties}</p>
-          <p><strong>Service:</strong> ${service}</p>
-          <p><strong>Total:</strong> ${total}</p>
-          <p><strong>Charge:</strong> ${amountpay}</p>
-          <p><strong>Status:</strong> ${status}</p>
-        </body>
-      </html>
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Details - ${homeownerName}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .receipt-container {
+            width: 80mm; /* Set the width based on the roll width */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 0;
+            font-size: 1.5em; /* Larger font size for the title */
+        }
+
+        p {
+            margin: 4px 0;
+            color: #555;
+            font-size: 0.8em; /* Adjusted font size for paragraphs */
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 10px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <h1>Billing Details</h1>
+        <span>--------------------------------------------</span>
+
+        <p><strong>Homeowner Name:</strong> ${homeownerName}</p>
+        <p><strong>Reading Date:</strong> ${readingDate}</p>
+        <p><strong>Due Date:</strong> ${dueDate}</p>
+        <p><strong>Reading:</strong> ${reading}</p>
+        <p><strong>Previous:</strong> ${previous}</p>
+        <p><strong>Penalties:</strong> ${penalties}</p>
+        <p><strong>Service:</strong> ${service}</p>
+        <p><strong>Total:</strong> ${total}</p>
+        <p><strong>Charge:</strong> ${amountpay}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <span>--------------------------------------------</span>
+    </div>
+    <div class="footer">
+        <p>Thank you for your payment. Have a great day!</p>
+    </div>
+</body>
+</html>
+
     `);
 
     // Close the document after printing

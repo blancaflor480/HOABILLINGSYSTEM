@@ -76,10 +76,10 @@ $type  = $row['type'];
           <h5 class="card-header">List of Homeowners
             <?php if ($type == 'Admin'): ?>
               <button type="button" class="btn btn-success float-right mx-2" data-toggle="modal" data-target="#Addcustomer">
-                <span class="bx bx-user-plus"></span> Create New Customer
+                <span class="bx bx-user-plus"></span> Create New Homeowners
               </button>
               <button type="button" class="btn btn-warning float-right mx-2" data-toggle="modal" data-target="#delete_user">
-                <span class="bx bx-archive"></span> Archive
+                <span class="bx bx-archive"></span> Trash
               </button>
               <button type="submit" class="btn btn-primary float-right" data-toggle="modal" data-target="#delete_account">
                 <span class="bi bi-database-fill-down"></span> Import
@@ -125,11 +125,8 @@ $type  = $row['type'];
         </a>
         <div class="dropdown-menu">
             <a class="dropdown-item" href="Edit_User.php?<?php echo 'Id=' . $Id; ?>"><i class="bx bx-edit"></i> Edit</a>
-            <!-- Use a form for deletion -->
-             <!-- Use a form for deletion -->
-             <form method="post" onsubmit="return 
-             confirm('Are you sure you want to delete this account?');">
-    <input type="hidden" name="deleteId" value="<?php echo $Id; ?>">
+      <form method="post" onsubmit="return confirm('Are you sure you want to delete this homeowners?');">
+    <input type="hidden" name="deleteId" value="<?php echo isset($Id) ? $Id : ''; ?>">
     <button class="dropdown-item" type="submit" style="font-size: 0.9rem;">
         <span class="bx bx-trash"></span> Delete
     </button>
@@ -147,47 +144,6 @@ $type  = $row['type'];
       </div>
    
 </section>
-<?php
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['deleteId'])) {
-        $deleteId = $_POST['deleteId'];
-
-        // Start a transaction
-        mysqli_autocommit($conn, false);
-
-        // Move the record to the archive table
-        $archiveQuery = "INSERT INTO tablearchives 
-                 SELECT *, 1 AS delete_flag FROM tableusers 
-                 WHERE Id = '$deleteId'";
-        $archiveResult = mysqli_query($conn, $archiveQuery);
-
-        // Check if archiving was successful before proceeding with deletion
-        if ($archiveResult) {
-            // Delete the record from the main table
-            $deleteQuery = "DELETE FROM tableusers WHERE Id = '$deleteId'";
-            $deleteResult = mysqli_query($conn, $deleteQuery);
-
-            if ($deleteResult) {
-                // Commit the transaction
-                mysqli_commit($conn);
-                echo '<script>setTimeout(function() { window.location.href = "customer.php"; }, 10);</script>';
-            } else {
-                // Rollback the transaction in case of deletion failure
-                mysqli_rollback($conn);
-                echo "Error deleting record: " . mysqli_error($conn);
-            }
-        } else {
-            // Rollback the transaction in case of archiving failure
-            mysqli_rollback($conn);
-            echo "Error archiving record: " . mysqli_error($conn);
-        }
-
-        // Restore the autocommit mode
-        mysqli_autocommit($conn, true);
-    }
-}
-?>
 
 <script>
   $(document).ready(function () {

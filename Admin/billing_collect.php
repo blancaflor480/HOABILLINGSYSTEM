@@ -8,7 +8,8 @@ include('Sidebar.php');
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <section class="home-section">
-    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;"><i class="bi bi-pencil-square"></i> COLLECT PAYMENT</p></div>
+    <div class="text col-lg-11" style="background-color: #182061; color: white; height: 100px"><p style="margin: 18px;">
+        <small>Transaction</small> > <i class="bi bi-pencil-square"></i> COLLECT PAYMENT</p></div>
     <br><br>
     <div class="container justify-content-center" style="margin-top: -5em;">
         <div class="col-lg-11 col-md-6 col-sm-11 col-xs-11">
